@@ -1,32 +1,34 @@
 export const Login = () => {
 	return (
 		<div className="hero min-h-screen bg-base-200">
-			<div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
-				<div className="card-body">
-					<h2 className="text-center text-2xl font-bold">Login</h2>
-					<div className="form-control flex-row justify-between mt-6">
-						<label className="label">
-							<span className="label-text">ID</span>
+			<div className="card flex-shrink-0 w-3/5 h-4/5 shadow-2xl bg-base-100">
+				<div className="card-body p-20">
+					<h2 className="text-center text-5xl font-bold">Login</h2>
+					<div className="form-control flex-row justify-center mt-16 ">
+						<label className="label w-24  pr-5">
+							<span className="label-text font-bold">ID</span>
 						</label>
 						<input type="text" placeholder="id" className="input input-bordered" />
 					</div>
-					<div className="form-control  flex-row justify-between">
-						<label className="label">
-							<span className="label-text">PW</span>
+					<div className="form-control  flex-row justify-center">
+						<label className="label w-24 pr-3 ">
+							<span className="label-text font-bold">PW</span>
 						</label>
 						<input type="text" placeholder="password" className="input input-bordered" />
 					</div>
-					<div className="form-control mt-6">
-						<button className="btn btn-primary ">Login</button>
+					<div className="form-control mt-6 items-center">
+						<button className="btn btn-primary w-1/3 m-auto">Login</button>
 					</div>
-					<label className="label justify-end">
+					<label className="label justify-end mt-3">
 						<a href="#" className="label-text-alt link link-hover mt-2 text-base">
 							Create Account
 						</a>
 					</label>
 					<div className="divider"></div>
-					<p className="text-center">Social login can save your valuable time.</p>
-					<button className="btn mt-3">Google</button>
+					<div className="flex flex-col gap-7">
+						<p className="text-center mt-4">Social login can save your valuable time.</p>
+						<button className="btn w-1/3 m-auto">Google</button>
+					</div>
 				</div>
 			</div>
 		</div>
