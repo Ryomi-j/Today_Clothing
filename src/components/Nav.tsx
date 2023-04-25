@@ -26,7 +26,7 @@ export const Nav = () => {
 						</li>
 					</ul>
 				</div>
-				<a className="btn btn-ghost normal-case text-xl">Today Clothing</a>
+				<a className="btn btn-ghost normal-case text-xl"><h1>Today Clothing</h1></a>
 			</div>
 			<div className="navbar-center hidden lg:flex">
 				<ul className="menu menu-horizontal px-1">
