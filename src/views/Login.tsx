@@ -4,9 +4,9 @@ import { Modal } from "../components/common/Modal";
 export const Login = () => {
 	return (
 		<>
-			<div className="hero min-h-screen bg-base-200">
+			<div className="hero min-h-[calc(100vh-3.3rem)] pt-16 bg-base-200">
 				<div className="card flex-shrink-0 w-3/5 h-4/5 shadow-2xl bg-base-100">
-					<div className="card-body p-20 gap-5">
+					<div className="card-body p-14 gap-5">
 						<h2 className="text-center text-5xl font-bold">Login</h2>
 						<div className="form-control flex-row justify-center mt-16 ">
 							<label className="label w-24  pr-5">
