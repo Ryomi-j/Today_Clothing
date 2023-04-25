@@ -2,7 +2,7 @@ export const SignUp = () => {
 	return (
 		<div className="hero min-h-screen bg-base-200">
 			<div className="card flex-shrink-0 w-3/5 h-4/5 shadow-2xl bg-base-100">
-				<div className="card-body p-20">
+				<div className="card-body p-20 gap-5">
 					<h2 className="text-center text-5xl font-bold">Sign Up</h2>
 					<div className="form-control flex-row  mt-16">
 						<label htmlFor="id" className="label w-24 justify-end">
