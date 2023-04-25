@@ -1,4 +1,5 @@
-import { Modal } from "./common/Modal";
+import { Link } from "react-router-dom";
+import { Modal } from "../components/common/Modal";
 
 export const Login = () => {
 	return (
@@ -25,9 +26,9 @@ export const Login = () => {
 							</label>
 						</div>
 						<label className="label justify-end mt-3">
-							<a href="#" className="label-text-alt link link-hover mt-2 text-base">
+							<Link to="/sign-up" className="label-text-alt link link-hover mt-2 text-base">
 								Create Account
-							</a>
+							</Link>
 						</label>
 						<div className="divider"></div>
 						<div className="flex flex-col gap-7">
