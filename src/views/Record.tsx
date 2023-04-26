@@ -1,5 +1,6 @@
+import { Link } from "react-router-dom";
 import { ImageFrame } from "../components/common/ImageFrame";
-import {MdNavigateBefore} from "react-icons/md"
+import { MdNavigateBefore } from "react-icons/md";
 
 export const Record = () => {
 	return (
@@ -16,8 +17,11 @@ export const Record = () => {
 					<ImageFrame content="23년 4월 24일 월요일 15도 흐림" editBtn={true} />
 				</div>
 				<div className="flex flex-row-reverse mt-7">
-                    
-					<button className="btn"><MdNavigateBefore class="text-xl"/> back</button>
+					<Link to="/my_closet">
+						<button className="btn">
+							<MdNavigateBefore class="text-xl" /> back
+						</button>
+					</Link>
 				</div>
 			</div>
 			{/* <Modal content="오늘 당신의 의상을 공유하시겠습니까?" btnContent="OK" btnContent2="Cancel"/> */}
