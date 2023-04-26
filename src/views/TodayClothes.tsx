@@ -1,11 +1,12 @@
 import { Modal } from "../components/common/Modal";
+import {BiShareAlt} from "react-icons/bi"
 
 export const TodayClothes = () => {
 	return (
 		<div className="flex w-screen min-h-[calc(100vh-3.3rem)] pt-16 bg-base-200">
-			<div className="card  gap-5 m-auto w-3/5 h-4/5 bg-base-100 shadow-xl p-7">
+			<div className="card m-auto w-fit h-auto bg-base-100 shadow-xl py-7 px-10">
 				<h2 className="text-5xl text-center pt-5 pb-5">Today's Clothes</h2>
-				<figure className="w-full h-72 border-2 rounded-md">
+				<figure className="w-96 h-96 border-2 rounded-md">
 					<img src="/vite.svg" alt="Shoes" />
 				</figure>
 				<div className="card-body">
@@ -23,12 +24,14 @@ export const TodayClothes = () => {
 						</svg>
 					</button>
 					<p className="mt-8 mb-8 text-xl text-center">2023년 4월 24일 월요일 15도 흐림</p>
-					<label htmlFor="my-modal-6" className="btn btn-primary w-1/3 m-auto">
-						Share
-					</label>
+					<div className="flex flex-row-reverse">
+						<label htmlFor="my-modal-6" className="btn btn-primary w-1/3">
+							Share <BiShareAlt className="pl-2 text-xl" />
+						</label>
+					</div>
 				</div>
 			</div>
-			<Modal content="오늘 당신의 의상을 공유하시겠습니까?" btnContent="OK" btnContent2="Cancel"/>
+			<Modal content="오늘 당신의 의상을 공유하시겠습니까?" btnContent="OK" btnContent2="Cancel" />
 		</div>
 	);
 };
