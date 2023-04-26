@@ -23,7 +23,7 @@ export const ImageFrame = ({ content, hashtag, deleteBtn }: ImageFrameDataType) 
 					</div>
 					{deleteBtn && (
 						<div className="form-control">
-							<label htmlFor="my-modal-6" className="btn min-h-6 h-9">
+							<label htmlFor="my-modal-6" className="btn btn-sm">
 								delete
 							</label>
 						</div>
