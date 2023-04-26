@@ -1,44 +1,38 @@
+import { Link } from "react-router-dom";
+
 interface ImageFrameDataType {
 	content: string;
 	editBtn?: boolean;
-	cancelBtn?: boolean;
-	deleteBtn?: boolean;
-	hashtag?: string;
 }
 
-export const ImageFrame = ({ content, hashtag, editBtn, cancelBtn, deleteBtn }: ImageFrameDataType) => {
+export const ImageFrame = ({ content }: ImageFrameDataType) => {
 	return (
 		<div className="card card-compact w-96 bg-base-100 shadow-xl">
-			<figure>
+			<figure className="w-96 h-96">
 				<img src="https://ribino.jp/web/product/big/202010/ef5634e25af800765b9dd263bceb39f8.gif" alt="clothing image" />
 			</figure>
-			<div className="card-body">
+			<div className="card-body h-28">
 				<h3 className="card-title justify-center">{content}</h3>
-				<p>{hashtag}</p>
 				<div className="card-actions justify-end">
-					{editBtn && <button className="btn btn-primary">edit</button>}
-					{cancelBtn && <button className="btn btn-primary">cancel</button>}
-					{deleteBtn && <button className="btn btn-primary">delete</button>}
+					<Link to="/editCloset">
+						<button className="btn btn-primary ">edit</button>
+					</Link>
 				</div>
 			</div>
 		</div>
 	);
 };
 
-export const EmptyImageFrame = ({ content, hashtag, editBtn, cancelBtn, deleteBtn }: ImageFrameDataType) => {
+export const EmptyImageFrame = ({ content }: ImageFrameDataType) => {
 	return (
 		<div className="card card-compact w-96 bg-base-100 shadow-xl">
-			<figure className="w-96 h-96 bg-base-200 cursor-pointer">
-				<div className="text-7xl">+</div>
-			</figure>
-			<div className="card-body h-32">
+			<Link to="/editCloset">
+				<figure className="w-96 h-96 bg-base-200 cursor-pointer rounded-t-2xl">
+					<div className="text-7xl">+</div>
+				</figure>
+			</Link>
+			<div className="card-body h-28">
 				<h3 className="card-title justify-center">{content}</h3>
-				<p>{hashtag}</p>
-				<div className="card-actions justify-end">
-					{editBtn && <button className="btn btn-primary">edit</button>}
-					{cancelBtn && <button className="btn btn-primary">cancel</button>}
-					{deleteBtn && <button className="btn btn-primary">delete</button>}
-				</div>
 			</div>
 		</div>
 	);
