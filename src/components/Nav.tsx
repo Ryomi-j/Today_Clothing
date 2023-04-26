@@ -29,7 +29,12 @@ export const Nav = () => {
 					</ul>
 				</div>
 				<Link to="/" className="btn btn-ghost normal-case text-xl">
-					<h1>Today Clothing</h1>
+					<h1 className="flex items-center gap-1">
+						<figure className="flex justify-center items-center w-7 h-7 rounded-full bg-sky-500">
+							<img src="/logo.svg" alt="logo" />
+						</figure>
+						Today Clothing
+					</h1>
 				</Link>
 			</div>
 			<div className="navbar-center hidden lg:flex">
