@@ -1,3 +1,5 @@
+import { Modal } from "../components/common/Modal";
+
 export const TodayClothes = () => {
 	return (
 		<div className="flex w-screen min-h-[calc(100vh-3.3rem)] pt-16 bg-base-200">
@@ -21,11 +23,12 @@ export const TodayClothes = () => {
 						</svg>
 					</button>
 					<p className="mt-8 mb-8 text-xl text-center">2023년 4월 24일 월요일 15도 흐림</p>
-					<div className="text-right">
-						<button className="btn text-right">Share</button>
-					</div>
+					<label htmlFor="my-modal-6" className="btn btn-primary w-1/3 m-auto">
+						Share
+					</label>
 				</div>
 			</div>
+			<Modal content="오늘 당신의 의상을 공유하시겠습니까?" btnContent="OK" btnContent2="Cancel"/>
 		</div>
 	);
 };

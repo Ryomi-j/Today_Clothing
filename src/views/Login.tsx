@@ -38,7 +38,7 @@ export const Login = () => {
 					</div>
 				</div>
 			</div>
-			<Modal content="아이디를 확인하세요" />
+			<Modal content="아이디를 확인하세요" btnContent="OK" />
 		</>
 	);
 };
