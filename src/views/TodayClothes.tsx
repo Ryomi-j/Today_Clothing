@@ -14,13 +14,13 @@ export const TodayClothes = () => {
 						Next
 						<svg
 							fill="currentColor"
-							stroke-width="0"
+							strokeWidth="0"
 							viewBox="0 0 24 24"
 							height="1em"
 							width="1em"
 							xmlns="http://www.w3.org/2000/svg"
 						>
-							<polyline fill="none" stroke="white" stroke-width="2" points="7 2 17 12 7 22"></polyline>
+							<polyline fill="none" stroke="white" strokeWidth="2" points="7 2 17 12 7 22"></polyline>
 						</svg>
 					</button>
 					<p className="mt-8 mb-8 text-xl text-center">2023년 4월 24일 월요일 15도 흐림</p>
