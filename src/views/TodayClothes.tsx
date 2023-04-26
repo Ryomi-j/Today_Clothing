@@ -10,7 +10,7 @@ export const TodayClothes = () => {
 					<img src="/vite.svg" alt="Shoes" />
 				</figure>
 				<div className="card-body">
-					<button className="btn m-auto gap-1">
+					<button className="btn m-auto gap-1 btn-sm">
 						Next
 						<svg
 							fill="currentColor"

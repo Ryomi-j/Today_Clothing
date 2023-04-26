@@ -17,34 +17,34 @@ export const Modal = ({ content, link, btnContent, btnContent2 }: ModalProps) =>
 					<div className="modal-action">
 						{link && !btnContent2 && (
 							<Link to={`/${link}`}>
-								<label htmlFor="my-modal-6" className="btn whitespace-pre">
+								<label htmlFor="my-modal-6" className="btn btn-sm whitespace-pre">
 									{btnContent}
 								</label>
 							</Link>
 						)}
 						{!link && !btnContent2 && (
-							<label htmlFor="my-modal-6" className="btn whitespace-pre">
+							<label htmlFor="my-modal-6" className="btn btn-sm whitespace-pre">
 								{btnContent}
 							</label>
 						)}
 						{link && btnContent2 && (
 							<>
 								<Link to={`/${link}`}>
-									<label htmlFor="my-modal-6" className="btn whitespace-pre">
+									<label htmlFor="my-modal-6" className="btn btn-sm whitespace-pre">
 										{btnContent}
 									</label>
 								</Link>
-								<label htmlFor="my-modal-6" className="btn whitespace-pre">
+								<label htmlFor="my-modal-6" className="btn btn-sm whitespace-pre">
 									{btnContent2}
 								</label>
 							</>
 						)}
 						{!link && btnContent2 && (
 							<>
-								<label htmlFor="my-modal-6" className="btn whitespace-pre">
+								<label htmlFor="my-modal-6" className="btn btn-sm whitespace-pre">
 									{btnContent}
 								</label>
-								<label htmlFor="my-modal-6" className="btn whitespace-pre">
+								<label htmlFor="my-modal-6" className="btn btn-sm whitespace-pre">
 									{btnContent2}
 								</label>
 							</>

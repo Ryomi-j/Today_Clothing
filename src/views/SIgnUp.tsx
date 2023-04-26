@@ -12,7 +12,7 @@ export const SignUp = () => {
 								<span className="label-text pr-3 font-bold">ID</span>
 							</label>
 							<input type="text" id="id" placeholder="id" className="input input-bordered w-52" />
-							<button className="btn p-1 font-medium text-xs ml-1 ">
+							<button className="btn btn-s p-1 font- text-xs ml-1 ">
 								Check
 								<br />
 								Availability
