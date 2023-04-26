@@ -16,13 +16,13 @@ export const EditCloset = () => {
 						<label htmlFor="my-modal-6" className="btn btn-primary w-1/3">
 							Save
 						</label>
-						<Link to="/myCloset">
+						<Link to="/closet">
 							<button className="btn">Cancel</button>
 						</Link>
 					</div>
 				</div>
 			</div>
-			<Modal content="내용을 저장하시겠습니까?" btnContent="OK" link="myCloset" btnContent2="No" />
+			<Modal content="내용을 저장하시겠습니까?" btnContent="OK" link="closet" btnContent2="No" />
 		</div>
 	);
 };

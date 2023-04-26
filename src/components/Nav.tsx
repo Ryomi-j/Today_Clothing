@@ -21,25 +21,27 @@ export const Nav = () => {
 							<Link to="/talk">Talk</Link>
 						</li>
 						<li>
-							<Link to="/my_closet">My Closet</Link>
+							<Link to="/closet">My Closet</Link>
 						</li>
 						<li>
 							<Link to="/login">Login</Link>
 						</li>
 					</ul>
 				</div>
-				<Link to="/" className="btn btn-ghost normal-case text-xl"><h1>Today Clothing</h1></Link>
+				<Link to="/" className="btn btn-ghost normal-case text-xl">
+					<h1>Today Clothing</h1>
+				</Link>
 			</div>
 			<div className="navbar-center hidden lg:flex">
 				<ul className="menu menu-horizontal px-1">
 					<li>
-					<Link to="/talk">Talk</Link>
+						<Link to="/talk">Talk</Link>
 					</li>
 					<li>
-						<Link to="/my_closet">My Closet</Link>
+						<Link to="/closet">My Closet</Link>
 					</li>
 					<li>
-					<Link to="/login">Login</Link>
+						<Link to="/login">Login</Link>
 					</li>
 				</ul>
 			</div>

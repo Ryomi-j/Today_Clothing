@@ -17,7 +17,7 @@ export const Record = () => {
 					<ImageFrame content="23년 4월 24일 월요일 15도 흐림" editBtn={true} />
 				</div>
 				<div className="flex flex-row-reverse mt-7">
-					<Link to="/my_closet">
+					<Link to="/closet">
 						<button className="btn">
 							<MdNavigateBefore class="text-xl" /> back
 						</button>

@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { EmptyImageFrame, ImageFrame } from "../components/common/ImageFrame";
 
 export const Closet = () => {
-	let days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+	// let days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 	return (
 		<div className="flex min-h-[calc(100vh-3.3rem)] pt-16 bg-base-200">
 			<div className="card gap-5 my-8 mx-auto min-w-2/5 bg-base-100 shadow-xl p-7">
