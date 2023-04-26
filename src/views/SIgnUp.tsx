@@ -38,7 +38,7 @@ export const SignUp = () => {
 					</div>
 				</div>
 			</div>
-			<Modal content="축하합니다. 가입이 완료되었습니다 :)" link="/login"  btnContent="OK"/>
+			<Modal content="축하합니다. 가입이 완료되었습니다 :)" link="login"  btnContent="OK"/>
 		</>
 	);
 };

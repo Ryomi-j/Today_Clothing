@@ -16,34 +16,38 @@ export const Modal = ({ content, link, btnContent, btnContent2 }: ModalProps) =>
 					<h3 className="font-bold text-lg">{content}</h3>
 					<div className="modal-action">
 						{link && !btnContent2 && (
-							<label htmlFor="my-modal-6" className="btn">
-								<Link to={`/${link}`}>{btnContent}</Link>
-							</label>
+							<Link to={`/${link}`}>
+								<label htmlFor="my-modal-6" className="btn whitespace-pre">
+									{btnContent}
+								</label>
+							</Link>
 						)}
 						{!link && !btnContent2 && (
-							<label htmlFor="my-modal-6" className="btn">
+							<label htmlFor="my-modal-6" className="btn whitespace-pre">
 								{btnContent}
 							</label>
 						)}
 						{link && btnContent2 && (
 							<>
-								<label htmlFor="my-modal-6" className="btn">
-									<Link to={`${link}`}>{btnContent}</Link>
-								</label>
-								<label htmlFor="my-modal-6" className="btn">
+								<Link to={`/${link}`}>
+									<label htmlFor="my-modal-6" className="btn whitespace-pre">
+										{btnContent}
+									</label>
+								</Link>
+								<label htmlFor="my-modal-6" className="btn whitespace-pre">
 									{btnContent2}
 								</label>
 							</>
 						)}
 						{!link && btnContent2 && (
 							<>
-							<label htmlFor="my-modal-6" className="btn">
-								{btnContent}
-							</label>
-							<label htmlFor="my-modal-6" className="btn">
-								{btnContent2}
-							</label>
-						</>
+								<label htmlFor="my-modal-6" className="btn whitespace-pre">
+									{btnContent}
+								</label>
+								<label htmlFor="my-modal-6" className="btn whitespace-pre">
+									{btnContent2}
+								</label>
+							</>
 						)}
 					</div>
 				</div>
