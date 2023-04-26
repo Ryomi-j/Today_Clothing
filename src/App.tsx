@@ -5,6 +5,7 @@ import { Nav } from "./components/Nav";
 import { SignUp } from "./views/SIgnUp";
 import "./index.css";
 import { TodayClothes } from "./views/TodayClothes";
+import { Closet } from "./views/Closet";
 
 function App() {
 	return (
@@ -15,6 +16,7 @@ function App() {
 					<Route path="/login" element={<Login />} />
 					<Route path="/sign-up" element={<SignUp />} />
 					<Route path="/*" element={<TodayClothes />} />
+					<Route path="/my_closet" element={<Closet />} />
 				</Routes>
 			</main>
 			<Footer />

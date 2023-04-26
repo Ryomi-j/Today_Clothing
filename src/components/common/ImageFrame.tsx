@@ -28,8 +28,8 @@ export const ImageFrame = ({ content, hashtag, editBtn, cancelBtn, deleteBtn }: 
 export const EmptyImageFrame = ({ content, hashtag, editBtn, cancelBtn, deleteBtn }: ImageFrameDataType) => {
 	return (
 		<div className="card card-compact w-96 bg-base-100 shadow-xl">
-			<figure>
-				<img src="http://via.placeholder.com/576x576 " alt="empty image" />
+			<figure className="w-96 h-96 bg-base-200 cursor-pointer">
+				<div className="text-7xl">+</div>
 			</figure>
 			<div className="card-body h-32">
 				<h3 className="card-title justify-center">{content}</h3>
