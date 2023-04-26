@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { EmptyImageFrame, ImageFrame } from "../components/common/ImageFrame";
 
 export const Closet = () => {
@@ -16,7 +17,9 @@ export const Closet = () => {
 					<EmptyImageFrame content="Mon" />
 				</div>
 				<div className="flex flex-row-reverse mt-7">
-					<button className="btn">Record</button>
+					<Link to="/record">
+						<button className="btn">Record</button>
+					</Link>
 				</div>
 			</div>
 			{/* <Modal content="오늘 당신의 의상을 공유하시겠습니까?" btnContent="OK" btnContent2="Cancel"/> */}

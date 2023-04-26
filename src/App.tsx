@@ -6,6 +6,7 @@ import { SignUp } from "./views/SIgnUp";
 import "./index.css";
 import { TodayClothes } from "./views/TodayClothes";
 import { Closet } from "./views/Closet";
+import { Record } from "./views/Record";
 
 function App() {
 	return (
@@ -17,6 +18,7 @@ function App() {
 					<Route path="/sign-up" element={<SignUp />} />
 					<Route path="/*" element={<TodayClothes />} />
 					<Route path="/my_closet" element={<Closet />} />
+					<Route path="/record" element={<Record />} />
 				</Routes>
 			</main>
 			<Footer />
