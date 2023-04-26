@@ -18,7 +18,7 @@ export const Login = () => {
 							<label className="label w-24 pr-3 ">
 								<span className="label-text font-bold">PW</span>
 							</label>
-							<input type="text" placeholder="password" className="input input-bordered" />
+							<input type="password" placeholder="password" className="input input-bordered" />
 						</div>
 						<div className="form-control mt-6 items-center">
 							<label htmlFor="my-modal-6" className="btn btn-primary w-1/3 m-auto">
