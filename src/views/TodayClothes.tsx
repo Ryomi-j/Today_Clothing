@@ -5,7 +5,7 @@ export const TodayClothes = () => {
 	return (
 		<div className="flex w-screen min-h-[calc(100vh-3.3rem)] pt-16 bg-base-200">
 			<div className="card m-auto w-fit h-auto bg-base-100 shadow-xl py-7 px-10">
-				<h2 className="text-5xl text-center pt-5 pb-5">Today's Clothes</h2>
+				<h2 className="text-4xl font-extrabold text-center pt-5 pb-5">Today's Clothes</h2>
 				<figure className="w-96 h-96 border-2 rounded-md">
 					<img src="/vite.svg" alt="Shoes" />
 				</figure>
