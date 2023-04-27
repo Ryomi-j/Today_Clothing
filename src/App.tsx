@@ -9,8 +9,20 @@ import { Closet } from "./views/Closet";
 import { Record } from "./views/Record";
 import { EditCloset } from "./views/EditCloset";
 import { Post } from "./views/Post";
+import { db } from "./firebase";
+import { collection, getDocs } from "firebase/firestore";
 
 function App() {
+	const getCities = async function (db: any) {
+		const users = collection(db, "users");
+		const userInfo = await getDocs(users);
+		const cityList = userInfo.docs.map((doc) => doc.data());
+		return cityList;
+	};
+	(async () => {
+		console.log(await getCities(db));
+	})();
+	
 	return (
 		<BrowserRouter>
 			<Nav />
