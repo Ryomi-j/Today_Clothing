@@ -20,10 +20,6 @@ export interface User {
 	data?: Data;
 }
 
-interface UserState {
-	userData: Record<string | number, User>;
-}
-
 export const UserData = selector<User[]>({
 	key: "userData",
 	get: async () => {
