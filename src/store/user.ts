@@ -36,4 +36,19 @@ export const UserData = selector<User[]>({
 	},
 });
 
+export const isUser = selector<User[]>({
+	key: "userData",
+	get: async () => {
+		try {
+			const users = collection(db, "users");
+			const userInfo = await getDocs(users);
+			const user = userInfo.docs.map((doc) => doc.data() as User);
+			console.log(user);
+			return user || [];
+		} catch (error) {
+			console.error(error);
+			return [];
+		}
+	},
+});
 

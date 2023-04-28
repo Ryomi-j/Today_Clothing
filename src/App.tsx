@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Footer } from "./components/Footer";
 import { Login } from "./views/Login";
 import { Nav } from "./components/Nav";
-import { SignUp } from "./views/SIgnUp";
+import { SignUp } from "./views/SignUp";
 import "./index.css";
 import { TodayClothes } from "./views/TodayClothes";
 import { Closet } from "./views/Closet";

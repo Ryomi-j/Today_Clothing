@@ -9,9 +9,11 @@ export const Login = () => {
 	const [content, setContent] = useState("");
 	const $modal = document.querySelector('input[type="checkbox"]') as HTMLInputElement;
 
-	// const handleLogin = (e : LabelHTMLAttributes<HTMLLabelElement>, HTMLLabelElement) => {
-	// 	idInput?.current?.value
-	// 	if( e.target.id === 'login')
+	// const handleLogin = () => {
+	// 	const id = idInput?.current?.value ?? ""
+	// 	const pw = pwInput?.current?.value ?? ""
+		
+	// 	signIn(id, pw)
 	// }
 
 	const googleLogin = async () => {
