@@ -1,13 +1,19 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
-import { GoogleAuthProvider, createUserWithEmailAndPassword, getAuth, signInWithCustomToken, signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
-// import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import {
+	GoogleAuthProvider,
+	User,
+	createUserWithEmailAndPassword,
+	getAuth,
+	onAuthStateChanged,
+	signInWithEmailAndPassword,
+	signInWithPopup,
+	signOut,
+} from "firebase/auth";
+import "firebase/database";
+// import { SetterOrUpdater } from "recoil";
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
 	apiKey: "AIzaSyDpUao1XcGxU6g0x7bBELobfO1Tu611VgU",
 	authDomain: "today-clothing.firebaseapp.com",
@@ -20,29 +26,72 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-// const analytics = getAnalytics(app);
 export const db = getFirestore(app);
 
-
-const auth = getAuth()
+export const auth = getAuth();
 
 export const signUp = async (email: string, password: string) => {
 	try {
-	  const userCredential = await createUserWithEmailAndPassword(auth, email, password)
-	  const user = userCredential.user
-	  console.log(user)
+		const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+		const user = userCredential.user;
+		console.log(user);
 	} catch (error) {
-		console.error(error)
+		console.error(error);
 	}
-  };
+};
 
-export const loginId = (id : string, password : string) => {
-	return signInWithEmailAndPassword(auth, id, password)
-}
+export const loginId = (id: string, password: string) => {
+	return signInWithEmailAndPassword(auth, id, password);
+};
 
-const provider = new GoogleAuthProvider()
+// export const getLoginState = async (cb: Function) => {
+// 	return onAuthStateChanged(auth, (user) => {
+// 		if (user) {
+// 			cb(user);
+// 		} else {
+// 			cb(null);
+// 		}
+// 	});
+// };
+
+// export const signUp = async (email: string, password: string) => {
+// 	createUserWithEmailAndPassword(auth, email, password)
+// 		.then((userCredential) => {
+// 			const user = userCredential.user;
+// 			return user;
+// 		})
+// 		.catch((error) => {
+// 			const errorCode = error.code;
+// 			const errorMessage = error.message;
+// 			alert(errorMessage);
+// 		});
+// };
+
+// export const signIn = async (email: string, password: string) => {
+// 	try {
+// 		const userCredential = await signInWithEmailAndPassword(auth, email, password);
+// 		const user = userCredential.user;
+// 		return user;
+// 	} catch (error) {
+// 		console.error(3333, error);
+// 	}
+// 	return false;
+// };
+
+const provider = new GoogleAuthProvider();
 export const loginGoogle = () => {
-	return signInWithPopup(auth, provider)
-}
+	return signInWithPopup(auth, provider);
+};
+
+// export const logout = () => {
+// 	signOut(auth)
+// 		.then(() => {
+// 			alert("로그인 되었습니다.");
+// 		})
+// 		.catch((error) => {
+// 			alert("에러가 발생했다");
+// 			console.log(1111, error);
+// 		});
+// };
 
 export default app;

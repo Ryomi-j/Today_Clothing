@@ -18,21 +18,18 @@ export const SignUp = () => {
 		if (id.length < 6) {
 			setContent("6자리 이상의 id를 입력해주세요");
 			setLink("/sign-up");
-			$modal.checked;
-		} else if (pw.length < 7) {
+		} else if (pw.length < 6) {
 			setContent("6자리 이상의 password를 입력해주세요");
 			setLink("");
-			$modal.checked;
 		} else if (pw !== _pw) {
 			setContent("password가 일치하지 않습니다.");
 			setLink("");
-			$modal.checked;
 		} else {
 			signUp(id, pw);
 			setContent("축하합니다. 가입이 완료되었습니다 :)");
 			setLink("login");
-			$modal.checked;
 		}
+		// $modal.click();
 	};
 
 	return (
@@ -45,7 +42,15 @@ export const SignUp = () => {
 							<label htmlFor="id" className="label w-24 justify-end">
 								<span className="label-text pr-3 font-bold">ID</span>
 							</label>
-							<input type="text" id="id" placeholder="id" className="input input-bordered w-52" ref={idInput} />
+							<input
+								type="text"
+								id="id"
+								placeholder="id"
+								minLength={6}
+								maxLength={15}
+								ref={idInput}
+								className="input input-bordered w-52"
+							/>
 							<button className="btn btn-s p-1 font- text-xs ml-1 ">
 								Check
 								<br />
@@ -56,7 +61,15 @@ export const SignUp = () => {
 							<label htmlFor="pw" className="label w-24 justify-end">
 								<span className="label-text pr-3 font-bold">PW</span>
 							</label>
-							<input type="text" id="pw" placeholder="password" className="input input-bordered w-52" ref={pwInput} />
+							<input
+								type="text"
+								id="pw"
+								placeholder="password"
+								minLength={6}
+								maxLength={15}
+								ref={pwInput}
+								className="input input-bordered w-52"
+							/>
 						</div>
 						<div className="form-control  flex-row ">
 							<label htmlFor="confirmPw" className="label w-24">
@@ -66,6 +79,8 @@ export const SignUp = () => {
 								type="text"
 								id="confirmPw"
 								placeholder="password"
+								minLength={6}
+								maxLength={15}
 								className="input input-bordered w-52"
 								ref={confirmPw}
 							/>

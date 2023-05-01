@@ -5,19 +5,20 @@ type ModalProps = {
 	link?: string;
 	btnContent: string;
 	btnContent2?: string;
+	checked?: boolean;
 };
 
-export const Modal = ({ content, link, btnContent, btnContent2 }: ModalProps) => {
+export const Modal = ({ content, link, btnContent, btnContent2, checked }: ModalProps) => {
 	return (
 		<>
-			<input type="checkbox" id="my-modal-6" className="modal-toggle" />
+			<input type="checkbox" id="my-modal-6" className="modal-toggle" checked={checked} />
 			<div className="modal modal-bottom sm:modal-middle">
 				<div className="modal-box">
 					<h3 className="font-bold text-lg">{content}</h3>
 					<div className="modal-action">
 						{link && !btnContent2 && (
 							<Link to={`/${link}`}>
-								<label htmlFor="my-modal-6" className="btn btn-sm whitespace-pre">
+								<label htmlFor="my-modal-6" className="btn btn-sm whitespace-pre" >
 									{btnContent}
 								</label>
 							</Link>
