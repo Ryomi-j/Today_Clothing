@@ -29,7 +29,7 @@ export const SignUp = () => {
 			setContent("축하합니다. 가입이 완료되었습니다 :)");
 			setLink("login");
 		}
-		// $modal.click();
+		$modal.click();
 	};
 
 	return (

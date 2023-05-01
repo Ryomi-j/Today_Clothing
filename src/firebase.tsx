@@ -27,9 +27,9 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
-
 export const auth = getAuth();
 
+// 가입
 export const signUp = async (email: string, password: string) => {
 	try {
 		const userCredential = await createUserWithEmailAndPassword(auth, email, password);

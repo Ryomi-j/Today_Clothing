@@ -1,20 +1,20 @@
-import { Link, /* useNavigate */ } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Modal } from "../components/common/Modal";
 import { useRef, useState } from "react";
-import { loginGoogle, /* signIn */ } from "../firebase";
-// import { useRecoilState } from "recoil";
-// import { activeUser, userState } from "../store/user";
+import { loginGoogle /* signIn */ } from "../firebase";
+import { useRecoilState } from "recoil";
+import { activeUser, userState } from "../store/user";
 
 export const Login = () => {
 	const idInput = useRef<HTMLInputElement>(null);
 	const pwInput = useRef<HTMLInputElement>(null);
 	const [content, setContent] = useState("");
 	const $modal = document.querySelector('input[type="checkbox"]') as HTMLInputElement;
-	// const [login, setLogin] = useRecoilState(userState);
+	const [login, setLogin] = useRecoilState(userState);
 	// const [userInfo, setUserInfo] = useRecoilState(activeUser);
 	// const [isLoading, setIsLoading] = useState(false);
 	// const [isOpenModal, setIsOpenModal] = useState(true);
-	// const navigate = useNavigate();
+	const navigate = useNavigate();
 
 	// const handleLogin = () => {
 	// 	setIsLoading(true);
@@ -32,14 +32,15 @@ export const Login = () => {
 	// 	});
 	// };
 
-	const googleLogin = async () => {
-		const result = await loginGoogle();
-		console.log(result);
-		setContent("로그인 되었습니다.");
-		$modal.click();
-		// if (result) setLogin(!login);
-		// console.log(login);
-		// navigate("/closet");
+	const googleLogin = () => {
+		loginGoogle()
+			.then(() => {
+				setLogin(true);
+				navigate("/closet");
+			})
+			.catch((error) => {
+				console.log(error);
+			});
 	};
 
 	return (
@@ -61,7 +62,11 @@ export const Login = () => {
 							<input type="password" placeholder="password" className="input input-bordered" ref={pwInput} />
 						</div>
 						<div className="flex mt-6 items-center">
-							<label htmlFor="my-modal-6" className="btn btn-primary w-1/3 m-auto" id="login" /* onClick={handleLogin} */>
+							<label
+								htmlFor="my-modal-6"
+								className="btn btn-primary w-1/3 m-auto"
+								id="login" /* onClick={handleLogin} */
+							>
 								Login
 							</label>
 						</div>
@@ -80,8 +85,7 @@ export const Login = () => {
 					</div>
 				</div>
 			</div>
-			{/* <Modal content="아이디/비밀번호를 확인하세요" btnContent="OK" /> */}
-			<Modal content={content} btnContent="OK" />
+			<Modal content="아이디/비밀번호를 확인하세요" btnContent="OK" />
 		</>
 	);
 };
