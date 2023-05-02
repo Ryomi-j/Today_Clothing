@@ -48,6 +48,19 @@ export const signUp = async (email: string, password: string) => {
 	}
 };
 
+export const isDuplicateId = async (id: string): Promise<boolean> => {
+	try {
+	  const users = collection(db, "users");
+	  const q = query(users, where("userId", "==", id));
+	  const userInfo = await getDocs(q);
+	  return !userInfo.empty;
+	} catch (error) {
+	  console.error(error);
+	  return false;
+	}
+  };
+  
+
 // 로그인
 export const signIn = (email: string, password: string) => {
 	return signInWithEmailAndPassword(auth, email, password)

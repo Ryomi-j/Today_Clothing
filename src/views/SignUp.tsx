@@ -1,32 +1,48 @@
 import { useRef, useState } from "react";
-import { Modal } from "../components/common/Modal";
-import { signUp } from "../firebase";
+import { isDuplicateId, signUp } from "../firebase";
 
 export const SignUp = () => {
 	const idInput = useRef<HTMLInputElement>(null);
 	const pwInput = useRef<HTMLInputElement>(null);
 	const confirmPw = useRef<HTMLInputElement>(null);
-	const [content, setContent] = useState("");
 	const [link, setLink] = useState("");
-	// const $modal = document.querySelector('input[type="checkbox"]') as HTMLInputElement;
+	const [id, setId] = useState("");
+	const [isIdDuplicate, setIsIdDuplicate] = useState(false);
+
+	const handleIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		setId(event.target.value);
+		setIsIdDuplicate(false);
+	};
+
+	const checkId = async () => {
+		const result = await isDuplicateId(id + "@todayClothing.com");
+		console.log(result);
+		if (result) {
+			alert("이미 사용중인 ID입니다.");
+		} else {
+			alert("사용가능한 ID 입니다.");
+			setIsIdDuplicate(true);
+		}
+	};
 
 	const handleJoin = () => {
-		const id = idInput?.current?.value + "@todayClothing.com" ?? "";
+		const email = id + "@todayClothing.com" ?? "";
 		let pw = pwInput?.current?.value ?? "";
 		let _pw = confirmPw?.current?.value ?? "";
 
-		if (id.length < 6) {
-			setContent("6자리 이상의 id를 입력해주세요");
+		if (!isIdDuplicate) return alert("아이디 중복검사가 필요합니다.");
+		else if (id.length < 6) {
+			alert("6자리 이상의 id를 입력해주세요");
 			setLink("/sign-up");
 		} else if (pw.length < 6) {
-			setContent("6자리 이상의 password를 입력해주세요");
+			alert("6자리 이상의 password를 입력해주세요");
 			setLink("");
 		} else if (pw !== _pw) {
-			setContent("password가 일치하지 않습니다.");
+			alert("password가 일치하지 않습니다.");
 			setLink("");
 		} else {
-			signUp(id, pw);
-			setContent("축하합니다. 가입이 완료되었습니다 :)");
+			signUp(email, pw);
+			alert("축하합니다. 가입이 완료되었습니다 :)");
 			setLink("login");
 		}
 	};
@@ -49,8 +65,9 @@ export const SignUp = () => {
 								maxLength={15}
 								ref={idInput}
 								className="input input-bordered w-52"
+								onChange={handleIdChange}
 							/>
-							<button className="btn btn-s p-1 font- text-xs ml-1 ">
+							<button className="btn btn-s p-1 font- text-xs ml-1" onClick={checkId}>
 								Check
 								<br />
 								Availability
