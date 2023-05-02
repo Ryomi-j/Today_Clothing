@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { doc, getFirestore, setDoc } from "firebase/firestore";
+import { collection, doc, getDocs, getFirestore, query, setDoc, where } from "firebase/firestore";
 import {
 	GoogleAuthProvider,
 	browserSessionPersistence,
@@ -34,16 +34,18 @@ export const signUp = async (email: string, password: string) => {
 		const user = userCredential.user;
 		const userData = {
 			uid: user.uid,
-			userId: email,
+			creactedAt: user.metadata.creationTime,
+			userId: user.email,
+			name: user.displayName,
 		};
 		const newUser = doc(db, "users", "user");
 		setDoc(newUser, userData, { merge: true });
-	} catch (error : any)  {
+	} catch (error: any) {
 		const errorMessage = error.message;
-		if(errorMessage === 'Firebase: Error (auth/email-already-in-use).'){
-			alert('이미 사용중인 아이디입니다.')
+		if (errorMessage === "Firebase: Error (auth/email-already-in-use).") {
+			alert("이미 사용중인 아이디입니다.");
 		}
-	};
+	}
 };
 
 // 로그인
@@ -79,7 +81,9 @@ export const loginGoogle = () => {
 			const user = result.user;
 			const userData = {
 				uid: user.uid,
+				creactedAt: user.metadata.creationTime,
 				userId: user.email,
+				name: user.displayName,
 			};
 			const newUser = doc(db, "users", user.uid);
 			setDoc(newUser, userData, { merge: true });
