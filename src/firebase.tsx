@@ -35,13 +35,15 @@ export const signUp = async (email: string, password: string) => {
 		const userData = {
 			uid: user.uid,
 			userId: email,
-			userPw: password,
 		};
 		const newUser = doc(db, "users", "user");
 		setDoc(newUser, userData, { merge: true });
-	} catch (error) {
-		console.error(error);
-	}
+	} catch (error : any)  {
+		const errorMessage = error.message;
+		if(errorMessage === 'Firebase: Error (auth/email-already-in-use).'){
+			alert('이미 사용중인 아이디입니다.')
+		}
+	};
 };
 
 // 로그인
@@ -74,8 +76,14 @@ export const loginGoogle = () => {
 			// This gives you a Google Access Token. You can use it to access the Google API.
 			const credential = GoogleAuthProvider.credentialFromResult(result);
 			const token = credential?.accessToken;
-			const userId = result.user.uid;
-			return userId;
+			const user = result.user;
+			const userData = {
+				uid: user.uid,
+				userId: user.email,
+			};
+			const newUser = doc(db, "users", user.uid);
+			setDoc(newUser, userData, { merge: true });
+			return user.uid;
 		})
 		.catch((error) => {
 			console.log(error);
