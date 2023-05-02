@@ -12,7 +12,7 @@ import { Post } from "./views/Post";
 import { useEffect } from "react";
 import { auth } from "./firebase";
 import { useRecoilState } from "recoil";
-import { UserData, activeUser, userState } from "./store/user";
+import {  activeUser, userState } from "./store/user";
 
 function App() {
 	const [login, setLogin] = useRecoilState(userState);
@@ -21,10 +21,10 @@ function App() {
 	useEffect(() => {
 		auth.onAuthStateChanged((user) => {
 			if (user !== null) {
-				const userUid = JSON.parse(JSON.stringify(user)).uid;
+				const currentUser = JSON.parse(JSON.stringify(user));
 				setLogin(true);
-				setUserInfo(userUid);
-				console.log(user);
+				setUserInfo(currentUser.uid);
+				console.log(currentUser);
 			} else {
 				setLogin(false)
 				setUserInfo("")
@@ -33,7 +33,6 @@ function App() {
 		});
 	}, []);
 
-	console.log(UserData)
 
 	return (
 		<BrowserRouter>
