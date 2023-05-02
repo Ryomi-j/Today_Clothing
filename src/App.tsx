@@ -12,7 +12,7 @@ import { Post } from "./views/Post";
 import { useEffect } from "react";
 import { auth } from "./firebase";
 import { useRecoilState } from "recoil";
-import { activeUser, userState } from "./store/user";
+import { UserData, activeUser, userState } from "./store/user";
 
 function App() {
 	const [login, setLogin] = useRecoilState(userState);
@@ -21,17 +21,19 @@ function App() {
 	useEffect(() => {
 		auth.onAuthStateChanged((user) => {
 			if (user !== null) {
-				const userCopy = JSON.parse(JSON.stringify(user));
+				const userUid = JSON.parse(JSON.stringify(user)).uid;
 				setLogin(true);
-				setUserInfo(userCopy);
-				console.log(userCopy);
+				setUserInfo(userUid);
+				console.log(user);
 			} else {
 				setLogin(false)
-				setUserInfo({})
+				setUserInfo("")
 				console.log('로그인된 정보가 없습니다.')
 			}
 		});
 	}, []);
+
+	console.log(UserData)
 
 	return (
 		<BrowserRouter>

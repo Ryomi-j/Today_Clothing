@@ -20,8 +20,6 @@ export interface User {
 	data?: Data;
 }
 
-
-
 // 로그인 여부 T/F
 export const userState = atom({
 	key: "isLogin",
@@ -31,7 +29,7 @@ export const userState = atom({
 // 현재 로그인한 user 정보
 export const activeUser = atom({
 	key: "activeUser",
-	default: {},
+	default: "",
 });
 
 export const UserData = selector<User[]>({
@@ -42,10 +40,14 @@ export const UserData = selector<User[]>({
 			const userInfo = await getDocs(users);
 			const user = userInfo.docs.map((doc) => doc.data() as User);
 			console.log(user);
-			return user || []
+			return user || [];
 		} catch (error) {
 			console.error(error);
 			return [];
 		}
 	},
 });
+
+export const userDB = (uid: string) => {
+	
+}
