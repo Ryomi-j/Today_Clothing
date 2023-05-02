@@ -1,30 +1,17 @@
 import { Link } from "react-router-dom";
-// import { useRecoilState } from "recoil";
-// import { activeUser, userState } from "../store/user";
-// import { logout, auth, getLoginState } from "../firebase";
-// import { getAuth, signOut } from "firebase/auth";
+import { useRecoilState } from "recoil";
+import { activeUser, userState } from "../store/user";
 
 export const Nav = () => {
-	// const [login, setLogin] = useRecoilState(userState);
-	// const [userInfo, setUserInfo] = useRecoilState(activeUser);
+	const [login, setLogin] = useRecoilState(userState);
+	const [userInfo, setUserInfo] = useRecoilState(activeUser);
 
-	// const handleLogout = () => {
-	// 	if (!login) return;
-	// 	const a = getAuth();
-	// 	getLoginState((param: any) =>{
-	// 		console.log(1, param);
-	// 		signOut(a);
-	// 	}).then(() => {
-	// 		getLoginState((param: any) => {
-	// 			console.log(2, param);
-	// 		})
-	// 	})
-	// const a = getAuth();
-	// a.signOut()
-	// setLogin(false);
-	// setUserInfo({});
-	// setLoginState(setLogin)
-	// };
+	const handleLogout = () => {
+		if (!login) return;
+		setLogin(false)
+		setUserInfo(null)
+		window.location.reload()
+	};
 
 	return (
 		<div className="navbar absolute bg-base-100 justify-between">
@@ -51,9 +38,9 @@ export const Nav = () => {
 						<li className="font-medium">
 							<Link to="/closet">My Closet</Link>
 						</li>
-						{/* <li className="font-medium" onClick={handleLogout}>
+						<li className="font-medium" onClick={handleLogout}>
 							{login ? <Link to="/login">Login</Link> : <Link to="/login">Login</Link>}
-						</li> */}
+						</li>
 					</ul>
 				</div>
 				<Link to="/" className="btn btn-ghost normal-case text-xl">
@@ -73,8 +60,8 @@ export const Nav = () => {
 					<li className="font-medium">
 						<Link to="/closet">My Closet</Link>
 					</li>
-					<li className="font-medium" /*  onClick={handleLogout} */>
-						{/* {login ? <Link to="/login">Logout</Link> : <Link to="/login">Login</Link>} */}
+					<li className="font-medium"  onClick={handleLogout}>
+						{login ? <Link to="/login">Logout</Link> : <Link to="/login">Login</Link>}
 					</li>
 				</ul>
 			</div>

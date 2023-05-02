@@ -31,7 +31,7 @@ export const userState = atom({
 // 현재 로그인한 user 정보
 export const activeUser = atom({
 	key: "activeUser",
-	default: {},
+	default: null,
 });
 
 export const UserData = selector<User[]>({
