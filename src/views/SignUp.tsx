@@ -8,7 +8,7 @@ export const SignUp = () => {
 	const confirmPw = useRef<HTMLInputElement>(null);
 	const [content, setContent] = useState("");
 	const [link, setLink] = useState("");
-	const $modal = document.querySelector('input[type="checkbox"]') as HTMLInputElement;
+	// const $modal = document.querySelector('input[type="checkbox"]') as HTMLInputElement;
 
 	const handleJoin = () => {
 		const id = idInput?.current?.value + "@todayClothing.com" ?? "";
@@ -29,7 +29,6 @@ export const SignUp = () => {
 			setContent("축하합니다. 가입이 완료되었습니다 :)");
 			setLink("login");
 		}
-		$modal.click();
 	};
 
 	return (
@@ -93,7 +92,7 @@ export const SignUp = () => {
 					</div>
 				</div>
 			</div>
-			<Modal content={content} link={link} btnContent="OK" />
+			{/* <Modal content={content} link={link} btnContent="OK" /> */}
 		</>
 	);
 };
