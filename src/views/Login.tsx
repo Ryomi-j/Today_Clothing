@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useRef } from "react";
-import { loginGoogle /* signIn */, signIn } from "../firebase";
+import { loginGoogle /* signIn */, persistenceLogin, signIn } from "../firebase";
 import { useRecoilState } from "recoil";
 import { activeUser, userState } from "../store/user";
 
@@ -9,16 +9,15 @@ export const Login = () => {
 	const pwInput = useRef<HTMLInputElement>(null);
 	// const $modal = document.querySelector('input[type="checkbox"]') as HTMLInputElement;
 	const [login, setLogin] = useRecoilState(userState);
-	const [userInfo, setUserInfo] = useRecoilState(activeUser);
 	const navigate = useNavigate();
+
 	const handleLogin = () => {
 		const id = idInput?.current?.value + "@todayClothing.com" ?? "";
 		const pw = pwInput?.current?.value ?? "";
 		signIn(id, pw).then((success: any) => {
 			if (success) {
 				setLogin(true);
-				setUserInfo(success);
-				navigate("/closet:${userInfo.uid}");
+				navigate(`/closet/${success.uid}`);
 			}
 		});
 	};

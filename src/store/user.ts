@@ -1,5 +1,5 @@
 import { collection, getDocs } from "firebase/firestore";
-import { db } from "../firebase";
+import { db, getLoginState } from "../firebase";
 import { atom, selector } from "recoil";
 
 export interface Data {
@@ -31,7 +31,7 @@ export const userState = atom({
 // 현재 로그인한 user 정보
 export const activeUser = atom({
 	key: "activeUser",
-	default: null,
+	default: {},
 });
 
 export const UserData = selector<User[]>({

@@ -9,9 +9,30 @@ import { Closet } from "./views/Closet";
 import { Record } from "./views/Record";
 import { EditCloset } from "./views/EditCloset";
 import { Post } from "./views/Post";
+import { useEffect } from "react";
+import { auth } from "./firebase";
+import { useRecoilState } from "recoil";
+import { activeUser, userState } from "./store/user";
 
 function App() {
-	
+	const [login, setLogin] = useRecoilState(userState);
+	const [userInfo, setUserInfo] = useRecoilState(activeUser);
+
+	useEffect(() => {
+		auth.onAuthStateChanged((user) => {
+			if (user !== null) {
+				const userCopy = JSON.parse(JSON.stringify(user));
+				setLogin(true);
+				setUserInfo(userCopy);
+				console.log(userCopy);
+			} else {
+				setLogin(false)
+				setUserInfo({})
+				console.log('로그인된 정보가 없습니다.')
+			}
+		});
+	}, []);
+
 	return (
 		<BrowserRouter>
 			<Nav />

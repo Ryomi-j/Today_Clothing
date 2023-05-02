@@ -1,18 +1,17 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import {
 	GoogleAuthProvider,
-	User,
+	browserSessionPersistence,
 	createUserWithEmailAndPassword,
 	getAuth,
 	onAuthStateChanged,
+	setPersistence,
 	signInWithEmailAndPassword,
 	signInWithPopup,
 	signOut,
 } from "firebase/auth";
 import "firebase/database";
-// import { SetterOrUpdater } from "recoil";
 
 const firebaseConfig = {
 	apiKey: "AIzaSyDpUao1XcGxU6g0x7bBELobfO1Tu611VgU",
@@ -40,19 +39,16 @@ export const signUp = async (email: string, password: string) => {
 	}
 };
 
-export const loginId = (id: string, password: string) => {
-	return signInWithEmailAndPassword(auth, id, password);
+export const getLoginState = () => {
+	onAuthStateChanged(auth, (user) => {
+		console.log(user);
+		if (user) {
+			const uid = user.uid;
+			return uid;
+		}
+		return null;
+	});
 };
-
-// export const getLoginState = async (cb: Function) => {
-// 	return onAuthStateChanged(auth, (user) => {
-// 		if (user) {
-// 			cb(user);
-// 		} else {
-// 			cb(null);
-// 		}
-// 	});
-// };
 
 // 로그인
 export const signIn = (email: string, password: string) => {
@@ -66,20 +62,30 @@ export const signIn = (email: string, password: string) => {
 		});
 };
 
+export const persistenceLogin = (email: string, password: string) => {
+	setPersistence(auth, browserSessionPersistence)
+		.then(() => {
+			return signInWithEmailAndPassword(auth, email, password);
+		})
+		.catch((error) => {
+			const errorMessage = error.message;
+			console.log(1111, errorMessage);
+		});
+};
+
 const provider = new GoogleAuthProvider();
 export const loginGoogle = () => {
 	return signInWithPopup(auth, provider);
 };
 
-// export const logout = () => {
-// 	signOut(auth)
-// 		.then(() => {
-// 			alert("로그인 되었습니다.");
-// 		})
-// 		.catch((error) => {
-// 			alert("에러가 발생했다");
-// 			console.log(1111, error);
-// 		});
-// };
+export const logout = () => {
+	signOut(auth)
+		.then(() => {
+			alert("로그아웃 되었습니다.");
+		})
+		.catch(() => {
+			alert("로그아웃 과정에서 문제가 발생했습니다.")
+		});
+};
 
 export default app;
