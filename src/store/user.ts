@@ -1,5 +1,5 @@
 import { collection, getDocs } from "firebase/firestore";
-import { db, getLoginState } from "../firebase";
+import { db } from "../firebase";
 import { atom, selector } from "recoil";
 
 export interface Data {
