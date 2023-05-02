@@ -1,11 +1,10 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
+import { doc, getFirestore, setDoc } from "firebase/firestore";
 import {
 	GoogleAuthProvider,
 	browserSessionPersistence,
 	createUserWithEmailAndPassword,
 	getAuth,
-	onAuthStateChanged,
 	setPersistence,
 	signInWithEmailAndPassword,
 	signInWithPopup,
@@ -33,21 +32,16 @@ export const signUp = async (email: string, password: string) => {
 	try {
 		const userCredential = await createUserWithEmailAndPassword(auth, email, password);
 		const user = userCredential.user;
-		console.log(user);
+		const userData = {
+			uid: user.uid,
+			userId: email,
+			userPw: password,
+		};
+		const newUser = doc(db, "users", "user");
+		setDoc(newUser, userData, { merge: true });
 	} catch (error) {
 		console.error(error);
 	}
-};
-
-export const getLoginState = () => {
-	onAuthStateChanged(auth, (user) => {
-		console.log(user);
-		if (user) {
-			const uid = user.uid;
-			return uid;
-		}
-		return null;
-	});
 };
 
 // 로그인
@@ -69,22 +63,23 @@ export const persistenceLogin = (email: string, password: string) => {
 		})
 		.catch((error) => {
 			const errorMessage = error.message;
-			console.log(1111, errorMessage);
+			console.log(errorMessage);
 		});
 };
 
 const provider = new GoogleAuthProvider();
 export const loginGoogle = () => {
 	return signInWithPopup(auth, provider)
-	.then((result) => {
-	  // This gives you a Google Access Token. You can use it to access the Google API.
-	  const credential = GoogleAuthProvider.credentialFromResult(result);
-	  const token = credential?.accessToken;
-	  const userId = result.user.uid
-	  return userId
-	}).catch((error) => {
-	  console.log(error)
-	});
+		.then((result) => {
+			// This gives you a Google Access Token. You can use it to access the Google API.
+			const credential = GoogleAuthProvider.credentialFromResult(result);
+			const token = credential?.accessToken;
+			const userId = result.user.uid;
+			return userId;
+		})
+		.catch((error) => {
+			console.log(error);
+		});
 };
 
 export const logout = () => {
@@ -93,7 +88,7 @@ export const logout = () => {
 			alert("로그아웃 되었습니다.");
 		})
 		.catch(() => {
-			alert("로그아웃 과정에서 문제가 발생했습니다.")
+			alert("로그아웃 과정에서 문제가 발생했습니다.");
 		});
 };
 
