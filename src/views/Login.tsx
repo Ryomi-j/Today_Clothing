@@ -1,8 +1,8 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useRef } from "react";
-import { loginGoogle /* signIn */, persistenceLogin, signIn } from "../firebase";
+import { loginGoogle, signIn } from "../firebase";
 import { useRecoilState } from "recoil";
-import { activeUser, userState } from "../store/user";
+import { userState } from "../store/user";
 
 export const Login = () => {
 	const idInput = useRef<HTMLInputElement>(null);
@@ -24,9 +24,9 @@ export const Login = () => {
 
 	const googleLogin = () => {
 		loginGoogle()
-			.then(() => {
+			.then((uid) => {
 				setLogin(true);
-				navigate("/closet");
+				navigate(`/closet/${uid}`);
 			})
 			.catch((error) => {
 				console.log(error);

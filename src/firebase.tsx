@@ -75,7 +75,16 @@ export const persistenceLogin = (email: string, password: string) => {
 
 const provider = new GoogleAuthProvider();
 export const loginGoogle = () => {
-	return signInWithPopup(auth, provider);
+	return signInWithPopup(auth, provider)
+	.then((result) => {
+	  // This gives you a Google Access Token. You can use it to access the Google API.
+	  const credential = GoogleAuthProvider.credentialFromResult(result);
+	  const token = credential?.accessToken;
+	  const userId = result.user.uid
+	  return userId
+	}).catch((error) => {
+	  console.log(error)
+	});
 };
 
 export const logout = () => {
