@@ -54,16 +54,17 @@ export const loginId = (id: string, password: string) => {
 // 	});
 // };
 
-// export const signIn = async (email: string, password: string) => {
-// 	try {
-// 		const userCredential = await signInWithEmailAndPassword(auth, email, password);
-// 		const user = userCredential.user;
-// 		return user;
-// 	} catch (error) {
-// 		console.error(3333, error);
-// 	}
-// 	return false;
-// };
+// 로그인
+export const signIn = (email: string, password: string) => {
+	return signInWithEmailAndPassword(auth, email, password)
+		.then((userCredential) => {
+			const user = userCredential.user;
+			return user;
+		})
+		.catch(() => {
+			alert("아이디와 비밀번호를 확인하세요");
+		});
+};
 
 const provider = new GoogleAuthProvider();
 export const loginGoogle = () => {
