@@ -1,7 +1,8 @@
 import { initializeApp } from "firebase/app";
-import { collection, doc, getDocs, getFirestore, query, setDoc, where } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, getFirestore, query, setDoc, where } from "firebase/firestore";
 import {
 	GoogleAuthProvider,
+	User,
 	browserSessionPersistence,
 	createUserWithEmailAndPassword,
 	getAuth,
@@ -27,6 +28,7 @@ const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 export const auth = getAuth();
 
+
 // 가입
 export const signUp = async (email: string, password: string) => {
 	try {
@@ -38,7 +40,7 @@ export const signUp = async (email: string, password: string) => {
 			userId: user.email,
 			name: user.displayName,
 		};
-		const newUser = doc(db, "users", "user");
+		const newUser = doc(db, "users", user.uid);
 		setDoc(newUser, userData, { merge: true });
 	} catch (error: any) {
 		const errorMessage = error.message;
@@ -50,16 +52,15 @@ export const signUp = async (email: string, password: string) => {
 
 export const isDuplicateId = async (id: string): Promise<boolean> => {
 	try {
-	  const users = collection(db, "users");
-	  const q = query(users, where("userId", "==", id));
-	  const userInfo = await getDocs(q);
-	  return !userInfo.empty;
+		const users = collection(db, "users");
+		const q = query(users, where("userId", "==", id));
+		const userInfo = await getDocs(q);
+		return !userInfo.empty;
 	} catch (error) {
-	  console.error(error);
-	  return false;
+		console.error(error);
+		return false;
 	}
-  };
-  
+};
 
 // 로그인
 export const signIn = (email: string, password: string) => {
@@ -116,5 +117,22 @@ export const logout = () => {
 			alert("로그아웃 과정에서 문제가 발생했습니다.");
 		});
 };
+
+export const getUserData = async(uid: string): Promise<User | null> => {
+	try {
+	  const userDoc = doc(db, "users", uid); // "users" 컬렉션에서 uid에 해당하는 문서를 가져옵니다.
+	  const userSnapshot = await getDoc(userDoc); // 문서 스냅샷을 가져옵니다.
+	  if (userSnapshot.exists()) {
+		const userData = userSnapshot.data() as User; // 문서 데이터를 User 타입으로 캐스팅합니다.
+		return userData;
+	  } else {
+		console.log("No such document!");
+		return null;
+	  }
+	} catch (error) {
+	  console.error(error);
+	  return null;
+	}
+  }
 
 export default app;
