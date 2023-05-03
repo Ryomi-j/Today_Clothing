@@ -28,7 +28,6 @@ const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 export const auth = getAuth();
 
-
 // 가입
 export const signUp = async (email: string, password: string) => {
 	try {
@@ -54,8 +53,8 @@ export const isDuplicateId = async (id: string): Promise<boolean> => {
 	try {
 		const users = collection(db, "users");
 		const q = query(users, where("userId", "==", id));
-		const userInfo = await getDocs(q);
-		return !userInfo.empty;
+		const user = await getDocs(q);
+		return !user.empty;
 	} catch (error) {
 		console.error(error);
 		return false;
@@ -118,21 +117,20 @@ export const logout = () => {
 		});
 };
 
-export const getUserData = async(uid: string): Promise<User | null> => {
+export const getUserData = async (uid: string) => {
 	try {
-	  const userDoc = doc(db, "users", uid); // "users" 컬렉션에서 uid에 해당하는 문서를 가져옵니다.
-	  const userSnapshot = await getDoc(userDoc); // 문서 스냅샷을 가져옵니다.
-	  if (userSnapshot.exists()) {
-		const userData = userSnapshot.data() as User; // 문서 데이터를 User 타입으로 캐스팅합니다.
-		return userData;
-	  } else {
-		console.log("No such document!");
-		return null;
-	  }
+		const userDoc = doc(db, "users", uid);
+		const userSnapshot = await getDoc(userDoc);
+		if (userSnapshot.exists()) {
+			const userData = userSnapshot.data() as User;
+			return userData;
+		} else {
+			return null;
+		}
 	} catch (error) {
-	  console.error(error);
-	  return null;
+		console.error(error);
+		return null;
 	}
-  }
+};
 
 export default app;
