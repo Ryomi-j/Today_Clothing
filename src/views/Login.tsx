@@ -1,21 +1,24 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useRef } from "react";
-import { loginGoogle, signIn } from "../firebase";
+import { getUserData, loginGoogle, signIn } from "../firebase";
 import { useRecoilState } from "recoil";
-import { userState } from "../store/user";
+import { userInfo, userState } from "../store/user";
 
 export const Login = () => {
 	const idInput = useRef<HTMLInputElement>(null);
 	const pwInput = useRef<HTMLInputElement>(null);
 	// const $modal = document.querySelector('input[type="checkbox"]') as HTMLInputElement;
 	const [login, setLogin] = useRecoilState(userState);
+	const [user, setUser] = useRecoilState(userInfo)
 	const navigate = useNavigate();
 
 	const handleLogin = () => {
 		const id = idInput?.current?.value + "@todayClothing.com" ?? "";
 		const pw = pwInput?.current?.value ?? "";
-		signIn(id, pw).then((success: any) => {
+		signIn(id, pw).then(async (success: any) => {
 			if (success) {
+				const c = await getUserData(success.uid)
+				setUser(c || {})
 				setLogin(true);
 				navigate(`/closet/${success.uid}`);
 			}
@@ -25,6 +28,8 @@ export const Login = () => {
 	const googleLogin = () => {
 		loginGoogle()
 			.then((uid) => {
+				const c = getUserData(uid || "")
+				setUser(c)
 				setLogin(true);
 				navigate(`/closet/${uid}`);
 			})

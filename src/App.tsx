@@ -10,26 +10,26 @@ import { Record } from "./views/Record";
 import { EditCloset } from "./views/EditCloset";
 import { Post } from "./views/Post";
 import { useEffect } from "react";
-import { auth } from "./firebase";
+import { auth, getUserData } from "./firebase";
 import { useRecoilState } from "recoil";
-import {  activeUser, userState } from "./store/user";
+import {  userInfo, userState } from "./store/user";
 
 function App() {
 	const [login, setLogin] = useRecoilState(userState);
-	const [userUid, setUserUid] = useRecoilState(activeUser);
+	const [user, setUser] = useRecoilState(userInfo)
 
 	useEffect(() => {
-		auth.onAuthStateChanged((user) => {
+		auth.onAuthStateChanged(async (user) => {
 			if (user !== null) {
-				const currentUser = JSON.parse(JSON.stringify(user));
+				const c = await getUserData(user.uid)
+				setUser(c || {})
 				setLogin(true);
-				setUserUid(currentUser.uid);
 			} else {
 				setLogin(false)
-				setUserUid("")
 			}
 		});
 	}, []);
+	console.log(user)
 
 	return (
 		<BrowserRouter>
