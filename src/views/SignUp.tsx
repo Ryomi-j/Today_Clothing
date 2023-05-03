@@ -16,7 +16,6 @@ export const SignUp = () => {
 
 	const checkId = async () => {
 		const result = await isDuplicateId(id + "@todayClothing.com");
-		console.log(result);
 		if (result) {
 			alert("이미 사용중인 ID입니다.");
 		} else {

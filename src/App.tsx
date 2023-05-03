@@ -16,23 +16,20 @@ import {  activeUser, userState } from "./store/user";
 
 function App() {
 	const [login, setLogin] = useRecoilState(userState);
-	const [userInfo, setUserInfo] = useRecoilState(activeUser);
+	const [userUid, setUserUid] = useRecoilState(activeUser);
 
 	useEffect(() => {
 		auth.onAuthStateChanged((user) => {
 			if (user !== null) {
 				const currentUser = JSON.parse(JSON.stringify(user));
 				setLogin(true);
-				setUserInfo(currentUser.uid);
-				console.log(currentUser);
+				setUserUid(currentUser.uid);
 			} else {
 				setLogin(false)
-				setUserInfo("")
-				console.log('로그인된 정보가 없습니다.')
+				setUserUid("")
 			}
 		});
 	}, []);
-
 
 	return (
 		<BrowserRouter>
