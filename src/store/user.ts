@@ -15,8 +15,8 @@ export interface Data {
 }
 
 export interface User {
+	uid: string;
 	id: string;
-	pw: string;
 	data?: Data;
 }
 
@@ -32,7 +32,12 @@ export const activeUser = atom({
 	default: "",
 });
 
-export const UserData = selector<User[]>({
+export const userInfo = atom({
+	key: "userInfo",
+	default: {},
+});
+
+export const userData = selector<User[]>({
 	key: "userData",
 	get: async () => {
 		try {
@@ -47,7 +52,3 @@ export const UserData = selector<User[]>({
 		}
 	},
 });
-
-export const userDB = (uid: string) => {
-	
-}
