@@ -1,11 +1,10 @@
 import { Link } from "react-router-dom";
 import { useRecoilState } from "recoil";
-import { activeUser, userState } from "../store/user";
+import { userState } from "../store/user";
 import { logout } from "../firebase";
 
 export const Nav = () => {
 	const [login, setLogin] = useRecoilState(userState);
-	const [userInfo, setUserInfo] = useRecoilState(activeUser);
 
 	const handleLogout = () => {
 		if (!login) return;

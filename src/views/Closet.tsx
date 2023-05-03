@@ -1,15 +1,9 @@
 import { Link } from "react-router-dom";
 import { EmptyImageFrame, ImageFrame } from "../components/common/ImageFrame";
-import { useRecoilValue } from "recoil";
-import { activeUser } from "../store/user";
-import { getUserData } from "../firebase";
 
 export const Closet = () => {
-	const userUid = useRecoilValue(activeUser);
 	// let days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-	const c = getUserData(userUid)
-	console.log(c)
-	
+
 	return (
 		<div className="flex min-h-[calc(100vh-3.3rem)] pt-16 bg-base-200">
 			<div className="card gap-5 my-8 mx-auto min-w-2/5 bg-base-100 shadow-xl p-7">
