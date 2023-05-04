@@ -12,24 +12,26 @@ import { Post } from "./views/Post";
 import { useEffect } from "react";
 import { auth, getUserData } from "./firebase";
 import { useRecoilState } from "recoil";
-import {  userInfo, userState } from "./store/user";
+import { userInfo, userState } from "./store/user";
+import { getGeoInfo } from "./utils/userGeolocation";
 
 function App() {
 	const [login, setLogin] = useRecoilState(userState);
-	const [user, setUser] = useRecoilState(userInfo)
+	const [user, setUser] = useRecoilState(userInfo);
+	const { getUserGeoInfo } = getGeoInfo();
 
 	useEffect(() => {
 		auth.onAuthStateChanged(async (user) => {
 			if (user !== null) {
-				const c = await getUserData(user.uid)
-				setUser(c || {})
+				const c = await getUserData(user.uid);
+				setUser(c || {});
 				setLogin(true);
+				getUserGeoInfo();
 			} else {
-				setLogin(false)
+				setLogin(false);
 			}
 		});
 	}, []);
-	console.log(user)
 
 	return (
 		<BrowserRouter>
