@@ -16,7 +16,6 @@ export const weatherData = selector<WeatherProps>({
 		const API_KEY = import.meta.env.VITE_WEATHER_API_KEY;
 		const WEATHER_API = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&lang=kr`;
 
-		console.log(lat, lon);
 		try {
 			const response = await axios.get(WEATHER_API);
 			const weatherProps: WeatherProps = {

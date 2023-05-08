@@ -9,8 +9,8 @@ export const Login = () => {
 	const idInput = useRef<HTMLInputElement>(null);
 	const pwInput = useRef<HTMLInputElement>(null);
 	// const $modal = document.querySelector('input[type="checkbox"]') as HTMLInputElement;
-	const [login, setLogin] = useRecoilState(userState);
-	const [user, setUser] = useRecoilState(userInfo)
+	const [, setLogin] = useRecoilState(userState);
+	const [, setUser] = useRecoilState(userInfo);
 	const navigate = useNavigate();
 
 	const handleLogin = () => {
@@ -18,8 +18,8 @@ export const Login = () => {
 		const pw = pwInput?.current?.value ?? "";
 		signIn(id, pw).then(async (success: any) => {
 			if (success) {
-				const c = await getUserData(success.uid)
-				setUser(c || {})
+				const c = await getUserData(success.uid);
+				setUser(c || {});
 				setLogin(true);
 				navigate(`/closet/${success.uid}`);
 			}
@@ -29,8 +29,8 @@ export const Login = () => {
 	const googleLogin = () => {
 		loginGoogle()
 			.then((uid) => {
-				const c = getUserData(uid || "")
-				setUser(c)
+				const c = getUserData(uid || "");
+				setUser(c);
 				setLogin(true);
 				navigate(`/closet/${uid}`);
 			})
@@ -41,7 +41,7 @@ export const Login = () => {
 
 	return (
 		<>
-		<GetGeoInfo />
+			<GetGeoInfo />
 			<div className="hero min-h-[calc(100vh-3.3rem)] pt-16 bg-base-200">
 				<div className="card flex-shrink-0 shadow-2xl bg-base-100">
 					<div className="card-body p-14 gap-5">
