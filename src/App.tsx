@@ -13,12 +13,10 @@ import { useEffect } from "react";
 import { auth, getUserData } from "./firebase";
 import { useRecoilState } from "recoil";
 import { userInfo, userState } from "./store/user";
-import { geolocation } from "./store/geolocation";
 
 function App() {
-	const [login, setLogin] = useRecoilState(userState);
-	const [user, setUser] = useRecoilState(userInfo);
-	const [location, setLocation] = useRecoilState(geolocation);
+	const [, setLogin] = useRecoilState(userState);
+	const [, setUser] = useRecoilState(userInfo);
 
 	useEffect(() => {
 		auth.onAuthStateChanged(async (user) => {
