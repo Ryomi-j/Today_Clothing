@@ -1,15 +1,15 @@
 import { useRecoilState } from "recoil";
 import { geolocation } from "../store/geolocation";
-import { useCallback } from "react";
+import { useEffect } from "react";
 
-export const getGeoInfo = () => {
+export const GetGeoInfo = () => {
 	const [location, setLocation] = useRecoilState(geolocation);
 
-	const getUserGeoInfo = useCallback(() => {
+	useEffect(() => {
 		navigator.geolocation.getCurrentPosition(function (position) {
 			setLocation([position.coords.latitude, position.coords.longitude]);
 		});
-	}, [setLocation]);
+	}, []);
 
-	return { getUserGeoInfo };
+	return null;
 };

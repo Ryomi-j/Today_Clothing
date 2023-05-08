@@ -13,12 +13,12 @@ import { useEffect } from "react";
 import { auth, getUserData } from "./firebase";
 import { useRecoilState } from "recoil";
 import { userInfo, userState } from "./store/user";
-import { getGeoInfo } from "./utils/userGeolocation";
+import { geolocation } from "./store/geolocation";
 
 function App() {
 	const [login, setLogin] = useRecoilState(userState);
 	const [user, setUser] = useRecoilState(userInfo);
-	const { getUserGeoInfo } = getGeoInfo();
+	const [location, setLocation] = useRecoilState(geolocation);
 
 	useEffect(() => {
 		auth.onAuthStateChanged(async (user) => {
@@ -26,7 +26,6 @@ function App() {
 				const c = await getUserData(user.uid);
 				setUser(c || {});
 				setLogin(true);
-				getUserGeoInfo();
 			} else {
 				setLogin(false);
 			}

@@ -3,6 +3,7 @@ import { useRef } from "react";
 import { getUserData, loginGoogle, signIn } from "../firebase";
 import { useRecoilState } from "recoil";
 import { userInfo, userState } from "../store/user";
+import { GetGeoInfo } from "../utils/userGeolocation";
 
 export const Login = () => {
 	const idInput = useRef<HTMLInputElement>(null);
@@ -40,6 +41,7 @@ export const Login = () => {
 
 	return (
 		<>
+		<GetGeoInfo />
 			<div className="hero min-h-[calc(100vh-3.3rem)] pt-16 bg-base-200">
 				<div className="card flex-shrink-0 shadow-2xl bg-base-100">
 					<div className="card-body p-14 gap-5">
