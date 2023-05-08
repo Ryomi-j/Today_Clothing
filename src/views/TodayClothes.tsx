@@ -1,7 +1,23 @@
+import { useRecoilValue } from "recoil";
 import { Modal } from "../components/common/Modal";
-import {BiShareAlt} from "react-icons/bi"
+import { BiShareAlt } from "react-icons/bi";
+import { weatherData } from "../api/weatherApi";
+import { useEffect, useState } from "react";
 
 export const TodayClothes = () => {
+	const weather = useRecoilValue(weatherData);
+	const [today, setToday] = useState(new Date());
+	const days = ["일", "월", "화", "수", "목", "금", "토"];
+
+	useEffect(() => {
+		setToday(new Date());
+	}, []);
+	
+	let year = today.getFullYear();
+	let month = today.getMonth() + 1;
+	let date = today.getDate();
+	let day = today.getDay()
+
 	return (
 		<div className="flex w-screen min-h-[calc(100vh-3.3rem)] pt-16 bg-base-200">
 			<div className="card m-auto w-fit h-auto bg-base-100 shadow-xl py-7 px-10">
@@ -23,7 +39,9 @@ export const TodayClothes = () => {
 							<polyline fill="none" stroke="white" strokeWidth="2" points="7 2 17 12 7 22"></polyline>
 						</svg>
 					</button>
-					<p className="mt-8 mb-8 text-xl text-center">2023년 4월 24일 월요일 15도 흐림</p>
+					<p className="mt-8 mb-8 text-xl text-center">
+						{year}년 {month}월 {date}일 {days[day]}요일 {weather.temp}C° {weather.weather}
+					</p>
 					<div className="flex flex-row-reverse">
 						<label htmlFor="my-modal-6" className="btn btn-primary w-1/3">
 							Share <BiShareAlt className="pl-2 text-xl" />
