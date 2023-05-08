@@ -3,11 +3,13 @@ import { geolocation } from "../store/geolocation";
 import { useEffect } from "react";
 
 export const GetGeoInfo = () => {
-	const [location, setLocation] = useRecoilState(geolocation);
+	const [, setLocation] = useRecoilState(geolocation);
 
 	useEffect(() => {
 		navigator.geolocation.getCurrentPosition(function (position) {
-			setLocation([position.coords.latitude, position.coords.longitude]);
+			const newLocation = [position.coords.latitude, position.coords.longitude]
+			setLocation(newLocation);
+			localStorage.setItem('userLocation', JSON.stringify(newLocation));
 		});
 	}, []);
 
