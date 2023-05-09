@@ -37,6 +37,8 @@ function App() {
 			<main>
 				<Routes>
 					<Route path="/*" element={login ? <TodayClothes /> : <Talk />} />
+					<Route path="/todayClothes" element={<TodayClothes />} />
+					<Route path="/talk" element={<Talk />} />
 					<Route path="/login" element={<Login />} />
 					<Route path="/sign-up" element={<SignUp />} />
 					<Route path="/closet" element={<Closet />} />
