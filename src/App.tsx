@@ -13,9 +13,10 @@ import { useEffect } from "react";
 import { auth, getUserData } from "./firebase";
 import { useRecoilState } from "recoil";
 import { userInfo, userState } from "./store/user";
+import { Talk } from "./views/Talk";
 
 function App() {
-	const [, setLogin] = useRecoilState(userState);
+	const [login, setLogin] = useRecoilState(userState);
 	const [, setUser] = useRecoilState(userInfo);
 
 	useEffect(() => {
@@ -35,7 +36,7 @@ function App() {
 			<Nav />
 			<main>
 				<Routes>
-					<Route path="/*" element={<TodayClothes />} />
+					<Route path="/*" element={login ? <TodayClothes /> : <Talk />} />
 					<Route path="/login" element={<Login />} />
 					<Route path="/sign-up" element={<SignUp />} />
 					<Route path="/closet" element={<Closet />} />
