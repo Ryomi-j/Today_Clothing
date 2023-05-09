@@ -22,7 +22,7 @@ export const TodayClothes = () => {
 		<div className="flex w-screen min-h-[calc(100vh-3.3rem)] pt-16 bg-base-200">
 			<div className="card m-auto w-fit h-auto bg-base-100 shadow-xl py-7 px-10">
 				<h2 className="text-4xl font-extrabold text-center pt-5 pb-5">Today's Clothes</h2>
-				<figure className="w-96 h-96 border-2 rounded-md">
+				<figure className="w-96 h-96 mx-auto border-2 rounded-md">
 					<img src="/vite.svg" alt="Shoes" />
 				</figure>
 				<div className="card-body">
@@ -40,7 +40,8 @@ export const TodayClothes = () => {
 						</svg>
 					</button>
 					<p className="mt-8 mb-8 text-xl text-center">
-						{year}년 {month}월 {date}일 {days[day]}요일 {weather.temp}C° {weather.weather}
+						{year}년 {month}월 {date}일 {days[day]}요일 <br />
+						습도 {weather.humidity}% 온도{weather.temp}C° {weather.weather}
 					</p>
 					<div className="flex flex-row-reverse">
 						<label htmlFor="my-modal-6" className="btn btn-primary w-1/3">
