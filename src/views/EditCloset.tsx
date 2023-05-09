@@ -1,14 +1,35 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { storage } from "../firebase";
+import { useRecoilValue } from "recoil";
+import { userInfo } from "../store/user";
+import { v4 } from "uuid";
 import { Modal } from "../components/common/Modal";
 
 export const EditCloset = () => {
 	const [imgUrl, setImgUrl] = useState<undefined | string>("/public/addImg.svg");
 	const [imgUpload, setImgUpload] = useState<undefined | File>(undefined);
+	const user = useRecoilValue(userInfo);
+	const userUid = user && user.uid;
+	let fileName = "";
 
 	const getImgUrl = (file: File) => {
 		const url = URL.createObjectURL(file);
 		setImgUrl(url);
+	};
+
+	const uploadImg = () => {
+		if (!imgUpload) return;
+
+		fileName = `${userUid + imgUpload.name + v4()}`;
+		const imgRef = ref(storage, `imgs/${fileName}`);
+		uploadBytes(imgRef, imgUpload).then((snapshot) => {
+			getDownloadURL(snapshot.ref).then((downloadURL) => {
+				console.log("File available at", downloadURL);
+				setImgUrl(downloadURL);
+			});
+		});
 	};
 
 	useEffect(() => {
@@ -46,7 +67,7 @@ export const EditCloset = () => {
 				<div className="card-body max-h-fit">
 					<h3 className=" mb-14 text-3xl font-semibold text-center">Tue</h3>
 					<div className="flex justify-end gap-2">
-						<label htmlFor="my-modal-6" className="btn btn-primary" >
+						<label htmlFor="my-modal-6" className="btn btn-primary" onClick={uploadImg}>
 							Save
 						</label>
 						<Link to="/closet">
