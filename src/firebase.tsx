@@ -42,7 +42,8 @@ export const signUp = async (email: string, password: string) => {
 			name: user.displayName,
 		};
 		const newUser = doc(db, "users", user.uid);
-		setDoc(newUser, userData, { merge: true });
+		await setDoc(newUser, userData, { merge: true });
+		await signOut(auth);
 	} catch (error: any) {
 		const errorMessage = error.message;
 		if (errorMessage === "Firebase: Error (auth/email-already-in-use).") {
@@ -91,8 +92,8 @@ export const loginGoogle = () => {
 	return signInWithPopup(auth, provider)
 		.then((result) => {
 			// This gives you a Google Access Token. You can use it to access the Google API.
-			const credential = GoogleAuthProvider.credentialFromResult(result);
-			const token = credential?.accessToken;
+			// const credential = GoogleAuthProvider.credentialFromResult(result);
+			// const token = credential?.accessToken;
 			const user = result.user;
 			const userData = {
 				uid: user.uid,
@@ -111,12 +112,6 @@ export const loginGoogle = () => {
 
 export const logout = () => {
 	signOut(auth)
-		.then(() => {
-			alert("로그아웃 되었습니다.");
-		})
-		.catch(() => {
-			alert("로그아웃 과정에서 문제가 발생했습니다.");
-		});
 };
 
 export const getUserData = async (uid: string) => {
