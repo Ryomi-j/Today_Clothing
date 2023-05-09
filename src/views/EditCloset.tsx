@@ -17,6 +17,7 @@ export const EditCloset = () => {
 	const getImgUrl = (file: File) => {
 		const url = URL.createObjectURL(file);
 		setImgUrl(url);
+		console.log(url)
 	};
 
 	const uploadImg = () => {
@@ -53,6 +54,7 @@ export const EditCloset = () => {
 					<label id="label" className="w-1/3 h-1/3 bg-no-repeat bg-center bg-contain ">
 						<input
 							type="file"
+							accept=".jpg,.jpeg,.png"
 							className="hidden"
 							onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
 								const file = e.target.files?.[0];
