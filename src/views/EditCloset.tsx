@@ -17,7 +17,6 @@ export const EditCloset = () => {
 	const getImgUrl = (file: File) => {
 		const url = URL.createObjectURL(file);
 		setImgUrl(url);
-		console.log(url)
 	};
 
 	const uploadImg = () => {
@@ -38,9 +37,9 @@ export const EditCloset = () => {
 			const label = document.querySelector("#label");
 			if (label instanceof HTMLElement) {
 				label.style.backgroundImage = `url(${imgUrl})`;
-				if(imgUrl !== "/public/addImg.svg"){
-					label.style.width = "100%"
-					label.style.height = "100%"
+				if (imgUrl !== "/public/addImg.svg") {
+					label.style.width = "100%";
+					label.style.height = "100%";
 				}
 			}
 		}
@@ -48,10 +47,10 @@ export const EditCloset = () => {
 
 	return (
 		<div className="flex min-h-[calc(100vh-3.3rem)] pt-16 bg-base-200">
-			<div className="card gap-5 my-6 mx-auto py-7 px-14 bg-base-100 shadow-xl">
+			<div className="card gap-5 my-auto mx-auto max-h-min py-7 px-14 bg-base-100 shadow-xl">
 				<h2 className="text-4xl font-extrabold text-center pt-5 pb-5">Edit Weekly Closet</h2>
-				<figure className="w-96 h-96 m-auto border-2 rounded-md cursor-pointer">
-					<label id="label" className="w-1/3 h-1/3 bg-no-repeat bg-center bg-contain ">
+				<figure className="w-96 h-96 m-auto border-2 rounded-md bg-base-200">
+					<label id="label" className="w-1/3 h-1/3 bg-no-repeat bg-center bg-contain cursor-pointer">
 						<input
 							type="file"
 							accept=".jpg,.jpeg,.png"
