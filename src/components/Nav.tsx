@@ -8,9 +8,9 @@ export const Nav = () => {
 
 	const handleLogout = () => {
 		if (!login) return;
-		logout()
-		setLogin(false)
-		window.location.reload()
+		logout();
+		setLogin(false);
+		window.location.reload();
 	};
 
 	return (
@@ -35,9 +35,16 @@ export const Nav = () => {
 						<li className="font-medium">
 							<Link to="/talk">Talk</Link>
 						</li>
-						<li className="font-medium">
-							<Link to="/closet">My Closet</Link>
-						</li>
+						{login && (
+							<>
+								<li className="font-medium">
+									<Link to="/TodayClothing">Today's Clothing</Link>
+								</li>
+								<li className="font-medium">
+									<Link to="/closet">My Closet</Link>
+								</li>
+							</>
+						)}
 						<li className="font-medium" onClick={handleLogout}>
 							{login ? <Link to="/login">Login</Link> : <Link to="/login">Login</Link>}
 						</li>
@@ -57,10 +64,17 @@ export const Nav = () => {
 					<li className="font-medium">
 						<Link to="/talk">Talk</Link>
 					</li>
-					<li className="font-medium">
-						<Link to="/closet">My Closet</Link>
-					</li>
-					<li className="font-medium"  onClick={handleLogout}>
+					{login && (
+						<>
+							<li className="font-medium">
+								<Link to="/TodayClothing">Today's Clothing</Link>
+							</li>
+							<li className="font-medium">
+								<Link to="/closet">My Closet</Link>
+							</li>
+						</>
+					)}
+					<li className="font-medium" onClick={handleLogout}>
 						{login ? <Link to="/login">Logout</Link> : <Link to="/login">Login</Link>}
 					</li>
 				</ul>
