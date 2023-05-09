@@ -1,13 +1,14 @@
 import { useRef, useState } from "react";
 import { isDuplicateId, signUp } from "../firebase";
+import { useNavigate } from "react-router-dom";
 
 export const SignUp = () => {
 	const idInput = useRef<HTMLInputElement>(null);
 	const pwInput = useRef<HTMLInputElement>(null);
 	const confirmPw = useRef<HTMLInputElement>(null);
-	const [link, setLink] = useState("");
 	const [id, setId] = useState("");
 	const [isIdDuplicate, setIsIdDuplicate] = useState(false);
+	const nav = useNavigate()
 
 	const handleIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setId(event.target.value);
@@ -32,17 +33,14 @@ export const SignUp = () => {
 		if (!isIdDuplicate) return alert("아이디 중복검사가 필요합니다.");
 		else if (id.length < 6) {
 			alert("6자리 이상의 id를 입력해주세요");
-			setLink("/sign-up");
 		} else if (pw.length < 6) {
 			alert("6자리 이상의 password를 입력해주세요");
-			setLink("");
 		} else if (pw !== _pw) {
 			alert("password가 일치하지 않습니다.");
-			setLink("");
 		} else {
 			signUp(email, pw);
 			alert("축하합니다. 가입이 완료되었습니다 :)");
-			setLink("login");
+			nav('/login')
 		}
 	};
 
