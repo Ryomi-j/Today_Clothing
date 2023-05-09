@@ -12,6 +12,7 @@ import {
 	signOut,
 } from "firebase/auth";
 import "firebase/database";
+import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
 	apiKey: "AIzaSyDpUao1XcGxU6g0x7bBELobfO1Tu611VgU",
@@ -27,6 +28,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 export const auth = getAuth();
+export const storage = getStorage(app)
 
 // 가입
 export const signUp = async (email: string, password: string) => {
