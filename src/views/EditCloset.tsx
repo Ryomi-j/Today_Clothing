@@ -16,7 +16,6 @@ export const EditCloset = () => {
 	const [imgUpload, setImgUpload] = useState<undefined | File>(undefined);
 	const user = useRecoilValue(userInfo);
 	const userUid = user && user.uid;
-	let fileName = "";
 
 	const getImgUrl = (file: File) => {
 		const url = URL.createObjectURL(file);
@@ -26,18 +25,17 @@ export const EditCloset = () => {
 	const uploadImg = () => {
 		if (!imgUpload) return;
 
-		fileName = `${userUid + imgUpload.name + v4()}`;
+		const fileName = `${userUid + imgUpload.name + v4()}`;
 		const imgRef = ref(storage, `imgs/${fileName}`);
 		uploadBytes(imgRef, imgUpload).then((snapshot) => {
 			getDownloadURL(snapshot.ref).then((downloadURL) => {
-				console.log("File available at", downloadURL);
-				setImgUrl(downloadURL);
+				setDoc(doc(db, "post", `${userUid}${date}v4()`), {
+					id: v4(),
+					date: date,
+					imgUrl: downloadURL,
+					uid: userUid
+				});
 			});
-		});
-		setDoc(doc(db, "post", userUid), {
-			id: v4(),
-			date: date,
-			imgUrl: imgUrl,
 		});
 	};
 
