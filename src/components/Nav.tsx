@@ -38,7 +38,7 @@ export const Nav = () => {
 						{login && (
 							<>
 								<li className="font-medium">
-									<Link to="/TodayClothing">Today's Clothing</Link>
+									<Link to="/TodayClothes">Today's Clothing</Link>
 								</li>
 								<li className="font-medium">
 									<Link to="/closet">My Closet</Link>
@@ -67,7 +67,7 @@ export const Nav = () => {
 					{login && (
 						<>
 							<li className="font-medium">
-								<Link to="/TodayClothing">Today's Clothing</Link>
+								<Link to="/TodayClothes">Today's Clothing</Link>
 							</li>
 							<li className="font-medium">
 								<Link to="/closet">My Closet</Link>
