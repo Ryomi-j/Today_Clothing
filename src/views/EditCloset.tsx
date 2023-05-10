@@ -1,13 +1,17 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { storage } from "../firebase";
+import { db, storage } from "../firebase";
 import { useRecoilValue } from "recoil";
 import { userInfo } from "../store/user";
 import { v4 } from "uuid";
 import { Modal } from "../components/common/Modal";
+import { selectedDate } from "../store/editItem";
+import { doc, setDoc } from "firebase/firestore";
 
 export const EditCloset = () => {
+	const date = useRecoilValue(selectedDate);
+
 	const [imgUrl, setImgUrl] = useState<undefined | string>("/public/addImg.svg");
 	const [imgUpload, setImgUpload] = useState<undefined | File>(undefined);
 	const user = useRecoilValue(userInfo);
@@ -29,6 +33,11 @@ export const EditCloset = () => {
 				console.log("File available at", downloadURL);
 				setImgUrl(downloadURL);
 			});
+		});
+		setDoc(doc(db, "post", userUid), {
+			id: v4(),
+			date: date,
+			imgUrl: imgUrl,
 		});
 	};
 

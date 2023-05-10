@@ -1,12 +1,17 @@
 import { Link } from "react-router-dom";
+import { useRecoilState } from "recoil";
+import { selectedDate } from "../../store/editItem";
 
 interface ImageFrameDataType {
 	content: string;
 	hashtag?: string;
 	deleteBtn?: boolean;
+	date?: Date;
 }
 
-export const ImageFrame = ({ content, hashtag, deleteBtn }: ImageFrameDataType) => {
+export const ImageFrame = ({ content, hashtag, deleteBtn, date }: ImageFrameDataType) => {
+	const [, setDate] = useRecoilState(selectedDate);
+
 	return (
 		<div className="card card-compact w-96 bg-base-100 shadow-xl">
 			<figure className="w-96 h-96 max-w-96 max-h-96">
@@ -18,7 +23,11 @@ export const ImageFrame = ({ content, hashtag, deleteBtn }: ImageFrameDataType) 
 				<div className="flex gap-2 justify-end">
 					<div className="card-actions justify-end">
 						<Link to="/editCloset">
-							<button className="btn btn-primary btn-sm">edit</button>
+							{date && (
+								<button className="btn btn-primary btn-sm" onClick={() => setDate(date.getTime())}>
+									edit
+								</button>
+							)}
 						</Link>
 					</div>
 					{deleteBtn && (
@@ -34,13 +43,20 @@ export const ImageFrame = ({ content, hashtag, deleteBtn }: ImageFrameDataType) 
 	);
 };
 
-export const EmptyImageFrame = ({ content }: ImageFrameDataType) => {
+export const EmptyImageFrame = ({ content, date }: ImageFrameDataType) => {
+	const [, setDate] = useRecoilState(selectedDate);
+
 	return (
 		<div className="card card-compact w-96 bg-base-100 shadow-xl">
 			<Link to="/editCloset">
-				<figure className="w-96 h-96 max-w-96 max-h-96 bg-base-200 cursor-pointer rounded-t-2xl">
-					<img src="/addImg.svg" alt="Shoes" className="w-1/4" />
-				</figure>
+				{date && (
+					<figure
+						className="w-96 h-96 max-w-96 max-h-96 bg-base-200 cursor-pointer rounded-t-2xl"
+						onClick={() => setDate(date.getTime())}
+					>
+						<img src="/addImg.svg" alt="Shoes" className="w-1/4" />
+					</figure>
+				)}
 			</Link>
 			<div className="card-body h-28 ">
 				<h3 className="card-title justify-center">{content}</h3>
