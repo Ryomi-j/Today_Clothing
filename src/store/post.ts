@@ -11,13 +11,13 @@ export interface Post {
 	weather: string;
 }
 
-export const PostData = selector<Post[]>({
+export const postData = selector<Post[]>({
 	key: "postData",
 	get: async () => {
 		try {
 			const posts = collection(db, "post");
-			const postData = await getDocs(posts);
-			const post = postData.docs.map((doc) => doc.data() as Post);
+			const postItems = await getDocs(posts);
+			const post = postItems.docs.map((doc) => doc.data() as Post);
             console.log(post)
 			return post || [];
 		} catch (error) {
