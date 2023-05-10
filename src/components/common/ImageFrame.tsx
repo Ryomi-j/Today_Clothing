@@ -4,18 +4,19 @@ import { selectedDate } from "../../store/editItem";
 
 interface ImageFrameDataType {
 	content: string;
+	src?: string;
 	hashtag?: string;
 	deleteBtn?: boolean;
 	date?: Date;
 }
 
-export const ImageFrame = ({ content, hashtag, deleteBtn, date }: ImageFrameDataType) => {
+export const ImageFrame = ({ content, src, hashtag, deleteBtn, date }: ImageFrameDataType) => {
 	const [, setDate] = useRecoilState(selectedDate);
 
 	return (
 		<div className="card card-compact w-96 bg-base-100 shadow-xl">
 			<figure className="w-96 h-96 max-w-96 max-h-96">
-				<img src="https://ribino.jp/web/product/big/202010/ef5634e25af800765b9dd263bceb39f8.gif" alt="clothing image" />
+				<img src={src} alt={`${date?.toString().slice(0, 15)} clothing image`} />
 			</figure>
 			<div className="card-body min-h-28">
 				<h3 className="card-title justify-center">{content}</h3>
