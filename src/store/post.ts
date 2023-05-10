@@ -3,12 +3,14 @@ import { selector } from "recoil";
 import { db } from "../firebase";
 
 export interface Post {
+	date: number,
+	id: string,
+	imgUrl: string,
+	uid: string,
 	createdAt : string,
-	img: string;
 	location: string;
-	pw: string;
-	userId: string;
 	weather: string;
+	humidity: string
 }
 
 export const postData = selector<Post[]>({
