@@ -18,7 +18,7 @@ export const ImageFrame = ({ content, src, hashtag, deleteBtn, date }: ImageFram
 			<figure className="w-96 h-96 max-w-96 max-h-96 border-2 border-base-200">
 				<img src={src} alt={`${date?.toString().slice(0, 15)} clothing image`} />
 			</figure>
-			<div className="card-body min-h-28 bg-base-200">
+			<div className="card-body min-h-28 bg-base-200  rounded-b-2xl">
 				<h3 className="card-title justify-center">{content}</h3>
 				{hashtag && <p>{hashtag}</p>}
 				<div className="flex gap-2 justify-end">
