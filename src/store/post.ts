@@ -15,7 +15,7 @@ export const PostData = selector<Post[]>({
 	key: "postData",
 	get: async () => {
 		try {
-			const posts = collection(db, "posts");
+			const posts = collection(db, "post");
 			const postData = await getDocs(posts);
 			const post = postData.docs.map((doc) => doc.data() as Post);
             console.log(post)
