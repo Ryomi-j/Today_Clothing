@@ -11,7 +11,7 @@ import { doc, setDoc } from "firebase/firestore";
 
 export const EditCloset = () => {
 	const date = useRecoilValue(selectedDate);
-
+	
 	const [imgUrl, setImgUrl] = useState<undefined | string>("/public/addImg.svg");
 	const [imgUpload, setImgUpload] = useState<undefined | File>(undefined);
 	const user = useRecoilValue(userInfo);
@@ -73,7 +73,7 @@ export const EditCloset = () => {
 					</label>
 				</figure>
 				<div className="card-body max-h-fit">
-					<h3 className=" mb-14 text-3xl font-semibold text-center">Tue</h3>
+					<h3 className=" mb-14 text-3xl font-semibold text-center">{new Date(date).toString().slice(0, 3)}</h3>
 					<div className="flex justify-end gap-2">
 						<label htmlFor="my-modal-6" className="btn btn-primary" onClick={uploadImg}>
 							Save
