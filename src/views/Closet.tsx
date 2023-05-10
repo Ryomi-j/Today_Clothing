@@ -1,16 +1,16 @@
 import { Link } from "react-router-dom";
 import { EmptyImageFrame, ImageFrame } from "../components/common/ImageFrame";
 import { v4 } from "uuid";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { userInfo } from "../store/user";
-import { postData } from "../store/post";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { postData, userPost } from "../store/post";
+import { useEffect, useMemo, useRef } from "react";
 
 export const Closet = () => {
 	const user = useRecoilValue(userInfo);
 	const userUid = user && user.uid;
 	const postItems = useRecoilValue(postData);
-	const [postArr, setPostArr] = useState(new Array(7).fill(null));
+	const [postArr, setPostArr] = useRecoilState(userPost);
 	const postArrRef = useRef(postArr);
 
 	const today = useMemo(() => new Date(), []);
@@ -18,7 +18,7 @@ export const Closet = () => {
 		() => new Date(today.getFullYear(), today.getMonth(), today.getDate() + ((1 + 7 - today.getDay()) % 7)),
 		[today]
 	);
-	
+
 	const weekDates: Date[] = useMemo(() => {
 		const dates = [];
 		for (let i = 0; i < 7; i++) {
