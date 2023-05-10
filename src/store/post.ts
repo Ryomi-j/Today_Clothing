@@ -1,5 +1,5 @@
 import { collection, getDocs } from "firebase/firestore";
-import { selector } from "recoil";
+import { atom, selector } from "recoil";
 import { db } from "../firebase";
 
 export interface Post {
@@ -28,3 +28,8 @@ export const postData = selector<Post[]>({
 		}
 	},
 });
+
+export const userPost = atom({
+	key: "userPost",
+	default: new Array(7).fill(null)
+})
