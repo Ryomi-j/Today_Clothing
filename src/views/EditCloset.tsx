@@ -2,32 +2,45 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { db, storage } from "../firebase";
-import { useRecoilValue } from "recoil";
+import { useRecoilCallback, useRecoilState, useRecoilValue } from "recoil";
 import { userInfo } from "../store/user";
 import { v4 } from "uuid";
 import { Modal } from "../components/common/Modal";
 import { selectedDate } from "../store/editItem";
-import { doc, setDoc } from "firebase/firestore";
-import { userPost } from "../store/post";
+import { collection, doc, getDocs, setDoc } from "firebase/firestore";
+import { Post, userPost } from "../store/post";
 
 export const EditCloset = () => {
 	const date = useRecoilValue(selectedDate);
 	const newDate = new Date(date).toString();
-	const postArr = useRecoilValue(userPost);
+	const [postArr, setPostArr] = useRecoilState(userPost);
 
 	const [imgUrl, setImgUrl] = useState<undefined | string>("/public/addImg.svg");
 	const [imgUpload, setImgUpload] = useState<undefined | File>(undefined);
 	const user = useRecoilValue(userInfo);
 	const userUid = user && user.uid;
 
+	const getPostData = useRecoilCallback(({ set }) => async () => {
+		try {
+			const posts = collection(db, "post");
+			const postItems = await getDocs(posts);
+			const post = postItems.docs.map((doc) => doc.data() as Post);
+			set(userPost, post || []);
+		} catch (error) {
+			console.error(error);
+			set(userPost, []);
+		}
+	});
+
 	useEffect(() => {
 		postArr.forEach((post) => {
-			if(post && post.date === date){
+			if (post && post.date === date) {
 				setImgUrl(post.imgUrl);
 			}
 		});
+		getPostData();
 	}, []);
- 
+
 	const getImgUrl = (file: File) => {
 		const url = URL.createObjectURL(file);
 		setImgUrl(url);
@@ -40,11 +53,15 @@ export const EditCloset = () => {
 		const imgRef = ref(storage, `imgs/${fileName}`);
 		uploadBytes(imgRef, imgUpload).then((snapshot) => {
 			getDownloadURL(snapshot.ref).then((downloadURL) => {
-				setDoc(doc(db, "post", `${userUid}${date}v4()`), {
+				const newData = {
 					id: v4(),
 					date: date,
 					imgUrl: downloadURL,
-					uid: userUid,
+					uid: userUid || "",
+				};
+				setDoc(doc(db, "post", `${userUid}${date}v4()`), newData).then(() => {
+					setPostArr((prevPostArr) => [...prevPostArr, newData]);
+					getPostData();
 				});
 			});
 		});
