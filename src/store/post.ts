@@ -3,14 +3,14 @@ import { atom, selector } from "recoil";
 import { db } from "../firebase";
 
 export interface Post {
-	date: number,
-	id: string,
-	imgUrl: string,
-	uid: string,
-	createdAt : string,
+	date: number;
+	id: string;
+	imgUrl: string;
+	uid: string;
+	createdAt: string;
 	location: string;
 	weather: string;
-	humidity: string
+	humidity: string;
 }
 
 export const postData = selector<Post[]>({
@@ -29,7 +29,7 @@ export const postData = selector<Post[]>({
 	},
 });
 
-export const userPost = atom({
+export const userPost = atom<Post[]>({
 	key: "userPost",
-	default: new Array(7).fill(null)
-})
+	default: new Array(7).fill(null),
+});
