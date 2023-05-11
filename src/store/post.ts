@@ -7,10 +7,10 @@ export interface Post {
 	id: string;
 	imgUrl: string;
 	uid: string;
-	createdAt: string;
-	location: string;
-	weather: string;
-	humidity: string;
+	createdAt?: string;
+	location?: string;
+	weather?: string;
+	humidity?: string;
 }
 
 export const postData = selector<Post[]>({
