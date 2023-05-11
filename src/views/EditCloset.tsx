@@ -12,6 +12,7 @@ import { userPost } from "../store/post";
 
 export const EditCloset = () => {
 	const date = useRecoilValue(selectedDate);
+	const newDate = new Date(date).toString();
 	const postArr = useRecoilValue(userPost);
 
 	const [imgUrl, setImgUrl] = useState<undefined | string>("/public/addImg.svg");
@@ -26,7 +27,7 @@ export const EditCloset = () => {
 			}
 		});
 	}, []);
-	
+ 
 	const getImgUrl = (file: File) => {
 		const url = URL.createObjectURL(file);
 		setImgUrl(url);
@@ -83,7 +84,7 @@ export const EditCloset = () => {
 					</label>
 				</figure>
 				<div className="card-body max-h-fit">
-					<h3 className=" mb-14 text-3xl font-semibold text-center">{new Date(date).toString().slice(0, 3)}</h3>
+					<h3 className=" mb-14 text-3xl font-semibold text-center">{newDate.slice(0, 3)}</h3>
 					<div className="flex justify-end gap-2">
 						<label htmlFor="my-modal-6" className="btn btn-primary" onClick={uploadImg}>
 							Save
