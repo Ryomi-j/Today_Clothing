@@ -24,7 +24,8 @@ export const EditCloset = () => {
 		try {
 			const posts = collection(db, "post");
 			const postItems = await getDocs(posts);
-			const post = postItems.docs.map((doc) => doc.data() as Post);
+			let post = postItems.docs.map((doc) => doc.data() as Post);
+			post = post.filter(el => el.uid === userUid)
 			set(userPost, post || []);
 		} catch (error) {
 			console.error(error);
