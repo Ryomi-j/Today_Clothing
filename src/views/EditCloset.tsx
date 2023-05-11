@@ -27,6 +27,7 @@ export const EditCloset = () => {
 			let post = postItems.docs.map((doc) => doc.data() as Post);
 			post = post.filter(el => el.uid === userUid)
 			set(userPost, post || []);
+			if(userUid) localStorage.setItem(userUid?.toString(), JSON.stringify(post))
 		} catch (error) {
 			console.error(error);
 			set(userPost, []);
