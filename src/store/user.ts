@@ -15,10 +15,7 @@ export interface Data {
 }
 
 export interface User {
-	creactedAt: string,
-	name: string | null;
 	uid: string;
-	userId: string;
 	data?: Data;
 }
 
@@ -28,9 +25,9 @@ export const userState = atom({
 	default: false,
 });
 
-export const userInfo = atom({
+export const userInfo = atom<User | null>({
 	key: "userInfo",
-	default: {},
+	default: null,
 });
 
 export const userData = selector<User[]>({

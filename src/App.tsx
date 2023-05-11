@@ -23,7 +23,7 @@ function App() {
 		auth.onAuthStateChanged(async (user) => {
 			if (user !== null) {
 				const c = await getUserData(user.uid);
-				setUser(c || {});
+				setUser(c || null);
 				setLogin(true);
 			} else {
 				setLogin(false);

@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useRef } from "react";
 import { getUserData, loginGoogle, signIn } from "../firebase";
 import { useRecoilState } from "recoil";
-import { userInfo, userState } from "../store/user";
+import { User, userInfo, userState } from "../store/user";
 import { GetGeoInfo } from "../utils/userGeolocation";
 
 export const Login = () => {
@@ -19,7 +19,7 @@ export const Login = () => {
 		signIn(id, pw).then(async (success: any) => {
 			if (success) {
 				const c = await getUserData(success.uid);
-				setUser(c || {});
+				setUser(c || {} as User)
 				setLogin(true);
 				navigate(`/closet/${success.uid}`);
 			}
@@ -28,9 +28,9 @@ export const Login = () => {
 
 	const googleLogin = () => {
 		loginGoogle()
-			.then((uid) => {
+			.then(async (uid) => {
 				const c = getUserData(uid || "");
-				setUser(c);
+				setUser(await c);
 				setLogin(true);
 				navigate(`/closet/${uid}`);
 			})
