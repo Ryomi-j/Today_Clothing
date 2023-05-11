@@ -19,7 +19,7 @@ export const Record = () => {
 				<div className="flex flex-row-reverse mt-7">
 					<Link to="/closet">
 						<button className="btn">
-							<MdNavigateBefore class="text-xl" /> back
+							<MdNavigateBefore className="text-xl" /> back
 						</button>
 					</Link>
 				</div>
