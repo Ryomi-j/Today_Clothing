@@ -55,7 +55,7 @@ export const EmptyImageFrame = ({ content, date }: ImageFrameDataType) => {
 						className="w-96 h-96 max-w-96 max-h-96 bg-base-200 cursor-pointer rounded-t-2xl"
 						onClick={() => setDate(date.getTime())}
 					>
-						<img src="/addImg.svg" alt="Shoes" className="w-1/4" />
+						<img src="/addImg.svg" alt="No image data" className="w-1/4" />
 					</figure>
 				)}
 			</Link>
