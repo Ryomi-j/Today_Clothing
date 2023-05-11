@@ -3,28 +3,40 @@ import { Modal } from "../components/common/Modal";
 import { BiShareAlt } from "react-icons/bi";
 import { weatherData } from "../api/weatherApi";
 import { useEffect, useState } from "react";
+import { userInfo } from "../store/user";
+import { Post } from "../store/post";
 
 export const TodayClothes = () => {
 	const weather = useRecoilValue(weatherData);
+	const user = useRecoilValue(userInfo);
+	const userUid = user && user.uid;
+	const userPosts: Post[] = (userUid && JSON.parse(localStorage.getItem(userUid) || "[]")) || [];
 	const [today, setToday] = useState(new Date());
 	const days = ["일", "월", "화", "수", "목", "금", "토"];
+	let year = today.getFullYear();
+	let month = today.getMonth() + 1;
+	let date = today.getDate();
+	let day = today.getDay();
 
 	useEffect(() => {
 		setToday(new Date());
 	}, []);
-	
-	let year = today.getFullYear();
-	let month = today.getMonth() + 1;
-	let date = today.getDate();
-	let day = today.getDay()
+
+	const todayPost = userPosts.find((item) => item.date === today.getTime());
 
 	return (
 		<div className="flex w-screen min-h-[calc(100vh-3.3rem)] pt-16 bg-base-200">
 			<div className="card m-auto w-fit h-auto bg-base-100 shadow-xl py-7 px-10">
 				<h2 className="text-4xl font-extrabold text-center pt-5 pb-5">Today's Clothes</h2>
-				<figure className="w-96 h-96 mx-auto border-2 rounded-md">
-					<img src="/vite.svg" alt="Shoes" />
-				</figure>
+				{todayPost ? (
+					<figure className="w-96 h-96 mx-auto border-2 rounded-md">
+						<img src={todayPost.imgUrl} alt={`${today?.toString().slice(0, 15)} clothing image`} />
+					</figure>
+				) : (
+					<figure className="w-96 h-96 mx-auto border-2 rounded-md">
+						<img src="/vite.svg" alt="No image data" />
+					</figure>
+				)}
 				<div className="card-body">
 					<button className="btn m-auto gap-1 btn-sm">
 						Next
