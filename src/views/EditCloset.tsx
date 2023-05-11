@@ -8,15 +8,25 @@ import { v4 } from "uuid";
 import { Modal } from "../components/common/Modal";
 import { selectedDate } from "../store/editItem";
 import { doc, setDoc } from "firebase/firestore";
+import { userPost } from "../store/post";
 
 export const EditCloset = () => {
 	const date = useRecoilValue(selectedDate);
-	
+	const postArr = useRecoilValue(userPost);
+
 	const [imgUrl, setImgUrl] = useState<undefined | string>("/public/addImg.svg");
 	const [imgUpload, setImgUpload] = useState<undefined | File>(undefined);
 	const user = useRecoilValue(userInfo);
 	const userUid = user && user.uid;
 
+	useEffect(() => {
+		postArr.forEach((post) => {
+			if(post && post.date === date){
+				setImgUrl(post.imgUrl);
+			}
+		});
+	}, []);
+	
 	const getImgUrl = (file: File) => {
 		const url = URL.createObjectURL(file);
 		setImgUrl(url);
@@ -33,7 +43,7 @@ export const EditCloset = () => {
 					id: v4(),
 					date: date,
 					imgUrl: downloadURL,
-					uid: userUid
+					uid: userUid,
 				});
 			});
 		});
