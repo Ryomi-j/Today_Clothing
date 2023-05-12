@@ -39,3 +39,18 @@ export const userPost = atom<Post[]>({
 	key: "userPost",
 	default: new Array(7).fill(null),
 });
+
+export const defaultData = selector<DefaultPost[]>({
+	key: "defaultData",
+	get: async () => {
+		try {
+			const posts = collection(db, "defaultData");
+			const postItems = await getDocs(posts);
+			const post = postItems.docs.map((doc) => doc.data() as DefaultPost);
+			return post || [];
+		} catch (error) {
+			console.error(error);
+			return [];
+		}
+	},
+});
