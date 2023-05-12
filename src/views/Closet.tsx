@@ -4,22 +4,20 @@ import { v4 } from "uuid";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { userInfo } from "../store/user";
 import { postData, userPost } from "../store/post";
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo } from "react";
 
-export const Closet = () => {
+const Closet = () => {
 	const user = useRecoilValue(userInfo);
 	const userUid = user && user.uid;
 	const postItems = useRecoilValue(postData);
 	const [postArr, setPostArr] = useRecoilState(userPost);
-	const postArrRef = useRef(postArr);
-
-	const today = useMemo(() => new Date(), []);
-	const nextMonday = useMemo(
-		() => new Date(today.getFullYear(), today.getMonth(), today.getDate() + ((1 + 7 - today.getDay()) % 7)),
-		[today]
-	);
-
-	const weekDates: Date[] = useMemo(() => {
+	const weekDates = useMemo(() => {
+		const today = new Date();
+		const nextMonday = new Date(
+			today.getFullYear(),
+			today.getMonth(),
+			today.getDate() + ((1 + 7 - today.getDay()) % 7)
+		);
 		const dates = [];
 		for (let i = 0; i < 7; i++) {
 			const date = new Date(nextMonday);
@@ -27,10 +25,10 @@ export const Closet = () => {
 			dates.push(date);
 		}
 		return dates;
-	}, [nextMonday]);
+	}, []);
 
 	useEffect(() => {
-		const newPostArr = [...postArrRef.current];
+		const newPostArr = [...postArr];
 		weekDates.forEach((date, i) => {
 			postItems.forEach((post) => {
 				if (post.uid === userUid && date.getTime() === post.date) {
@@ -38,9 +36,8 @@ export const Closet = () => {
 				}
 			});
 		});
-		postArrRef.current = newPostArr;
 		setPostArr(newPostArr);
-	}, [postItems, userUid, weekDates]);
+	}, [postItems, userUid, weekDates, setPostArr]);
 
 	return (
 		<div className="flex min-h-[calc(100vh-3.3rem)] pt-16 bg-base-200">
@@ -68,3 +65,5 @@ export const Closet = () => {
 		</div>
 	);
 };
+
+export default Closet;
