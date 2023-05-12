@@ -4,16 +4,17 @@ import { Login } from "./views/Login";
 import { Nav } from "./components/Nav";
 import { SignUp } from "./views/SignUp";
 import "./index.css";
-import { TodayClothes } from "./views/TodayClothes";
-import { Closet } from "./views/Closet";
 import { Record } from "./views/Record";
 import { EditCloset } from "./views/EditCloset";
 import { Post } from "./views/Post";
-import { useEffect } from "react";
+import React, { lazy, useEffect } from "react";
 import { auth, getUserData } from "./firebase";
 import { useRecoilState } from "recoil";
 import { userInfo, userState } from "./store/user";
 import { Talk } from "./views/Talk";
+
+const TodayClothes = lazy(() => import("./views/TodayClothes"));
+const Closet = lazy(() => import("./views/Closet"));
 
 function App() {
 	const [login, setLogin] = useRecoilState(userState);
@@ -36,12 +37,37 @@ function App() {
 			<Nav />
 			<main>
 				<Routes>
-					<Route path="/*" element={login ? <TodayClothes /> : <Talk />} />
-					<Route path="/todayClothes" element={<TodayClothes />} />
+					<Route
+						path="/*"
+						element={
+							login ? (
+								<React.Suspense fallback={<div>Loading...</div>}>
+									<TodayClothes />
+								</React.Suspense>
+							) : (
+								<Talk />
+							)
+						}
+					/>
+					<Route
+						path="/todayClothes"
+						element={
+							<React.Suspense fallback={<div>Loading...</div>}>
+								<TodayClothes />
+							</React.Suspense>
+						}
+					/>
 					<Route path="/talk" element={<Talk />} />
 					<Route path="/login" element={<Login />} />
 					<Route path="/sign-up" element={<SignUp />} />
-					<Route path="/closet" element={<Closet />} />
+					<Route
+						path="/closet"
+						element={
+							<React.Suspense fallback={<div>Loading...</div>}>
+								<Closet />
+							</React.Suspense>
+						}
+					/>
 					<Route path="/record" element={<Record />} />
 					<Route path="/editCloset" element={<EditCloset />} />
 					<Route path="/post" element={<Post />} />
