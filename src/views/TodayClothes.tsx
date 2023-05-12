@@ -16,6 +16,7 @@ const TodayClothes = () => {
 	const userPosts: Post[] = (userUid && JSON.parse(localStorage.getItem(userUid) || "[]")) || [];
 	const [today, setToday] = useState(new Date());
 	const [todayPost, setTodayPost] = useState<Post[] | undefined>(undefined);
+	let currentPost: Post[] | undefined;
 	/* 1684162800000 */
 	const days = ["일", "월", "화", "수", "목", "금", "토"];
 	let year = today.getFullYear();
@@ -25,7 +26,8 @@ const TodayClothes = () => {
 	let posts: Post[] | undefined;
 
 	useEffect(() => {
-		const todayPost = userPosts.find((item) => item.date === today.getTime());
+		// currentPost = userPosts.filter((item) => item.date === today.getTime());
+		currentPost = userPosts.filter((item) => item.date === 1684162800000);
 		if (!todayPost) {
 			switch (true) {
 				case weather.temp < 4:
@@ -61,7 +63,7 @@ const TodayClothes = () => {
 
 	useEffect(() => {
 		setToday(new Date());
-		setTodayPost(posts);
+		setTodayPost(currentPost ? currentPost : posts);
 	}, []);
 
 	if (todayPost === undefined) {
@@ -72,34 +74,36 @@ const TodayClothes = () => {
 		<div className="flex w-screen min-h-[calc(100vh-3.3rem)] pt-16 bg-base-200">
 			<div className="card m-auto w-fit h-auto bg-base-100 shadow-xl py-7 px-10">
 				<h2 className="text-4xl font-extrabold text-center pt-5 pb-5">Today's Clothes</h2>
-				<Carousel
-					autoPlay
-					showThumbs={false}
-					interval={6000}
-					showStatus={false}
-					infiniteLoop={true}
-					className="carousel-container w-96 h-96 mx-auto border-2 rounded-md overflow-hidden object-cover"
-				>
-					{todayPost.length === 1
-						? todayPost.map((post) => {
-								return (
-									<figure key={post.id} className="w-96 h-96 mx-auto border-2 rounded-md">
-										<img
-											src={todayPost[0].imgUrl}
-											alt={`${today?.toString().slice(0, 15)} clothing image`}
-											className="w-full h-full"
-										/>
-									</figure>
-								);
-						  })
-						: todayPost.map((post) => {
-								return (
-									<figure key={post.id} className="w-96 h-96 mx-auto border-2 rounded-md">
-										<img src={post.imgUrl} alt={`default data - ${today?.toString().slice(0, 15)}`} />
-									</figure>
-								);
-						  })}
-				</Carousel>
+
+				{todayPost.length === 1 ? (
+					todayPost.map((post) => {
+						return (
+							<figure key={post.id} className="w-96 h-96 mx-auto border-2 rounded-md object-cover overflow-hidden">
+								<img
+									src={post.imgUrl}
+									alt={`${today?.toString().slice(0, 15)} clothing image`}
+								/>
+							</figure>
+						);
+					})
+				) : (
+					<Carousel
+						autoPlay
+						showThumbs={false}
+						interval={6000}
+						showStatus={false}
+						infiniteLoop={true}
+						className="carousel-container w-96 h-96 mx-auto border-2 rounded-md"
+					>
+						{todayPost.map((post) => {
+							return (
+								<figure key={post.id} className="w-96 h-96 mx-auto border-2 rounded-b-sm">
+									<img src={post.imgUrl} alt={`default data - ${today?.toString().slice(0, 15)}`} />
+								</figure>
+							);
+						})}
+					</Carousel>
+				)}
 				<div className="card-body">
 					<p className="mt-8 mb-8 text-xl text-center">
 						{year}년 {month}월 {date}일 {days[day]}요일 <br />
