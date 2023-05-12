@@ -12,10 +12,10 @@ const TodayClothes = () => {
 	const weather = useRecoilValue(weatherData);
 	const user = useRecoilValue(userInfo);
 	const defaultImgs = useRecoilValue(defaultData);
-	const userUid = user && user.uid;
-	const userPosts: Post[] = (userUid && JSON.parse(localStorage.getItem(userUid) || "[]")) || [];
 	const [today, setToday] = useState(new Date());
 	const [todayPost, setTodayPost] = useState<Post[] | undefined>(undefined);
+	const userUid = user && user.uid;
+	const userPosts: Post[] = (userUid && JSON.parse(localStorage.getItem(userUid) || "[]")) || [];
 	let currentPost: Post[] | undefined;
 	/* 1684162800000 */
 	const days = ["일", "월", "화", "수", "목", "금", "토"];
@@ -28,7 +28,7 @@ const TodayClothes = () => {
 	useEffect(() => {
 		// currentPost = userPosts.filter((item) => item.date === today.getTime());
 		currentPost = userPosts.filter((item) => item.date === 1684162800000);
-		if (!todayPost) {
+		if (currentPost.length === 0) {
 			switch (true) {
 				case weather.temp < 4:
 					posts = defaultImgs.filter((img) => img.degree < 4);
@@ -63,7 +63,11 @@ const TodayClothes = () => {
 
 	useEffect(() => {
 		setToday(new Date());
-		setTodayPost(currentPost ? currentPost : posts);
+		if (currentPost && currentPost.length > 0) {
+			setTodayPost(currentPost);
+		} else {
+			setTodayPost(posts);
+		}
 	}, []);
 
 	if (todayPost === undefined) {
@@ -79,10 +83,7 @@ const TodayClothes = () => {
 					todayPost.map((post) => {
 						return (
 							<figure key={post.id} className="w-96 h-96 mx-auto border-2 rounded-md object-cover overflow-hidden">
-								<img
-									src={post.imgUrl}
-									alt={`${today?.toString().slice(0, 15)} clothing image`}
-								/>
+								<img src={post.imgUrl} alt={`${today?.toString().slice(0, 15)} clothing image`} />
 							</figure>
 						);
 					})
@@ -107,7 +108,7 @@ const TodayClothes = () => {
 				<div className="card-body">
 					<p className="mt-8 mb-8 text-xl text-center">
 						{year}년 {month}월 {date}일 {days[day]}요일 <br />
-						습도 {weather.humidity}% 온도{weather.temp}C° {weather.weather}
+						습도 {weather.humidity}% 온도 {weather.temp}C° {weather.weather}
 					</p>
 					{todayPost.length === 1 && (
 						<div className="flex flex-row-reverse">
@@ -118,7 +119,11 @@ const TodayClothes = () => {
 					)}
 				</div>
 			</div>
-			<Modal content="오늘 당신의 의상을 공유하시겠습니까?" btnContent="OK" btnContent2="Cancel" />
+			<Modal
+				content="오늘 당신의 의상을 공유하시겠습니까?"
+				btnContent="OK"
+				btnContent2="Cancel"
+			/>
 		</div>
 	);
 };
