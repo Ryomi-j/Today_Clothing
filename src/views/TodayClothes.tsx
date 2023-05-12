@@ -84,7 +84,11 @@ const TodayClothes = () => {
 						? todayPost.map((post) => {
 								return (
 									<figure key={post.id} className="w-96 h-96 mx-auto border-2 rounded-md">
-										<img src={todayPost[0].imgUrl} alt={`${today?.toString().slice(0, 15)} clothing image`} className="w-full h-full" />
+										<img
+											src={todayPost[0].imgUrl}
+											alt={`${today?.toString().slice(0, 15)} clothing image`}
+											className="w-full h-full"
+										/>
 									</figure>
 								);
 						  })
@@ -101,11 +105,13 @@ const TodayClothes = () => {
 						{year}년 {month}월 {date}일 {days[day]}요일 <br />
 						습도 {weather.humidity}% 온도{weather.temp}C° {weather.weather}
 					</p>
-					<div className="flex flex-row-reverse">
-						<label htmlFor="my-modal-6" className="btn btn-primary w-1/3">
-							Share <BiShareAlt className="pl-2 text-xl" />
-						</label>
-					</div>
+					{todayPost.length === 1 && (
+						<div className="flex flex-row-reverse">
+							<label htmlFor="my-modal-6" className="btn btn-primary w-1/3">
+								Share <BiShareAlt className="pl-2 text-xl" />
+							</label>
+						</div>
+					)}
 				</div>
 			</div>
 			<Modal content="오늘 당신의 의상을 공유하시겠습니까?" btnContent="OK" btnContent2="Cancel" />
