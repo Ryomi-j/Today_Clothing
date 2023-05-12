@@ -14,6 +14,12 @@ export interface Post {
 	degree?: number
 }
 
+export interface DefaultPost {
+	imgUrl: string;
+	id: string;
+	degree: number;
+}
+
 export const postData = selector<Post[]>({
 	key: "postData",
 	get: async () => {
