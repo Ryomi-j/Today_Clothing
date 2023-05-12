@@ -11,7 +11,8 @@ export interface Post {
 	location?: string;
 	weather?: string;
 	humidity?: string;
-	degree?: number
+	degree?: number;
+	isPost?: boolean;
 }
 
 export interface DefaultPost {
