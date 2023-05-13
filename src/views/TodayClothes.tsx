@@ -7,6 +7,8 @@ import { userInfo } from "../store/user";
 import { Post, defaultData } from "../store/post";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
+import { collection, getDocs, query, setDoc, where } from "firebase/firestore";
+import { db } from "../firebase";
 
 const TodayClothes = () => {
 	const weather = useRecoilValue(weatherData);
@@ -14,6 +16,7 @@ const TodayClothes = () => {
 	const defaultImgs = useRecoilValue(defaultData);
 	const [today, setToday] = useState(new Date());
 	const [todayPost, setTodayPost] = useState<Post[] | undefined>(undefined);
+
 	const userUid = user && user.uid;
 	const userPosts: Post[] = (userUid && JSON.parse(localStorage.getItem(userUid) || "[]")) || [];
 	let currentPost: Post[] | undefined;
@@ -74,6 +77,31 @@ const TodayClothes = () => {
 		return <div>Loading...</div>;
 	}
 
+	const makePost = async () => {
+		if (todayPost && todayPost.length > 0) {
+			const selectedPost = await getDocs(query(collection(db, "post"), where("imgUrl", "==", todayPost[0].imgUrl)));
+			selectedPost.forEach((doc) => {
+				const postRef = doc.ref;
+				const postData = doc.data();
+				if (postData.isPost) return alert("이미 등록된 게시물입니다.");
+				else
+					setDoc(
+						postRef,
+						{
+							...postData,
+							isPost: true,
+							createdAt: new Date().getTime(),
+							location: weather.location,
+							humidity: weather.humidity,
+							weather: weather.weather,
+							degree: weather.temp,
+						},
+						{ merge: true }
+					);
+			});
+		}
+	};
+
 	return (
 		<div className="flex w-screen min-h-[calc(100vh-3.3rem)] pt-16 bg-base-200">
 			<div className="card m-auto w-fit h-auto bg-base-100 shadow-xl py-7 px-10">
@@ -123,6 +151,7 @@ const TodayClothes = () => {
 				content="오늘 당신의 의상을 공유하시겠습니까?"
 				btnContent="OK"
 				btnContent2="Cancel"
+				handleClick={makePost}
 			/>
 		</div>
 	);
