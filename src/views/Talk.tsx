@@ -3,6 +3,7 @@ import { Carousel } from "react-responsive-carousel";
 import { useRecoilValue } from "recoil";
 import { Post, postData } from "../store/post";
 import { useEffect, useState } from "react";
+import { BsFillSendFill } from "react-icons/bs";
 import { v4 } from "uuid";
 
 export const Talk = () => {
@@ -61,6 +62,61 @@ export const Talk = () => {
 						</label>
 					);
 				})}
+			</div>
+			<input type="checkbox" id={`${clickedPost?.createdAt}-${clickedPost?.uid}`} className="modal-toggle" />
+			<div className="modal ">
+				<div className="modal-box relative max-w-3xl">
+					<label
+						htmlFor={`${clickedPost?.createdAt}-${clickedPost?.uid}`}
+						className="btn btn-sm btn-circle absolute right-2 top-2"
+					>
+						✕
+					</label>
+					<article className="flex">
+						<div>
+							<figure className="mx-5 mt-5 max-w-xs overflow-hidden object-cover">
+								<img
+									src={clickedPost?.imgUrl}
+									alt={`${clickedPost?.uid}-${clickedPost?.date}-clothing info`}
+									className="rounded-xl"
+								/>
+							</figure>
+							<div className="card-body flex-row flex-wrap items-center text-center">
+								<div className="badge badge-primary badge-outline">#{clickedPost?.location}</div>
+								<div className="badge badge-secondary badge-outline">#{clickedPost?.weather}</div>
+								<div className="badge badge-outline">#{`${clickedPost?.degree}C°`}</div>
+								<div className="badge badge-accent badge-outline">#{`습도_${clickedPost?.humidity}%`}</div>
+							</div>
+						</div>
+						<div className="card-body w-96 gap-5">
+							<div className="flex gap-2">
+								<span className="font-bold">Angela</span>
+								<div className="flex items-center w-full  border-solid border-2 border-indigo-600 rounded-lg">
+									<textarea
+										className="textarea w-full focus:outline-none resize-none overflow-auto"
+										maxLength={50}
+										placeholder="댓글을 입력해주세요."
+									></textarea>
+									<div className="flex items-center w-6 h-full cursor-pointer">
+										<BsFillSendFill className="mr-1" />
+									</div>
+								</div>
+							</div>
+							<div className="flex flex-col gap-72 max-h-96 overflow-auto">
+								<div className="flex gap-1">
+									<span className="font-bold">Angela</span>
+									<div >
+										<span className="pl-1">오늘 춥나요?춥나요춥나요춥나요춥나요춥나요춥나요춥나요춥나요춥나요</span>
+										<span className="pl-1">
+											<button className="btn btn-primary btn-xs">Edit</button>
+											<button className="btn btn-xs ml-1">delete</button>
+										</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</article>
+				</div>
 			</div>
 		</div>
 	);
