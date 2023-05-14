@@ -43,7 +43,7 @@ export const Talk = () => {
 				{posts?.map((post) => {
 					return (
 						<label
-						id={v4()}
+						key={v4()}
 							htmlFor={`${post.createdAt}-${post.uid}`}
 							className="card card-compact bg-base-100 shadow-xl cursor-pointer block"
 							onClick={() => {
