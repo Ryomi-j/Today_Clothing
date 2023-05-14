@@ -3,10 +3,12 @@ import { Carousel } from "react-responsive-carousel";
 import { useRecoilValue } from "recoil";
 import { Post, postData } from "../store/post";
 import { useEffect, useState } from "react";
+import { v4 } from "uuid";
 
 export const Talk = () => {
 	const postItems = useRecoilValue(postData);
 	const [posts, setPosts] = useState<Post[] | undefined>(undefined);
+	const [clickedPost, setClickedPost] = useState<Post | undefined>(undefined);
 
 	useEffect(() => {
 		const sharedPosts = postItems.filter((post) => post.isPost === true);
@@ -39,17 +41,24 @@ export const Talk = () => {
 			<div className="grid grid-cols-3 gap-6 my-10 justify-center items-center max-w-screen-2xl">
 				{posts?.map((post) => {
 					return (
-						<div className="card card-compact bg-base-100 shadow-xl cursor">
-							<figure className="mx-10 mt-10 max-h-72 overflow-hidden object-cover">
+						<label
+						id={v4()}
+							htmlFor={`${post.createdAt}-${post.uid}`}
+							className="card card-compact bg-base-100 shadow-xl cursor-pointer block"
+							onClick={() => {
+								setClickedPost(post);
+							}}
+						>
+							<figure className="mx-5 mt-5 max-h-72 overflow-hidden object-cover">
 								<img src={post.imgUrl} alt={`${post.uid}-${post.date}-clothing info`} className="rounded-xl" />
 							</figure>
 							<div className="card-body flex-row flex-wrap items-center text-center">
-								<div className="badge badge-md badge-primary badge-outline">#{post.location}</div>
-								<div className="badge badge-md badge-secondary badge-outline">#{post.weather}</div>
-								<div className="badge badge-md badge-outline">#{`${post.degree}C°`}</div>
-								<div className="badge badge-md badge-accent badge-outline">#{`습도_${post.humidity}%`}</div>
+								<div className="badge badge-primary badge-outline">#{post.location}</div>
+								<div className="badge badge-secondary badge-outline">#{post.weather}</div>
+								<div className="badge badge-outline">#{`${post.degree}C°`}</div>
+								<div className="badge badge-accent badge-outline">#{`습도_${post.humidity}%`}</div>
 							</div>
-						</div>
+						</label>
 					);
 				})}
 			</div>
