@@ -7,7 +7,7 @@ export interface Post {
 	id: string;
 	imgUrl: string;
 	uid?: string;
-	createdAt?: string;
+	createdAt?: number;
 	location?: string;
 	weather?: string;
 	humidity?: string;
