@@ -20,7 +20,6 @@ const TodayClothes = () => {
 	const userUid = user && user.uid;
 	const userPosts: Post[] = (userUid && JSON.parse(localStorage.getItem(userUid) || "[]")) || [];
 	let currentPost: Post[] | undefined;
-	/* 1684162800000 */
 	const days = ["일", "월", "화", "수", "목", "금", "토"];
 	let year = today.getFullYear();
 	let month = today.getMonth() + 1;
@@ -29,8 +28,7 @@ const TodayClothes = () => {
 	let posts: Post[] | undefined;
 
 	useEffect(() => {
-		// currentPost = userPosts.filter((item) => item.date === today.getTime());
-		currentPost = userPosts.filter((item) => item.date === 1684162800000);
+		currentPost = userPosts.filter((item) => item.date === today.getTime());
 		if (currentPost.length === 0) {
 			switch (true) {
 				case weather.temp < 4:
