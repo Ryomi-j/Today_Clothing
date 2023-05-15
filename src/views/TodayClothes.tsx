@@ -16,15 +16,13 @@ const TodayClothes = () => {
 	const [todayPost, setTodayPost] = useState<Post[] | undefined>(undefined);
 	const userPosts = useRecoilValue(userPostState);
 
-	let currentPost: Post[] | undefined = userPosts.filter(
-		(post) => {
-		  if (!post.date) {
+	let currentPost: Post[] | undefined = userPosts.filter((post) => {
+		if (!post.date) {
 			return false;
-		  }
-		  return new Date(+post.date)?.toString().slice(0, 15) === today.toString().slice(0, 15);
 		}
-	  );
-	  
+		return new Date(+post.date)?.toString().slice(0, 15) === today.toString().slice(0, 15);
+	});
+
 	const days = ["일", "월", "화", "수", "목", "금", "토"];
 	let year = today.getFullYear();
 	let month = today.getMonth() + 1;
@@ -70,6 +68,28 @@ const TodayClothes = () => {
 		setToday(new Date());
 		if (currentPost && currentPost.length > 0) {
 			setTodayPost(currentPost);
+			getDocs(query(collection(db, "post"), where("imgUrl", "==", currentPost[0].imgUrl)))
+				.then((selectedPost) => {
+					selectedPost.forEach((doc) => {
+						const postRef = doc.ref;
+						const postData = doc.data();
+						setDoc(
+							postRef,
+							{
+								...postData,
+								createdAt: new Date().getTime(),
+								location: weather.location,
+								humidity: weather.humidity,
+								weather: weather.weather,
+								degree: weather.temp,
+							},
+							{ merge: true }
+						);
+					});
+				})
+				.catch((error) => {
+					console.error(error);
+				});
 		} else {
 			setTodayPost(posts);
 		}
@@ -92,11 +112,6 @@ const TodayClothes = () => {
 						{
 							...postData,
 							isPost: true,
-							createdAt: new Date().getTime(),
-							location: weather.location,
-							humidity: weather.humidity,
-							weather: weather.weather,
-							degree: weather.temp,
 						},
 						{ merge: true }
 					);
