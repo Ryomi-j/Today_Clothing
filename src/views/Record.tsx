@@ -51,7 +51,9 @@ export const Record = () => {
 									key={v4()}
 									content={`${timeStamp.getFullYear()}년 ${timeStamp.getMonth() + 1}월 ${timeStamp.getDate()}일 ${
 										days[timeStamp.getDay()]
-									}요일\n습도 ${post.humidity ? post.humidity : 0}% ${post.weather ? post.weather : ""}`}
+									}요일${
+										post.humidity !== undefined && post.weather ? `\n습도 ${post.humidity}% ${post.weather}` : ""
+									}`}
 									src={post.imgUrl}
 									date={timeStamp}
 								/>
