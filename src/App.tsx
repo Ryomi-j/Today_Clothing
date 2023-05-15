@@ -57,9 +57,6 @@ function App() {
 							</React.Suspense>
 						}
 					/>
-					<Route path="/talk" element={<Talk />} />
-					<Route path="/login" element={<Login />} />
-					<Route path="/sign-up" element={<SignUp />} />
 					<Route
 						path="/closet"
 						element={
@@ -76,6 +73,9 @@ function App() {
 							</React.Suspense>
 						}
 					/>
+					<Route path="/talk" element={<Talk />} />
+					<Route path="/login" element={<Login />} />
+					<Route path="/sign-up" element={<SignUp />} />
 					<Route path="/editCloset" element={<EditCloset />} />
 					<Route path="/post" element={<Post />} />
 				</Routes>
