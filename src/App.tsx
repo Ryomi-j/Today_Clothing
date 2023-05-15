@@ -28,8 +28,8 @@ function App() {
 		if(isLogin) setLogin(isLogin);
 		auth.onAuthStateChanged(async (user) => {
 		  if (user !== null) {
-			const c = await getUserData(user.uid);
-			setUser(c || null);
+			const c = await getUserData(user);
+			setUser(c);
 			const userPosts = posts.filter(post => post.uid === user.uid)
 			setUserPosts(userPosts)
 		  }

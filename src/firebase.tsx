@@ -112,7 +112,7 @@ export const loginGoogle = () => {
 			};
 			const newUser = doc(db, "users", user.uid);
 			setDoc(newUser, userData, { merge: true });
-			return user.uid;
+			return user;
 		})
 		.catch((error) => {
 			console.log(error);
@@ -123,9 +123,9 @@ export const logout = () => {
 	signOut(auth)
 };
 
-export const getUserData = async (uid: string) => {
+export const getUserData = async (user: User) => {
 	try {
-		const userDoc = doc(db, "users", uid);
+		const userDoc = doc(db, "users", user.uid);
 		const userSnapshot = await getDoc(userDoc);
 		if (userSnapshot.exists()) {
 			const userData = userSnapshot.data() as User;

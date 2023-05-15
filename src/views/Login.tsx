@@ -1,38 +1,44 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useRef } from "react";
 import { getUserData, loginGoogle, signIn } from "../firebase";
-import { useRecoilState } from "recoil";
-import { User, userInfo, userState } from "../store/user";
+import { useRecoilCallback, useRecoilState } from "recoil";
+import { userInfo, userState } from "../store/user";
 import { GetGeoInfo } from "../utils/userGeolocation";
+import { User } from "firebase/auth";
 
 export const Login = () => {
 	const idInput = useRef<HTMLInputElement>(null);
 	const pwInput = useRef<HTMLInputElement>(null);
 	const [, setLogin] = useRecoilState(userState);
-	const [, setUser] = useRecoilState(userInfo);
 	const navigate = useNavigate();
+
+	const setUser = useRecoilCallback(({ set }) => (newUser: User | null) => {
+		set(userInfo, newUser);
+	  });
 
 	const handleLogin = () => {
 		const id = idInput?.current?.value + "@todayClothing.com" ?? "";
 		const pw = pwInput?.current?.value ?? "";
 		signIn(id, pw).then(async (success: any) => {
 			if (success) {
-				const c = await getUserData(success.uid);
-				setUser(c || {} as User)
+				const c = await getUserData(success);
+				setUser(c);
 				setLogin(true);
 				navigate(`/closet/${success.uid}`);
-				localStorage.setItem('isLogin', 'true')
+				localStorage.setItem("isLogin", "true");
 			}
 		});
 	};
 
 	const googleLogin = () => {
 		loginGoogle()
-			.then(async (uid) => {
-				const c = getUserData(uid || "");
-				setUser(await c);
-				setLogin(true);
-				navigate(`/closet/${uid}`);
+			.then(async (user) => {
+				if (user) {
+					const c = await getUserData(user);
+					setUser(c);
+					setLogin(true);
+					navigate(`/closet/${user.uid}`);
+				}
 			})
 			.catch((error) => {
 				console.log(error);
