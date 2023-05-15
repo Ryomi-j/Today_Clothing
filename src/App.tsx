@@ -9,9 +9,10 @@ import { EditCloset } from "./views/EditCloset";
 import { Post } from "./views/Post";
 import React, { lazy, useEffect } from "react";
 import { auth, getUserData } from "./firebase";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { userInfo, userState } from "./store/user";
 import { Talk } from "./views/Talk";
+import { postData, userPostState } from "./store/post";
 
 const TodayClothes = lazy(() => import("./views/TodayClothes"));
 const Closet = lazy(() => import("./views/Closet"));
@@ -19,6 +20,8 @@ const Closet = lazy(() => import("./views/Closet"));
 function App() {
 	const [login, setLogin] = useRecoilState(userState);
 	const [, setUser] = useRecoilState(userInfo);
+	const [, setUserPosts] = useRecoilState(userPostState)
+	const posts = useRecoilValue(postData)
 
 	useEffect(() => {
 		auth.onAuthStateChanged(async (user) => {
@@ -26,6 +29,8 @@ function App() {
 				const c = await getUserData(user.uid);
 				setUser(c || null);
 				setLogin(true);
+				const userPosts = posts.filter(post => post.uid === user.uid)
+				setUserPosts(userPosts)
 			} else {
 				setLogin(false);
 			}
