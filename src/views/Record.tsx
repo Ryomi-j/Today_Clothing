@@ -7,15 +7,18 @@ import { postData } from "../store/post";
 import { ImageFrame } from "../components/common/ImageFrame";
 import { RiEmotionSadLine } from "react-icons/ri";
 import { useWeekDates } from "../utils/useWeekDates";
+import { v4 } from "uuid";
 
 export const Record = () => {
 	const user = useRecoilValue(userInfo);
 	const postItems = useRecoilValue(postData);
 	const days = ["일", "월", "화", "수", "목", "금", "토"];
-	const nextMonday = useWeekDates()[0]
+	const nextMonday = useWeekDates()[0];
 
 	const userRecords = useMemo(() => {
-		const posts = postItems.filter((post) => post.uid === user?.uid && post.date !== undefined && post.date < Number(nextMonday));
+		const posts = postItems.filter(
+			(post) => post.uid === user?.uid && post.date !== undefined && post.date < Number(nextMonday)
+		);
 		return posts;
 	}, []);
 
@@ -45,6 +48,7 @@ export const Record = () => {
 							let timeStamp = new Date(Number(post.date));
 							return (
 								<ImageFrame
+									key={v4()}
 									content={`${timeStamp.getFullYear()}년 ${timeStamp.getMonth() + 1}월 ${timeStamp.getDate()}일 ${
 										days[timeStamp.getDay()]
 									}요일\n습도 ${post.humidity ? post.humidity : 0}% ${post.weather ? post.weather : ""}`}
