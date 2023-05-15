@@ -10,6 +10,7 @@ export const Nav = () => {
 		if (!login) return;
 		logout();
 		setLogin(false);
+		localStorage.setItem('isLogin', 'false')
 		window.location.reload();
 	};
 

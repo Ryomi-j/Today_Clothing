@@ -21,6 +21,7 @@ export const Login = () => {
 				setUser(c || {} as User)
 				setLogin(true);
 				navigate(`/closet/${success.uid}`);
+				localStorage.setItem('isLogin', 'true')
 			}
 		});
 	};

@@ -24,18 +24,17 @@ function App() {
 	const posts = useRecoilValue(postData)
 
 	useEffect(() => {
+		const isLogin = localStorage.getItem('isLogin') === 'true';
+		if(isLogin) setLogin(isLogin);
 		auth.onAuthStateChanged(async (user) => {
-			if (user !== null) {
-				const c = await getUserData(user.uid);
-				setUser(c || null);
-				setLogin(true);
-				const userPosts = posts.filter(post => post.uid === user.uid)
-				setUserPosts(userPosts)
-			} else {
-				setLogin(false);
-			}
+		  if (user !== null) {
+			const c = await getUserData(user.uid);
+			setUser(c || null);
+			const userPosts = posts.filter(post => post.uid === user.uid)
+			setUserPosts(userPosts)
+		  }
 		});
-	}, []);
+	  }, []);	  
 
 	return (
 		<BrowserRouter>
