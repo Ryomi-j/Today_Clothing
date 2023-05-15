@@ -3,47 +3,16 @@ import { EmptyImageFrame, ImageFrame } from "../components/common/ImageFrame";
 import { v4 } from "uuid";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { userInfo } from "../store/user";
-import { postData, userPost } from "../store/post";
-import { useEffect, useState } from "react";
-import { doc, getDoc, setDoc } from "firebase/firestore";
-import { db } from "../firebase";
-import { DateTime } from "luxon";
-import { nextMonday } from "../store/editItem";
+import { nextWeekUserPost, postData } from "../store/post";
+import { useEffect } from "react";
+import { useWeekDates } from "../utils/useWeekDates";
 
 const Closet = () => {
 	const user = useRecoilValue(userInfo);
 	const userUid = user && user.uid;
 	const postItems = useRecoilValue(postData);
-	const [postArr, setPostArr] = useRecoilState(userPost);
-	const [nextMon, setNextMon] = useRecoilState<Date | undefined>(nextMonday);
-	const [weekDates, setWeekDates] = useState<Date[]>([]);
-
-	useEffect(() => {
-		const getWeekDates = async () => {
-			const savedMonday = (await getDoc(doc(db, "next_Monday", "Monday"))).data();
-			const today = new Date().getTime();
-			if (today >= savedMonday?.Monday) {
-				const updatedNextMonday = savedMonday?.Monday
-					? DateTime.fromMillis(savedMonday.Monday).plus({ weeks: 1 }).toJSDate()
-					: DateTime.local().startOf("week").plus({ weeks: 1 }).toJSDate();
-				setNextMon(updatedNextMonday);
-				setDoc(doc(db, "next_Monday", "Monday"), {
-					Monday: updatedNextMonday.getTime(),
-				});
-			}
-			if (savedMonday) {
-				const weekDate = [];
-				const next = nextMon ?? savedMonday.Monday;
-				for (let i = 0; i < 7; i++) {
-					const date = new Date(next);
-					date.setDate(date.getDate() + i);
-					weekDate.push(date);
-				}
-				setWeekDates(weekDate);
-			}
-		};
-		getWeekDates();
-	}, []);
+	const [postArr, setPostArr] = useRecoilState(nextWeekUserPost);
+	const weekDates = useWeekDates();
 
 	useEffect(() => {
 		const newPostArr = [...postArr];
