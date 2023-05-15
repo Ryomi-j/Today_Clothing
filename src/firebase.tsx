@@ -31,7 +31,7 @@ export const auth = getAuth();
 export const storage = getStorage(app)
 
 // 가입
-export const signUp = async (email: string, password: string) => {
+export const signUp = async (email: string, password: string, nickname: string) => {
 	try {
 		const userCredential = await createUserWithEmailAndPassword(auth, email, password);
 		const user = userCredential.user;
@@ -39,7 +39,7 @@ export const signUp = async (email: string, password: string) => {
 			uid: user.uid,
 			creactedAt: user.metadata.creationTime,
 			userId: user.email,
-			name: user.displayName,
+			name: user.displayName || nickname,
 		};
 		const newUser = doc(db, "users", user.uid);
 		await setDoc(newUser, userData, { merge: true });
@@ -56,6 +56,18 @@ export const isDuplicateId = async (id: string): Promise<boolean> => {
 	try {
 		const users = collection(db, "users");
 		const q = query(users, where("userId", "==", id));
+		const user = await getDocs(q);
+		return !user.empty;
+	} catch (error) {
+		console.error(error);
+		return false;
+	}
+};
+
+export const isDuplicateNickName = async (nickname: string): Promise<boolean> => {
+	try {
+		const users = collection(db, "users");
+		const q = query(users, where("name", "==", nickname));
 		const user = await getDocs(q);
 		return !user.empty;
 	} catch (error) {

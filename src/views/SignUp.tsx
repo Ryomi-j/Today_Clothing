@@ -1,13 +1,17 @@
 import { useRef, useState } from "react";
-import { isDuplicateId, signUp } from "../firebase";
+import { isDuplicateId, isDuplicateNickName, signUp } from "../firebase";
 import { useNavigate } from "react-router-dom";
 
 export const SignUp = () => {
 	const idInput = useRef<HTMLInputElement>(null);
 	const pwInput = useRef<HTMLInputElement>(null);
+	const nicknameInput = useRef<HTMLInputElement>(null);
 	const confirmPw = useRef<HTMLInputElement>(null);
 	const [id, setId] = useState("");
 	const [isIdDuplicate, setIsIdDuplicate] = useState(false);
+	const [nickName, setNickName] = useState("");
+	const [isNickNameDuplicate, setIsNickNameDuplicate] = useState(false);
+
 	const nav = useNavigate();
 
 	const checkIdValidation = (id: string): boolean => {
@@ -25,35 +29,53 @@ export const SignUp = () => {
 		setIsIdDuplicate(false);
 	};
 
+	const handleNickNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		setNickName(event.target.value);
+	};
+
+	const checkNickName = async () => {
+		const result = await isDuplicateNickName(nickName);
+		if (result) {
+			alert("이미 사용중인 닉네임입니다.");
+		} else {
+			alert("사용가능한 닉네임입니다.");
+			setIsNickNameDuplicate(true);
+		}
+	};
+
 	const checkId = async () => {
 		if (!checkIdValidation(id)) {
-		  alert("영문/숫자 조합 6~12자리의 id를 입력해주세요");
+			alert("영문/숫자 조합 6~12자리의 id를 입력해주세요");
 		} else {
-		  const result = await isDuplicateId(id + "@todayclothing.com");
-		  if (result) {
-			alert("이미 사용중인 ID입니다.");
-		  } else {
-			alert("사용가능한 ID 입니다.");
-			setIsIdDuplicate(true);
-		  }
+			const result = await isDuplicateId(id + "@todayclothing.com");
+			if (result) {
+				alert("이미 사용중인 ID입니다.");
+			} else {
+				alert("사용가능한 ID 입니다.");
+				setIsIdDuplicate(true);
+			}
 		}
-	  };
-	  
+	};
 
 	const handleJoin = () => {
 		const email = id + "@todayClothing.com" ?? "";
 		let pw = pwInput?.current?.value ?? "";
 		let _pw = confirmPw?.current?.value ?? "";
+		let nickname = nicknameInput?.current?.value;
 
 		if (!isIdDuplicate) return alert("아이디 중복검사가 필요합니다.");
 		else if (checkIdValidation(id)) {
-			alert("영문/숫자 조합 6~12자리의 id를 입력해주세요");
+			alert("영문/숫자 조합 6~12자리의 id를 입력해주세요.");
 		} else if (checkPasswordValidation(pw)) {
-			alert("영문/숫자 조합 6~12자리의 password를 입력해주세요");
+			alert("영문/숫자 조합 6~12자리의 password를 입력해주세요.");
 		} else if (pw !== _pw) {
 			alert("password가 일치하지 않습니다.");
+		} else if (!nickname) {
+			alert("닉네임을 입력하세요");
+		} else if (!isNickNameDuplicate) {
+			alert("닉네임 중복검사가 필요합니다.");
 		} else {
-			signUp(email, pw);
+			signUp(email, pw, nickname);
 			alert("축하합니다. 가입이 완료되었습니다 :)");
 			nav("/login");
 		}
@@ -66,15 +88,35 @@ export const SignUp = () => {
 					<div className="card-body p-14 gap-5">
 						<h2 className="text-center text-5xl font-bold">Sign Up</h2>
 						<div className="form-control flex-row  mt-16">
+							<label htmlFor="nickName" className="label w-24 justify-end">
+								<span className="label-text pr-3 font-bold">Nick-Name</span>
+							</label>
+							<input
+								type="text"
+								id="nickName"
+								placeholder="Nick Name"
+								minLength={1}
+								maxLength={15}
+								ref={idInput}
+								className="input input-bordered w-52"
+								onChange={handleNickNameChange}
+							/>
+							<button className="btn btn-s p-1 font- text-xs ml-1" onClick={checkNickName}>
+								Check
+								<br />
+								Availability
+							</button>
+						</div>
+						<div className="form-control flex-row">
 							<label htmlFor="id" className="label w-24 justify-end">
 								<span className="label-text pr-3 font-bold">ID</span>
 							</label>
 							<input
 								type="text"
 								id="id"
-								placeholder="id"
+								placeholder="영문/숫자 조합 6~12자리"
 								minLength={6}
-								maxLength={15}
+								maxLength={12}
 								ref={idInput}
 								className="input input-bordered w-52"
 								onChange={handleIdChange}
@@ -92,7 +134,7 @@ export const SignUp = () => {
 							<input
 								type="password"
 								id="pw"
-								placeholder="password"
+								placeholder="영문/숫자 조합 6~12자리"
 								minLength={6}
 								maxLength={15}
 								ref={pwInput}
@@ -106,7 +148,7 @@ export const SignUp = () => {
 							<input
 								type="text"
 								id="confirmPw"
-								placeholder="password"
+								placeholder="password 재확인"
 								minLength={6}
 								maxLength={15}
 								className="input input-bordered w-52"
