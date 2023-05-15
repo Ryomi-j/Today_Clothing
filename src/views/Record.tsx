@@ -3,26 +3,19 @@ import { MdNavigateBefore } from "react-icons/md";
 import { useRecoilValue } from "recoil";
 import { userInfo } from "../store/user";
 import { useMemo } from "react";
-import { Post } from "../store/post";
+import { postData } from "../store/post";
 import { ImageFrame } from "../components/common/ImageFrame";
 import { RiEmotionSadLine } from "react-icons/ri";
+import { useWeekDates } from "../utils/useWeekDates";
 
 export const Record = () => {
 	const user = useRecoilValue(userInfo);
-	const userUid = user && user.uid;
-	const userPosts: Post[] = (userUid && JSON.parse(localStorage.getItem(userUid) || "[]")) || [];
+	const postItems = useRecoilValue(postData);
 	const days = ["일", "월", "화", "수", "목", "금", "토"];
+	const nextMonday = useWeekDates()[0]
 
 	const userRecords = useMemo(() => {
-		const today = new Date();
-		const nextMonday = new Date(
-			today.getFullYear(),
-			today.getMonth(),
-			today.getDate() + ((1 + 7 - today.getDay()) % 7)
-		);
-		// 1684594800000
-		const posts = userPosts.filter((post) => post.date !== undefined && post.date < 1684594800000);
-		// const posts = userPosts.filter((post) => post.date !== undefined && post.date < nextMonday.getTime());
+		const posts = postItems.filter((post) => post.uid === user?.uid && post.date !== undefined && post.date < Number(nextMonday));
 		return posts;
 	}, []);
 
@@ -54,7 +47,7 @@ export const Record = () => {
 								<ImageFrame
 									content={`${timeStamp.getFullYear()}년 ${timeStamp.getMonth() + 1}월 ${timeStamp.getDate()}일 ${
 										days[timeStamp.getDay()]
-									}요일\n습도 ${post.humidity}% ${post.weather}`}
+									}요일\n습도 ${post.humidity ? post.humidity : 0}% ${post.weather ? post.weather : ""}`}
 									src={post.imgUrl}
 									date={timeStamp}
 								/>
