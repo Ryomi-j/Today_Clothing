@@ -5,7 +5,7 @@ export const selectedDate = atom({
 	default: 0,
 });
 
-export const nextMonday = atom<Date | undefined>({
+export const nextMondayState = atom<Date | undefined>({
 	key: "nextMonday",
 	default: undefined,
 });
