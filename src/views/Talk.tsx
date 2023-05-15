@@ -95,7 +95,7 @@ export const Talk = () => {
 						<div className="card-body w-96 gap-5">
 							{isLogin && (
 								<div className="flex gap-2">
-									<span className="font-bold">{user?.displayName}</span>
+									<span className="font-bold">{user?.name}</span>
 									<div className="flex items-center w-full  border-solid border-2 border-indigo-600 rounded-lg">
 										<textarea
 											className="textarea w-full focus:outline-none resize-none overflow-auto"
