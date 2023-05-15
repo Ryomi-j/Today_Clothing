@@ -4,28 +4,46 @@ import { v4 } from "uuid";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { userInfo } from "../store/user";
 import { postData, userPost } from "../store/post";
-import { useEffect, useMemo } from "react";
+import { useEffect, useState } from "react";
+import { doc, getDoc, setDoc } from "firebase/firestore";
+import { db } from "../firebase";
+import { DateTime } from "luxon";
 
 const Closet = () => {
 	const user = useRecoilValue(userInfo);
 	const userUid = user && user.uid;
 	const postItems = useRecoilValue(postData);
 	const [postArr, setPostArr] = useRecoilState(userPost);
-	const weekDates = useMemo(() => {
-		const today = new Date();
-		const nextMonday = new Date(
-			today.getFullYear(),
-			today.getMonth(),
-			today.getDate() + ((1 + 7 - today.getDay()) % 7)
-		);
-		const dates = [];
-		for (let i = 0; i < 7; i++) {
-			const date = new Date(nextMonday);
-			date.setDate(nextMonday.getDate() + i);
-			dates.push(date);
-		}
-		return dates;
-	}, []);
+	const [nextMonday, setNextMonday] = useState<Date | undefined>(undefined);
+	const [weekDates, setWeekDates] = useState<Date[]>([]);
+
+	useEffect(() => {
+		const getWeekDates = async () => {
+		  const savedMonday = (await getDoc(doc(db, "next_Monday", "Monday"))).data();
+		  const today = new Date().getTime();
+		  if (today >= savedMonday?.Monday) {
+			const updatedNextMonday = savedMonday?.Monday
+			  ? DateTime.fromMillis(savedMonday.Monday).plus({ weeks: 1 }).toJSDate()
+			  : DateTime.local().startOf("week").plus({ weeks: 1 }).toJSDate();
+			setNextMonday(updatedNextMonday);
+			setDoc(doc(db, "next_Monday", "Monday"), {
+			  Monday: updatedNextMonday.getTime(),
+			});
+		  }
+		  if (savedMonday) {
+			const weekDate = [];
+			const next = nextMonday ?? savedMonday.Monday;
+			for (let i = 0; i < 7; i++) {
+			  const date = new Date(next);
+			  date.setDate(date.getDate() + i);
+			  weekDate.push(date);
+			}
+			setWeekDates(weekDate);
+		  }
+		};
+		getWeekDates();
+	  }, []);
+	  
 
 	useEffect(() => {
 		const newPostArr = [...postArr];
@@ -37,7 +55,7 @@ const Closet = () => {
 			});
 		});
 		setPostArr(newPostArr);
-	}, [postItems, userUid, weekDates, setPostArr]);
+	}, [postItems, userUid, setPostArr]);
 
 	return (
 		<div className="flex min-h-[calc(100vh-3.3rem)] pt-16 bg-base-200">
@@ -61,7 +79,6 @@ const Closet = () => {
 					</Link>
 				</div>
 			</div>
-			{/* <Modal content="오늘 당신의 의상을 공유하시겠습니까?" btnContent="OK" btnContent2="Cancel"/> */}
 		</div>
 	);
 };
