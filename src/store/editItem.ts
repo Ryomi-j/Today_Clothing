@@ -9,3 +9,8 @@ export const nextMondayState = atom<Date | undefined>({
 	key: "nextMonday",
 	default: undefined,
 });
+
+export const weekDatesState = atom({
+	key: "weekDatesState",
+	default: [] as Date[],
+  });
