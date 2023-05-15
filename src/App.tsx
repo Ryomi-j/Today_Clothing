@@ -68,7 +68,14 @@ function App() {
 							</React.Suspense>
 						}
 					/>
-					<Route path="/record" element={<Record />} />
+					<Route
+						path="/record"
+						element={
+							<React.Suspense fallback={<div>Loading...</div>}>
+								<Record />
+							</React.Suspense>
+						}
+					/>
 					<Route path="/editCloset" element={<EditCloset />} />
 					<Route path="/post" element={<Post />} />
 				</Routes>
