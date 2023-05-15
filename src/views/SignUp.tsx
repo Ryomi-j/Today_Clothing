@@ -163,7 +163,6 @@ export const SignUp = () => {
 					</div>
 				</div>
 			</div>
-			{/* <Modal content={content} link={link} btnContent="OK" /> */}
 		</>
 	);
 };

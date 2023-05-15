@@ -8,7 +8,6 @@ import { GetGeoInfo } from "../utils/userGeolocation";
 export const Login = () => {
 	const idInput = useRef<HTMLInputElement>(null);
 	const pwInput = useRef<HTMLInputElement>(null);
-	// const $modal = document.querySelector('input[type="checkbox"]') as HTMLInputElement;
 	const [, setLogin] = useRecoilState(userState);
 	const [, setUser] = useRecoilState(userInfo);
 	const navigate = useNavigate();
