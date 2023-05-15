@@ -36,6 +36,11 @@ export const postData = selector<Post[]>({
 	},
 });
 
+export const userPosts = atom({
+	key: "userPosts",
+	default: []
+});
+
 export const nextWeekUserPost = atom<Post[]>({
 	key: "nextWeekUserPost",
 	default: new Array(7).fill(null),
