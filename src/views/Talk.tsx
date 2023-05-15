@@ -50,7 +50,7 @@ export const Talk = () => {
 								setClickedPost(post);
 							}}
 						>
-							<figure className="mx-5 mt-5 max-h-72 overflow-hidden object-cover">
+							<figure className="mx-5 mt-5 h-72 overflow-hidden object-cover">
 								<img src={post.imgUrl} alt={`${post.uid}-${post.date}-clothing info`} className="rounded-xl" />
 							</figure>
 							<div className="card-body flex-row flex-wrap items-center text-center">
