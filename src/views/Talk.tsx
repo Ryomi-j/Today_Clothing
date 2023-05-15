@@ -2,24 +2,55 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
 import { useRecoilValue } from "recoil";
 import { Post, postData } from "../store/post";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { BsFillSendFill } from "react-icons/bs";
 import { v4 } from "uuid";
 import { userInfo, userState } from "../store/user";
-import { UserWithProfile } from "../firebase";
+import { UserWithProfile, db } from "../firebase";
+import { collection, getDocs, query, setDoc, where } from "firebase/firestore";
 
 export const Talk = () => {
 	const postItems = useRecoilValue(postData);
 	const [posts, setPosts] = useState<Post[] | undefined>(undefined);
 	const [clickedPost, setClickedPost] = useState<Post | undefined>(undefined);
 	const isLogin = useRecoilValue(userState);
-	const user = useRecoilValue<UserWithProfile | null>(userInfo)
+	const user = useRecoilValue<UserWithProfile | null>(userInfo);
+	const textareaRef = useRef<HTMLTextAreaElement>(null);
 
 	useEffect(() => {
 		const sharedPosts = postItems.filter((post) => post.isPost === true);
 		setPosts(sharedPosts);
 	}, []);
 	console.log(posts);
+	const uploadComment = () => {
+		const comment = textareaRef.current?.value;
+		if (comment && clickedPost) {
+			getDocs(query(collection(db, "post"), where("imgUrl", "==", clickedPost.imgUrl)))
+				.then((querySnapshot) => {
+					const doc = querySnapshot.docs[0];
+					const postRef = doc.ref;
+					const postData = doc.data();
+					const newComment = {
+						comment: comment,
+						createdAt: new Date().getTime(),
+						author: user?.uid
+					};
+					const comments = postData.comments ? [...postData.comments, newComment] : [newComment];
+					setDoc(
+						postRef,
+						{
+							...postData,
+							comments: comments,
+						},
+						{ merge: true }
+					);
+				})
+				.catch((error) => {
+					console.error(error);
+				});
+		}
+	};
+
 	return (
 		<div className="flex flex-col items-center min-h-[calc(100vh-3.3rem)] pt-16 bg-base-200">
 			<Carousel
@@ -101,8 +132,9 @@ export const Talk = () => {
 											className="textarea w-full focus:outline-none resize-none overflow-auto"
 											maxLength={50}
 											placeholder="댓글을 입력해주세요."
+											ref={textareaRef}
 										></textarea>
-										<div className="flex items-center w-6 h-full cursor-pointer">
+										<div className="flex items-center w-6 h-full cursor-pointer" onClick={uploadComment}>
 											<BsFillSendFill className="mr-1" />
 										</div>
 									</div>
