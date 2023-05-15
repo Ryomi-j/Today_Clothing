@@ -36,7 +36,7 @@ export const postData = selector<Post[]>({
 	},
 });
 
-export const userPosts = atom({
+export const userPostState = atom<Post[]>({
 	key: "userPosts",
 	default: []
 });
