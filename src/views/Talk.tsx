@@ -1,7 +1,7 @@
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
 import { useRecoilValue } from "recoil";
-import { Post, postData } from "../store/post";
+import { Comments, Post, postData } from "../store/post";
 import { useEffect, useRef, useState } from "react";
 import { BsFillSendFill } from "react-icons/bs";
 import { v4 } from "uuid";
@@ -16,12 +16,19 @@ export const Talk = () => {
 	const isLogin = useRecoilValue(userState);
 	const user = useRecoilValue<UserWithProfile | null>(userInfo);
 	const textareaRef = useRef<HTMLTextAreaElement>(null);
+	const [comments, setComments] = useState<Comments[]>([]);
 
 	useEffect(() => {
 		const sharedPosts = postItems.filter((post) => post.isPost === true);
 		setPosts(sharedPosts);
 	}, []);
-	console.log(posts);
+
+	useEffect(() => {
+		const postData = postItems.filter((post) => post.imgUrl === clickedPost?.imgUrl);
+		const comment = postData[0]?.comments;
+		if (comment) setComments(comment);
+	}, [clickedPost]);
+
 	const uploadComment = () => {
 		const comment = textareaRef.current?.value;
 		if (comment && clickedPost) {
@@ -33,17 +40,23 @@ export const Talk = () => {
 					const newComment = {
 						comment: comment,
 						createdAt: new Date().getTime(),
-						author: user?.uid
+						author: user?.name,
 					};
 					const comments = postData.comments ? [...postData.comments, newComment] : [newComment];
+					setComments(comments);
 					setDoc(
 						postRef,
 						{
 							...postData,
 							comments: comments,
+							author: user?.name,
+							createdAt: new Date().getTime(),
 						},
 						{ merge: true }
 					);
+					if (textareaRef.current) {
+						textareaRef.current.value = "";
+					}
 				})
 				.catch((error) => {
 					console.error(error);
@@ -141,16 +154,24 @@ export const Talk = () => {
 								</div>
 							)}
 							<div className="flex flex-col gap-72 max-h-96 overflow-auto">
-								<div className="flex gap-1">
-									<span className="font-bold">Angela</span>
-									<div>
-										<span className="pl-1">오늘 춥나요?춥나요춥나요춥나요춥나요춥나요춥나요춥나요춥나요춥나요</span>
-										<span className="pl-1">
-											<button className="btn btn-primary btn-xs">Edit</button>
-											<button className="btn btn-xs ml-1">delete</button>
-										</span>
-									</div>
-								</div>
+								{comments &&
+									comments.map((item) => {
+										console.log(comments);
+										return (
+											<div key={v4()} className="flex gap-1">
+												<span className="font-bold">{item.author}</span>
+												<span className="pl-1">
+													{item.comment} {}
+												</span>
+												<div>
+													<span className="pl-1">
+														<button className="btn btn-primary btn-xs">Edit</button>
+														<button className="btn btn-xs ml-1">delete</button>
+													</span>
+												</div>
+											</div>
+										);
+									})}
 							</div>
 						</div>
 					</article>
