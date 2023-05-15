@@ -5,11 +5,15 @@ import { Post, postData } from "../store/post";
 import { useEffect, useState } from "react";
 import { BsFillSendFill } from "react-icons/bs";
 import { v4 } from "uuid";
+import { userInfo, userState } from "../store/user";
+import { UserWithProfile } from "../firebase";
 
 export const Talk = () => {
 	const postItems = useRecoilValue(postData);
 	const [posts, setPosts] = useState<Post[] | undefined>(undefined);
 	const [clickedPost, setClickedPost] = useState<Post | undefined>(undefined);
+	const isLogin = useRecoilValue(userState);
+	const user = useRecoilValue<UserWithProfile | null>(userInfo)
 
 	useEffect(() => {
 		const sharedPosts = postItems.filter((post) => post.isPost === true);
@@ -43,7 +47,7 @@ export const Talk = () => {
 				{posts?.map((post) => {
 					return (
 						<label
-						key={v4()}
+							key={v4()}
 							htmlFor={`${post.createdAt}-${post.uid}`}
 							className="card card-compact bg-base-100 shadow-xl cursor-pointer block"
 							onClick={() => {
@@ -89,23 +93,25 @@ export const Talk = () => {
 							</div>
 						</div>
 						<div className="card-body w-96 gap-5">
-							<div className="flex gap-2">
-								<span className="font-bold">Angela</span>
-								<div className="flex items-center w-full  border-solid border-2 border-indigo-600 rounded-lg">
-									<textarea
-										className="textarea w-full focus:outline-none resize-none overflow-auto"
-										maxLength={50}
-										placeholder="댓글을 입력해주세요."
-									></textarea>
-									<div className="flex items-center w-6 h-full cursor-pointer">
-										<BsFillSendFill className="mr-1" />
+							{isLogin && (
+								<div className="flex gap-2">
+									<span className="font-bold">{user?.displayName}</span>
+									<div className="flex items-center w-full  border-solid border-2 border-indigo-600 rounded-lg">
+										<textarea
+											className="textarea w-full focus:outline-none resize-none overflow-auto"
+											maxLength={50}
+											placeholder="댓글을 입력해주세요."
+										></textarea>
+										<div className="flex items-center w-6 h-full cursor-pointer">
+											<BsFillSendFill className="mr-1" />
+										</div>
 									</div>
 								</div>
-							</div>
+							)}
 							<div className="flex flex-col gap-72 max-h-96 overflow-auto">
 								<div className="flex gap-1">
 									<span className="font-bold">Angela</span>
-									<div >
+									<div>
 										<span className="pl-1">오늘 춥나요?춥나요춥나요춥나요춥나요춥나요춥나요춥나요춥나요춥나요</span>
 										<span className="pl-1">
 											<button className="btn btn-primary btn-xs">Edit</button>

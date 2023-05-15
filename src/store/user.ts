@@ -1,7 +1,6 @@
 import { collection, getDocs } from "firebase/firestore";
-import { db } from "../firebase";
+import { UserWithProfile, db } from "../firebase";
 import { atom, selector } from "recoil";
-import { User } from "firebase/auth";
 
 export interface Data {
 	createdAt: string;
@@ -21,18 +20,18 @@ export const userState = atom({
 	default: false,
 });
 
-export const userInfo = atom<User | null>({
+export const userInfo = atom<UserWithProfile | null>({
 	key: "userInfo",
 	default: null,
 });
 
-export const userData = selector<User[]>({
+export const userData = selector<UserWithProfile[]>({
 	key: "userData",
 	get: async () => {
 		try {
 			const users = collection(db, "users");
 			const usersInfo = await getDocs(users);
-			const user = usersInfo.docs.map((doc) => doc.data() as User);
+			const user = usersInfo.docs.map((doc) => doc.data() as UserWithProfile);
 			console.log(user);
 			return user || [];
 		} catch (error) {

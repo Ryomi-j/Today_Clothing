@@ -28,21 +28,28 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 export const auth = getAuth();
-export const storage = getStorage(app)
+export const storage = getStorage(app);
+
+export interface UserWithProfile extends User {
+	name: string;
+  }  
 
 // 가입
-export const signUp = async (email: string, password: string, nickname: string) => {
+export const signUp = async (email: string, password: string, displayName: string) => {
 	try {
 		const userCredential = await createUserWithEmailAndPassword(auth, email, password);
 		const user = userCredential.user;
+
+		// Firestore에 사용자 정보 저장
 		const userData = {
 			uid: user.uid,
-			creactedAt: user.metadata.creationTime,
+			createdAt: user.metadata.creationTime,
 			userId: user.email,
-			name: user.displayName || nickname,
+			name: user.displayName || displayName,
 		};
 		const newUser = doc(db, "users", user.uid);
 		await setDoc(newUser, userData, { merge: true });
+
 		await signOut(auth);
 	} catch (error: any) {
 		const errorMessage = error.message;
@@ -120,7 +127,7 @@ export const loginGoogle = () => {
 };
 
 export const logout = () => {
-	signOut(auth)
+	signOut(auth);
 };
 
 export const getUserData = async (user: User) => {
@@ -128,7 +135,7 @@ export const getUserData = async (user: User) => {
 		const userDoc = doc(db, "users", user.uid);
 		const userSnapshot = await getDoc(userDoc);
 		if (userSnapshot.exists()) {
-			const userData = userSnapshot.data() as User;
+			const userData = userSnapshot.data() as UserWithProfile;
 			return userData;
 		} else {
 			return null;

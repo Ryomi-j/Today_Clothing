@@ -1,10 +1,9 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useRef } from "react";
-import { getUserData, loginGoogle, signIn } from "../firebase";
+import { UserWithProfile, getUserData, loginGoogle, signIn } from "../firebase";
 import { useRecoilCallback, useRecoilState } from "recoil";
 import { userInfo, userState } from "../store/user";
 import { GetGeoInfo } from "../utils/userGeolocation";
-import { User } from "firebase/auth";
 
 export const Login = () => {
 	const idInput = useRef<HTMLInputElement>(null);
@@ -12,7 +11,7 @@ export const Login = () => {
 	const [, setLogin] = useRecoilState(userState);
 	const navigate = useNavigate();
 
-	const setUser = useRecoilCallback(({ set }) => (newUser: User | null) => {
+	const setUser = useRecoilCallback(({ set }) => (newUser: UserWithProfile | null) => {
 		set(userInfo, newUser);
 	  });
 
