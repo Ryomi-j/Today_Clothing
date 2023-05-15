@@ -3,8 +3,7 @@ import { Modal } from "../components/common/Modal";
 import { BiShareAlt } from "react-icons/bi";
 import { weatherData } from "../api/weatherApi";
 import { useEffect, useState } from "react";
-import { userInfo } from "../store/user";
-import { Post, defaultData } from "../store/post";
+import { Post, defaultData, userPostState } from "../store/post";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
 import { collection, getDocs, query, setDoc, where } from "firebase/firestore";
@@ -12,14 +11,20 @@ import { db } from "../firebase";
 
 const TodayClothes = () => {
 	const weather = useRecoilValue(weatherData);
-	const user = useRecoilValue(userInfo);
 	const defaultImgs = useRecoilValue(defaultData);
 	const [today, setToday] = useState(new Date());
 	const [todayPost, setTodayPost] = useState<Post[] | undefined>(undefined);
+	const userPosts = useRecoilValue(userPostState);
 
-	const userUid = user && user.uid;
-	const userPosts: Post[] = (userUid && JSON.parse(localStorage.getItem(userUid) || "[]")) || [];
-	let currentPost: Post[] | undefined;
+	let currentPost: Post[] | undefined = userPosts.filter(
+		(post) => {
+		  if (!post.date) {
+			return false;
+		  }
+		  return new Date(+post.date)?.toString().slice(0, 15) === today.toString().slice(0, 15);
+		}
+	  );
+	  
 	const days = ["일", "월", "화", "수", "목", "금", "토"];
 	let year = today.getFullYear();
 	let month = today.getMonth() + 1;
@@ -28,8 +33,7 @@ const TodayClothes = () => {
 	let posts: Post[] | undefined;
 
 	useEffect(() => {
-		currentPost = userPosts.filter((item) => item.date === today.getTime());
-		if (currentPost.length === 0) {
+		if (!currentPost) {
 			switch (true) {
 				case weather.temp < 4:
 					posts = defaultImgs.filter((img) => img.degree < 4);
