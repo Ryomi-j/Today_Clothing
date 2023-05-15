@@ -7,13 +7,14 @@ import { userInfo } from "../store/user";
 import { v4 } from "uuid";
 import { Modal } from "../components/common/Modal";
 import { selectedDate } from "../store/editItem";
-import { collection, doc, getDocs, setDoc } from "firebase/firestore";
-import { Post, nextWeekUserPost } from "../store/post";
+import { doc, setDoc } from "firebase/firestore";
+import { nextWeekUserPost, userPostState } from "../store/post";
 
 export const EditCloset = () => {
 	const date = useRecoilValue(selectedDate);
 	const newDate = new Date(date).toString();
 	const [postArr, setPostArr] = useRecoilState(nextWeekUserPost);
+	const userPosts = useRecoilValue(userPostState);
 
 	const [imgUrl, setImgUrl] = useState<undefined | string>("/public/addImg.svg");
 	const [imgUpload, setImgUpload] = useState<undefined | File>(undefined);
@@ -22,12 +23,7 @@ export const EditCloset = () => {
 
 	const getPostData = useRecoilCallback(({ set }) => async () => {
 		try {
-			const posts = collection(db, "post");
-			const postItems = await getDocs(posts);
-			let post = postItems.docs.map((doc) => doc.data() as Post);
-			post = post.filter(el => el.uid === userUid)
-			set(nextWeekUserPost, post || []);
-			if(userUid) localStorage.setItem(userUid?.toString(), JSON.stringify(post))
+			set(nextWeekUserPost, userPosts || []);
 		} catch (error) {
 			console.error(error);
 			set(nextWeekUserPost, []);
