@@ -8,7 +8,17 @@ export const SignUp = () => {
 	const confirmPw = useRef<HTMLInputElement>(null);
 	const [id, setId] = useState("");
 	const [isIdDuplicate, setIsIdDuplicate] = useState(false);
-	const nav = useNavigate()
+	const nav = useNavigate();
+
+	const checkIdValidation = (id: string): boolean => {
+		const validId = /^[a-zA-Z0-9]{6,12}$/;
+		return !/\s/.test(id) && validId.test(id);
+	};
+
+	const checkPasswordValidation = (password: string): boolean => {
+		const validPassword = /^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9]{6,12}$/;
+		return !/\s/.test(password) && validPassword.test(password);
+	};
 
 	const handleIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setId(event.target.value);
@@ -16,14 +26,19 @@ export const SignUp = () => {
 	};
 
 	const checkId = async () => {
-		const result = await isDuplicateId(id + "@todayClothing.com");
-		if (result) {
-			alert("이미 사용중인 ID입니다.");
+		if (!checkIdValidation(id)) {
+		  alert("영문/숫자 조합 6~12자리의 id를 입력해주세요");
 		} else {
+		  const result = await isDuplicateId(id + "@todayClothing.com");
+		  if (result) {
+			alert("이미 사용중인 ID입니다.");
+		  } else {
 			alert("사용가능한 ID 입니다.");
 			setIsIdDuplicate(true);
+		  }
 		}
-	};
+	  };
+	  
 
 	const handleJoin = () => {
 		const email = id + "@todayClothing.com" ?? "";
@@ -31,16 +46,16 @@ export const SignUp = () => {
 		let _pw = confirmPw?.current?.value ?? "";
 
 		if (!isIdDuplicate) return alert("아이디 중복검사가 필요합니다.");
-		else if (id.length < 6) {
-			alert("6자리 이상의 id를 입력해주세요");
-		} else if (pw.length < 6) {
-			alert("6자리 이상의 password를 입력해주세요");
+		else if (checkIdValidation(id)) {
+			alert("영문/숫자 조합 6~12자리의 id를 입력해주세요");
+		} else if (checkPasswordValidation(pw)) {
+			alert("영문/숫자 조합 6~12자리의 password를 입력해주세요");
 		} else if (pw !== _pw) {
 			alert("password가 일치하지 않습니다.");
 		} else {
 			signUp(email, pw);
 			alert("축하합니다. 가입이 완료되었습니다 :)");
-			nav('/login')
+			nav("/login");
 		}
 	};
 
@@ -75,7 +90,7 @@ export const SignUp = () => {
 								<span className="label-text pr-3 font-bold">PW</span>
 							</label>
 							<input
-								type="text"
+								type="password"
 								id="pw"
 								placeholder="password"
 								minLength={6}
