@@ -13,12 +13,19 @@ export interface Post {
 	humidity?: string;
 	degree?: number;
 	isPost?: boolean;
+	comments ?:  Comments[]
 }
 
 export interface DefaultPost {
 	imgUrl: string;
 	id: string;
 	degree: number;
+}
+
+export interface Comments {
+	comment: string,
+	author: string, 
+	createdAt: number
 }
 
 export const postData = selector<Post[]>({
