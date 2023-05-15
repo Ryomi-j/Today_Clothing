@@ -29,7 +29,7 @@ export const SignUp = () => {
 		if (!checkIdValidation(id)) {
 		  alert("영문/숫자 조합 6~12자리의 id를 입력해주세요");
 		} else {
-		  const result = await isDuplicateId(id + "@todayClothing.com");
+		  const result = await isDuplicateId(id + "@todayclothing.com");
 		  if (result) {
 			alert("이미 사용중인 ID입니다.");
 		  } else {
