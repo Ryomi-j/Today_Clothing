@@ -1,6 +1,7 @@
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
 import { atom, selector } from "recoil";
+import { User } from "firebase/auth";
 
 export interface Data {
 	createdAt: string;
@@ -12,11 +13,6 @@ export interface Data {
 	tag: string;
 	temperature: number;
 	weather: string;
-}
-
-export interface User {
-	uid: string;
-	data?: Data;
 }
 
 // 로그인 여부 T/F
