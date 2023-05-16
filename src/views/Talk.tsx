@@ -24,9 +24,11 @@ export const Talk = () => {
 	}, []);
 
 	useEffect(() => {
-		const postData = postItems.filter((post) => post.imgUrl === clickedPost?.imgUrl);
-		const comment = postData[0]?.comments;
-		if (comment) setComments(comment);
+		if (posts) {
+			const postData = posts.filter((post) => post.imgUrl === clickedPost?.imgUrl);
+			const comment = postData[0]?.comments;
+			if (comment) setComments(comment);
+		}
 	}, [clickedPost]);
 
 	const uploadComment = () => {
