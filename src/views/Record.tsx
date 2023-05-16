@@ -25,9 +25,9 @@ export const Record = () => {
 	return (
 		<div className="flex min-h-[calc(100vh-3.3rem)] pt-16 bg-base-200">
 			{userRecords.length === 0 ? (
-				<div className="card gap-5 my-auto mx-auto min-w-2/5 h-80 bg-base-100 shadow-xl p-7">
-					<h2 className="text-4xl font-extrabold text-center pt-5 pb-5">Record</h2>
-					<div className="grid gap-6 mx-6 justify-center items-center">
+				<div className="card gap-5 my-8 mx-auto max-w-2/5 bg-base-100 shadow-xl p-7">
+				<h2 className="text-2xl sm:text-4xl font-extrabold text-center pt-5 pb-5">Record</h2>
+				<div className="grid xs:grid-cols-2 gap-6 justify-center justify-items-center">
 						<div className="flex items-center gap-2 mt-10 font-extrabold">
 							No clothing records found <RiEmotionSadLine />
 						</div>
@@ -43,7 +43,7 @@ export const Record = () => {
 			) : (
 				<div className="card gap-5 my-8 mx-auto min-w-2/5 min-h-min bg-base-100 shadow-xl p-7">
 					<h2 className="text-4xl font-extrabold text-center pt-5 pb-5">Record</h2>
-					<div className={`grid grid-cols-2 gap-6 justify-center items-center`}>
+					<div className="grid xs:grid-cols-2 gap-6 justify-center justify-items-center">
 						{userRecords.map((post) => {
 							let timeStamp = new Date(Number(post.date));
 							return (
