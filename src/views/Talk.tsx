@@ -17,6 +17,7 @@ export const Talk = () => {
 	const user = useRecoilValue<UserWithProfile | null>(userInfo);
 	const textareaRef = useRef<HTMLTextAreaElement>(null);
 	const [comments, setComments] = useState<Comments[]>([]);
+	const [editboxState, setEditboxState] = useState(false);
 
 	useEffect(() => {
 		const sharedPosts = postItems.filter((post) => post.isPost === true);
@@ -145,10 +146,10 @@ export const Talk = () => {
 									<div className="flex items-center w-full  border-solid border-2 border-indigo-600 rounded-lg">
 										<textarea
 											className="textarea w-full focus:outline-none resize-none overflow-auto"
-											maxLength={50}
+											maxLength={100}
 											placeholder="댓글을 입력해주세요."
 											ref={textareaRef}
-										></textarea>
+										/>
 										<div className="flex items-center w-6 h-full cursor-pointer" onClick={uploadComment}>
 											<BsFillSendFill className="mr-1" />
 										</div>
@@ -157,21 +158,37 @@ export const Talk = () => {
 							)}
 							<div className="flex flex-col max-h-96 overflow-auto">
 								{comments &&
-									comments.map((item) => {
-										console.log(comments);
+									comments.map((item, idx) => {
 										return (
 											<div key={v4()} className="flex gap-1">
 												<span className="font-bold">{item.author}</span>
-												<div className="pl-1 break-all">
-													<span className="w-10px inline-block">{item.comment}</span>
+												<div
+													id={item.createdAt.toString()}
+													className={`comment pl-1 break-all ${editboxState ? "hidden" : "block"}`}
+												>
+													<span className="inline-block">{item.comment}</span>
 													{item.author === user?.name && (
 														<span className="pl-1">
 															<button className="btn btn-primary btn-xs">
 																Edit
 															</button>
-															<button className="btn btn-xs ml-1">delete</button>
+															<button className="btn btn-xs ml-1">
+																delete
+															</button>
 														</span>
 													)}
+												</div>
+												<div
+													id={`${item.createdAt.toString()}Edit`}
+													className={`pl-1 break-all ${editboxState ? "block" : "hidden"}`}
+												>
+													<textarea
+														className="border-2 resize-none w-full"
+													/>
+													<div className="pl-1">
+														<button className="btn btn-primary btn-xs">save</button>
+														<button className="btn btn-xs ml-1">cancel</button>
+													</div>
 												</div>
 											</div>
 										);
