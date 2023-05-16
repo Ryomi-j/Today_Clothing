@@ -28,9 +28,9 @@ const Closet = () => {
 
 	return (
 		<div className="flex min-h-[calc(100vh-3.3rem)] pt-16 bg-base-200">
-			<div className="card gap-5 my-8 mx-auto min-w-2/5 bg-base-100 shadow-xl p-7">
-				<h2 className="text-4xl font-extrabold text-center pt-5 pb-5">Your Weekly Closet</h2>
-				<div className="grid grid-rows-4 grid-cols-2 gap-6 justify-center items-center">
+			<div className="card gap-5 my-8 mx-auto max-w-2/5 bg-base-100 shadow-xl p-7">
+				<h2 className="text-2xl sm:text-4xl font-extrabold text-center pt-5 pb-5">Weekly Closet</h2>
+				<div className="grid grid-rows-4 xs:grid-cols-2 gap-6 justify-center justify-items-center">
 					{weekDates.map((_, i) => {
 						const date = weekDates[i];
 						const content = date ? date.toString().slice(0, 3) : "";
@@ -44,7 +44,7 @@ const Closet = () => {
 				</div>
 				<div className="flex flex-row-reverse mt-7">
 					<Link to="/record">
-						<button className="btn">Record</button>
+						<button className="btn btn-xs xs:btn-md">Record</button>
 					</Link>
 				</div>
 			</div>
