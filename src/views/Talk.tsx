@@ -136,7 +136,7 @@ export const Talk = () => {
 								<div className="badge badge-accent badge-outline">#{`습도_${clickedPost?.humidity}%`}</div>
 							</div>
 						</div>
-						<div className="card-body w-96 gap-5">
+						<div className="card-body max-w-3xl gap-5">
 							{isLogin && (
 								<div className="flex gap-2">
 									<span className="font-bold">{user?.name}</span>
@@ -153,21 +153,23 @@ export const Talk = () => {
 									</div>
 								</div>
 							)}
-							<div className="flex flex-col gap-72 max-h-96 overflow-auto">
+							<div className="flex flex-col max-h-96 overflow-auto">
 								{comments &&
 									comments.map((item) => {
 										console.log(comments);
 										return (
 											<div key={v4()} className="flex gap-1">
 												<span className="font-bold">{item.author}</span>
-												<span className="pl-1">
-													{item.comment} {}
-												</span>
-												<div>
-													<span className="pl-1">
-														<button className="btn btn-primary btn-xs">Edit</button>
-														<button className="btn btn-xs ml-1">delete</button>
-													</span>
+												<div className="pl-1 break-all">
+													<span className="w-10px inline-block">{item.comment}</span>
+													{item.author === user?.name && (
+														<span className="pl-1">
+															<button className="btn btn-primary btn-xs">
+																Edit
+															</button>
+															<button className="btn btn-xs ml-1">delete</button>
+														</span>
+													)}
 												</div>
 											</div>
 										);
