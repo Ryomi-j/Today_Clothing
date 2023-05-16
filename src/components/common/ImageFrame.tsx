@@ -14,25 +14,25 @@ export const ImageFrame = ({ content, src, deleteBtn, date }: ImageFrameDataType
 	const [, setDate] = useRecoilState(selectedDate);
 
 	return (
-		<div className="card card-compact w-96 bg-base-100 shadow-xl">
-			<figure className="w-96 h-96 max-w-96 max-h-96 border-2 border-base-200">
+		<div className="card card-compact w-32 md:w-52 md:h-52 xl:w-96 xl:h-auto bg-base-100 shadow-xl">
+			<figure className="w-32 h-28 md:w-52 md:h-40 xl:w-96 xl:h-96 max-w-96 max-h-96 bg-base-200 cursor-pointer rounded-t-2xl">
 				<img src={src} alt={`${date?.toString().slice(0, 15)} clothing image`} />
 			</figure>
-			<div className="card-body min-h-28 bg-base-200  rounded-b-2xl">
-				<h3 className="card-title justify-center text-center whitespace-pre-wrap">{content}</h3>
+			<div className=" md:h-20 xl:h-28 md:p-3">
+				<h3 className="card-title justify-center gap-1 leading-3 text-[10px] md:text-sm xl:text-lg whitespace-pre-wrap text-center">{content}</h3>
 				<div className="flex gap-2 justify-end">
-					<div className="card-actions justify-end">
+					<div className="card-actions justify-end mt-[-0.3rem] xl:mt-0">
 						<Link to="/editCloset">
 							{date && (
-								<button className="btn btn-primary btn-sm" onClick={() => setDate(date.getTime())}>
-									edit
+								<button className="bg-primary text-white font-medium rounded-md text-[10px] p-1 mr-2 leading-none md:btn md:btn-primary text-xs md:btn-xs xl:btn-sm xl:p-2" onClick={() => setDate(date.getTime())}>
+									EDIT
 								</button>
 							)}
 						</Link>
 					</div>
 					{deleteBtn && (
 						<div className="form-control">
-							<label htmlFor="my-modal-6" className="btn btn-sm">
+							<label htmlFor="my-modal-6" className="btn btn-xs">
 								delete
 							</label>
 						</div>
@@ -47,19 +47,19 @@ export const EmptyImageFrame = ({ content, date }: ImageFrameDataType) => {
 	const [, setDate] = useRecoilState(selectedDate);
 
 	return (
-		<div className="card card-compact w-96 bg-base-100 shadow-xl">
+		<div className="card card-compact w-32 md:w-52 md:h-52 xl:w-96 xl:h-auto bg-base-100 shadow-xl">
 			<Link to="/editCloset">
 				{date && (
 					<figure
-						className="w-96 h-96 max-w-96 max-h-96 bg-base-200 cursor-pointer rounded-t-2xl"
+						className="w-32 h-28 md:w-52 md:h-40 xl:w-96 xl:h-96 max-w-96 max-h-96 bg-base-200 cursor-pointer rounded-t-2xl"
 						onClick={() => setDate(date.getTime())}
 					>
 						<img src="/addImg.svg" alt="No image data" className="w-1/4" />
 					</figure>
 				)}
 			</Link>
-			<div className="card-body h-28 ">
-				<h3 className="card-title justify-center">{content}</h3>
+			<div className="card-body h-10 p-0 md:p-1 md:h-28">
+				<h3 className="card-title justify-center text-sm xl:text-md">{content}</h3>
 			</div>
 		</div>
 	);
