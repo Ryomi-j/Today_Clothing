@@ -85,50 +85,52 @@ export const SignUp = () => {
 		<>
 			<div className="hero min-h-[calc(100vh-3.3rem)] pt-16 bg-base-200">
 				<div className="card flex-shrink-0 shadow-2xl bg-base-100">
-					<div className="card-body p-14 gap-5">
-						<h2 className="text-center text-5xl font-bold">Sign Up</h2>
-						<div className="form-control flex-row  mt-16">
-							<label htmlFor="nickName" className="label w-24 justify-end">
+					<div className="card-body pl-6 pr-1 sm:p-5 lg:p-10 gap-0 lg:gap-5 w-52 xs:w-auto">
+						<h2 className="text-center text-xl xs:text-4xl md:text-5xl font-bold">Sign Up</h2>
+						<div className="form-control sm:flex-row sm:justify-center sm:items-center mt-1 sm:mt-4 xs:mt-8 md:mt-16 ">
+							<label htmlFor="nickName" className="label w-24 sm:justify-end">
 								<span className="label-text pr-3 font-bold">Nick-Name</span>
 							</label>
-							<input
-								type="text"
-								id="nickName"
-								placeholder="Nick Name"
-								minLength={1}
-								maxLength={15}
-								ref={idInput}
-								className="input input-bordered w-52"
-								onChange={handleNickNameChange}
-							/>
-							<button className="btn btn-s p-1 font- text-xs ml-1" onClick={checkNickName}>
-								Check
-								<br />
-								Availability
-							</button>
+							<div className="flex">
+								<input
+									type="text"
+									id="nickName"
+									placeholder="Nick Name"
+									minLength={1}
+									maxLength={15}
+									ref={idInput}
+									className="input input-bordered w-36 h-8 xs:w-52 sm:h-12 md:auto"
+									onChange={handleNickNameChange}
+								/>
+								<button className="btn btn-xs text-[8px] xs:btn-sm sm:btn-md p-1 md:flex-col text-xs ml-1" onClick={checkId}>
+									<p>Check</p>
+									<p className="hidden md:block">Availability</p>
+								</button>
+							</div>
 						</div>
-						<div className="form-control flex-row">
-							<label htmlFor="id" className="label w-24 justify-end">
+						<div className="form-control sm:flex-row sm:justify-center sm:items-center mt-1 sm:mt-4 xs:mt-8 ">
+							<label htmlFor="nickName" className="label w-24 sm:justify-end">
 								<span className="label-text pr-3 font-bold">ID</span>
 							</label>
-							<input
-								type="text"
-								id="id"
-								placeholder="영문/숫자 조합 6~12자리"
-								minLength={6}
-								maxLength={12}
-								ref={idInput}
-								className="input input-bordered w-52"
-								onChange={handleIdChange}
-							/>
-							<button className="btn btn-s p-1 font- text-xs ml-1" onClick={checkId}>
-								Check
-								<br />
-								Availability
-							</button>
+							<div className="flex">
+								<input
+									type="text"
+									id="id"
+									placeholder="영문/숫자 조합 6~12자리"
+									minLength={6}
+									maxLength={12}
+									ref={idInput}
+									className="input input-bordered w-36 h-8 xs:w-52 sm:h-12 md:auto"
+									onChange={handleIdChange}
+								/>
+								<button className="btn btn-xs text-[8px] xs:btn-sm sm:btn-md p-1 md:flex-col text-xs ml-1" onClick={checkId}>
+									<p>Check</p>
+									<p className="hidden md:block">Availability</p>
+								</button>
+							</div>
 						</div>
-						<div className="form-control  flex-row ">
-							<label htmlFor="pw" className="label w-24 justify-end">
+						<div className="form-control sm:flex-row sm:justify-center sm:items-center mt-1 sm:mt-4 xs:mt-8 mr-20 md:mr-32">
+							<label htmlFor="nickName" className="label w-24 sm:justify-end">
 								<span className="label-text pr-3 font-bold">PW</span>
 							</label>
 							<input
@@ -138,11 +140,11 @@ export const SignUp = () => {
 								minLength={6}
 								maxLength={15}
 								ref={pwInput}
-								className="input input-bordered w-52"
+								className="input input-bordered w-36 h-8 xs:w-52 sm:h-12"
 							/>
 						</div>
-						<div className="form-control  flex-row ">
-							<label htmlFor="confirmPw" className="label w-24">
+						<div className="form-control sm:flex-row sm:justify-center sm:items-center mt-1 sm:mt-4 xs:mt-8 mr-20 md:mr-32">
+							<label htmlFor="nickName" className="label w-24 sm:justify-end">
 								<span className="label-text font-bold">Confrim PW</span>
 							</label>
 							<input
@@ -151,12 +153,16 @@ export const SignUp = () => {
 								placeholder="password 재확인"
 								minLength={6}
 								maxLength={15}
-								className="input input-bordered w-52"
+								className="input input-bordered w-36 h-8 xs:w-52 sm:h-12 md:auto"
 								ref={confirmPw}
 							/>
 						</div>
 						<div className="form-control mt-6">
-							<label htmlFor="my-modal-6" className="btn btn-primary w-1/3 m-auto" onClick={handleJoin}>
+							<label
+								htmlFor="my-modal-6"
+								className="btn btn-primary w-1/3 m-auto btn-sm text-xs xs:btn-md"
+								onClick={handleJoin}
+							>
 								Join
 							</label>
 						</div>
