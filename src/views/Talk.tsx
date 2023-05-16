@@ -14,23 +14,17 @@ export const Talk = () => {
 	const [posts, setPosts] = useState<Post[] | undefined>(undefined);
 	const [clickedPost, setClickedPost] = useState<Post | undefined>(undefined);
 	const isLogin = useRecoilValue(userState);
+
 	const user = useRecoilValue<UserWithProfile | null>(userInfo);
 	const textareaRef = useRef<HTMLTextAreaElement>(null);
 	const [comments, setComments] = useState<Comments[]>([]);
 	const [editboxState, setEditboxState] = useState(false);
 
+	// 공유된 포스트만 가져오기 
 	useEffect(() => {
 		const sharedPosts = postItems.filter((post) => post.isPost === true);
 		setPosts(sharedPosts);
 	}, []);
-
-	useEffect(() => {
-		if (posts) {
-			const postData = posts.filter((post) => post.imgUrl === clickedPost?.imgUrl);
-			const comment = postData[0]?.comments;
-			if (comment) setComments(comment);
-		}
-	}, [clickedPost]);
 
 	const uploadComment = () => {
 		const comment = textareaRef.current?.value;
@@ -157,8 +151,8 @@ export const Talk = () => {
 								</div>
 							)}
 							<div className="flex flex-col max-h-96 overflow-auto">
-								{comments &&
-									comments.map((item, idx) => {
+								{clickedPost?.comments &&
+									clickedPost?.comments.map((item, idx) => {
 										return (
 											<div key={v4()} className="flex gap-1">
 												<span className="font-bold">{item.author}</span>
