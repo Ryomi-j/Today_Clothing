@@ -25,7 +25,6 @@ export const Talk = () => {
 	const [page, setPage] = useState(1);
 
 	const selectedData = (value: Date) => {
-		console.log(value);
 		const newPosts: any = [];
 		if (posts) {
 			posts.forEach((post) => {
@@ -35,7 +34,6 @@ export const Talk = () => {
 					if (postDate === selecedData) newPosts.push(post);
 				}
 			});
-			console.log(posts);
 			setPosts(newPosts);
 		}
 	};
@@ -125,8 +123,6 @@ export const Talk = () => {
 							textareaRef.current.value = "";
 						}
 					});
-					console.log(clickedPost);
-					console.log(comments);
 				})
 				.catch((error) => {
 					console.error(error);
