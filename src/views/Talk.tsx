@@ -36,7 +36,7 @@ export const Talk = () => {
 		return selectedPostDocs;
 	};
 
-	const uploadComment = () => {
+	const writeComment = () => {
 		const comment = textareaRef.current?.value;
 		if (comment && clickedPost) {
 			getSelectedPostDocs(clickedPost)
@@ -157,7 +157,7 @@ export const Talk = () => {
 											placeholder="댓글을 입력해주세요."
 											ref={textareaRef}
 										/>
-										<div className="flex items-center w-6 h-full cursor-pointer" onClick={uploadComment}>
+										<div className="flex items-center w-6 h-full cursor-pointer" onClick={writeComment}>
 											<BsFillSendFill className="mr-1" />
 										</div>
 									</div>
