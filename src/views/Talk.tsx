@@ -69,6 +69,11 @@ export const Talk = () => {
 		}
 	};
 
+	const handlePostClick = (post: Post) => {
+		setClickedPost(post);
+		setComments(post.comments);
+	};
+
 	return (
 		<div className="flex flex-col items-center min-h-[calc(100vh-3.3rem)] pt-16 bg-base-200">
 			<Carousel
@@ -100,7 +105,7 @@ export const Talk = () => {
 							htmlFor={`${post.createdAt}-${post.uid}`}
 							className="card card-compact bg-base-100 shadow-xl cursor-pointer block"
 							onClick={() => {
-								setClickedPost(post);
+								handlePostClick(post);
 							}}
 						>
 							<figure className="mx-5 mt-5 h-72 overflow-hidden object-cover">
@@ -159,8 +164,8 @@ export const Talk = () => {
 								</div>
 							)}
 							<div className="flex flex-col max-h-96 overflow-auto">
-								{clickedPost?.comments &&
-									clickedPost?.comments.map((item, idx) => {
+								{comments &&
+									comments.map((item, idx) => {
 										return (
 											<div key={v4()} className="flex gap-1">
 												<span className="font-bold">{item.author}</span>
