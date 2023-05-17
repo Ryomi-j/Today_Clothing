@@ -15,7 +15,6 @@ const TodayClothes = () => {
 	const [today, setToday] = useState(new Date());
 	const [todayPost, setTodayPost] = useState<Post[] | undefined>(undefined);
 	const userPosts = useRecoilValue(userPostState);
-
 	let currentPost: Post[] | undefined = userPosts.filter((post) => {
 		if (!post.date) {
 			return false;
@@ -31,7 +30,7 @@ const TodayClothes = () => {
 	let posts: Post[] | undefined;
 
 	useEffect(() => {
-		if (!currentPost) {
+		if (currentPost && currentPost.length === 0) {
 			switch (true) {
 				case weather.temp < 4:
 					posts = defaultImgs.filter((img) => img.degree < 4);
@@ -62,7 +61,7 @@ const TodayClothes = () => {
 					break;
 			}
 		}
-	}, [userPosts, weather]);
+	}, []);
 
 	useEffect(() => {
 		setToday(new Date());
@@ -118,6 +117,7 @@ const TodayClothes = () => {
 			});
 		}
 	};
+	console.log(todayPost);
 
 	return (
 		<div className="flex w-screen min-h-[calc(100vh-3.3rem)] pt-16 bg-base-200">
@@ -126,8 +126,12 @@ const TodayClothes = () => {
 
 				{todayPost.length === 1 ? (
 					todayPost.map((post) => {
+						console.log(todayPost)
 						return (
-							<figure key={post.id} className="max-w-md max-h-96 mx-auto border-2 rounded-md object-cover overflow-hidden">
+							<figure
+								key={post.id}
+								className="max-w-md max-h-96 mx-auto border-2 rounded-md object-cover overflow-hidden"
+							>
 								<img src={post.imgUrl} alt={`${today?.toString().slice(0, 15)} clothing image`} />
 							</figure>
 						);
@@ -157,8 +161,12 @@ const TodayClothes = () => {
 					</p>
 					{todayPost.length === 1 && (
 						<div className="flex flex-row-reverse">
-							<label htmlFor="my-modal-6" className="btn btn-primary xxxs:btn-sm xxxs:w-full xxs:justify-center xxs:p-0 xs:w-1/3">
-								<span className="xxxs:hidden sm:block">Share</span> <BiShareAlt className="xxs:p-0 pl-2 xxs:text-xs xs:text-xl" />
+							<label
+								htmlFor="my-modal-6"
+								className="btn btn-primary xxxs:btn-sm xxxs:w-full xxs:justify-center xxs:p-0 xs:w-1/3"
+							>
+								<span className="xxxs:hidden sm:block">Share</span>{" "}
+								<BiShareAlt className="xxs:p-0 pl-2 xxs:text-xs xs:text-xl" />
 							</label>
 						</div>
 					)}
