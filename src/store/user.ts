@@ -14,7 +14,6 @@ export interface Data {
 	weather: string;
 }
 
-// 로그인 여부 T/F
 export const userState = atom({
 	key: "isLogin",
 	default: false,
@@ -32,7 +31,6 @@ export const userData = selector<UserWithProfile[]>({
 			const users = collection(db, "users");
 			const usersInfo = await getDocs(users);
 			const user = usersInfo.docs.map((doc) => doc.data() as UserWithProfile);
-			console.log(user);
 			return user || [];
 		} catch (error) {
 			console.error(error);
