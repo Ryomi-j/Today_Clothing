@@ -1,13 +1,15 @@
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
 import { useRecoilValue } from "recoil";
-import { Comments, Post } from "../store/post";
+import { Comments, Post, postData } from "../store/post";
 import { useEffect, useRef, useState } from "react";
 import { BsFillSendFill } from "react-icons/bs";
+import { FcCalendar } from "react-icons/fc";
 import { userInfo, userState } from "../store/user";
 import { UserWithProfile, db } from "../firebase";
 import { collection, getDocs, limit, orderBy, query, setDoc, startAfter, updateDoc, where } from "firebase/firestore";
 import { Link } from "react-router-dom";
+import Calendar from "react-calendar";
 
 export const Talk = () => {
 	const [posts, setPosts] = useState<Post[] | undefined>(undefined);
@@ -20,8 +22,23 @@ export const Talk = () => {
 	const [commentBox] = useState<HTMLElement | null>(null);
 	const [editCommentBox] = useState<HTMLElement | null>(null);
 	const [commentsState, setCommentsState] = useState<boolean[]>([]);
-
 	const [page, setPage] = useState(1);
+
+	const selectedData = (value: Date) => {
+		console.log(value);
+		const newPosts: any = [];
+		if (posts) {
+			posts.forEach((post) => {
+				if (post.date) {
+					const postDate = new Date(post.date).toString().slice(0, 15);
+					const selecedData = value.toString().slice(0, 15);
+					if (postDate === selecedData) newPosts.push(post);
+				}
+			});
+			console.log(posts);
+			setPosts(newPosts);
+		}
+	};
 
 	useEffect(() => {
 		if (clickedPost && clickedPost?.comments && clickedPost.comments.length > 0) {
@@ -102,11 +119,14 @@ export const Talk = () => {
 							comments,
 						},
 						{ merge: true }
-					);
-					if (comments) setClickedPost((prev) => ({ ...prev, comments } as Post));
-					if (textareaRef.current) {
-						textareaRef.current.value = "";
-					}
+					).then(() => {
+						if (comments) setClickedPost((prev) => ({ ...prev, comments } as Post));
+						if (textareaRef.current) {
+							textareaRef.current.value = "";
+						}
+					});
+					console.log(clickedPost);
+					console.log(comments);
 				})
 				.catch((error) => {
 					console.error(error);
@@ -364,6 +384,14 @@ export const Talk = () => {
 						</div>
 					</article>
 				</div>
+			</div>
+			<div className="dropdown dropdown-end absolute top-3/4 right-3">
+				<label tabIndex={0} className="btn bg-teal-50 border-teal-100 rounded-full ">
+					<FcCalendar />
+				</label>
+				<ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
+					<Calendar onClickDay={(value) => selectedData(value)} />
+				</ul>
 			</div>
 		</div>
 	);
