@@ -70,8 +70,6 @@ export const EditPost = () => {
 					uid: userUid || "",
 				};
 				setDoc(doc(db, "post", `${userUid}${date}v4()`), newData).then(() => {
-					const idx = postArr.findIndex((post) => post.date === date);
-					postArr[idx] = newData;
 					getPostData();
 					setImgUrl(downloadURL);
 				});
@@ -112,7 +110,7 @@ export const EditPost = () => {
 					</label>
 				</figure>
 				<div className="card-body max-h-fit">
-					<h3 className=" mb-14 text-3xl font-semibold text-center">{decodeURI(query.content)}</h3>
+					<h3 className=" mb-14 text-3xl font-semibold text-center">{ query.content ? decodeURIComponent(query.content) : new Date(date).toString().slice(0,4)}</h3>
 					<div className="flex justify-end gap-2">
 						<label htmlFor="my-modal-6" className="btn btn-primary" onClick={uploadImg}>
 							Save
