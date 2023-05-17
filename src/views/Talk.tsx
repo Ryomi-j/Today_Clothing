@@ -17,21 +17,34 @@ export const Talk = () => {
 
 	const user = useRecoilValue<UserWithProfile | null>(userInfo);
 	const textareaRef = useRef<HTMLTextAreaElement>(null);
-	const [comments, setComments] = useState<Comments[]>([]);
+	const [comments, setComments] = useState<Comments[] | undefined>([]);
 	const [editboxState, setEditboxState] = useState(false);
 
-	// 공유된 포스트만 가져오기 
 	useEffect(() => {
 		const sharedPosts = postItems.filter((post) => post.isPost === true);
 		setPosts(sharedPosts);
 	}, []);
 
+	const getSelectedPostDocs = (clickedPost: Post) => {
+		return getDocs(query(collection(db, "post"), where("imgUrl", "==", clickedPost.imgUrl)));
+	};
+
+	useEffect(() => {
+		if (clickedPost)
+			getSelectedPostDocs(clickedPost).then((selectedPostDoc) => {
+				const doc = selectedPostDoc.docs[0];
+				const postData = doc.data();
+				console.log(postData);
+				setClickedPost(postData as Post)
+			});
+	}, [comments]);
+
 	const uploadComment = () => {
 		const comment = textareaRef.current?.value;
 		if (comment && clickedPost) {
-			getDocs(query(collection(db, "post"), where("imgUrl", "==", clickedPost.imgUrl)))
-				.then((querySnapshot) => {
-					const doc = querySnapshot.docs[0];
+			getSelectedPostDocs(clickedPost)
+				.then((selectedPostDoc) => {
+					const doc = selectedPostDoc.docs[0];
 					const postRef = doc.ref;
 					const postData = doc.data();
 					const newComment = {
@@ -40,17 +53,15 @@ export const Talk = () => {
 						author: user?.name,
 					};
 					const comments = postData.comments ? [...postData.comments, newComment] : [newComment];
-					setComments(comments);
 					setDoc(
 						postRef,
 						{
 							...postData,
-							comments: comments,
-							author: user?.name,
-							createdAt: new Date().getTime(),
+							comments,
 						},
 						{ merge: true }
 					);
+					setComments(comments);
 					if (textareaRef.current) {
 						textareaRef.current.value = "";
 					}
@@ -163,12 +174,8 @@ export const Talk = () => {
 													<span className="inline-block">{item.comment}</span>
 													{item.author === user?.name && (
 														<span className="pl-1">
-															<button className="btn btn-primary btn-xs">
-																Edit
-															</button>
-															<button className="btn btn-xs ml-1">
-																delete
-															</button>
+															<button className="btn btn-primary btn-xs">Edit</button>
+															<button className="btn btn-xs ml-1">delete</button>
 														</span>
 													)}
 												</div>
@@ -176,9 +183,7 @@ export const Talk = () => {
 													id={`${item.createdAt.toString()}Edit`}
 													className={`pl-1 break-all ${editboxState ? "block" : "hidden"}`}
 												>
-													<textarea
-														className="border-2 resize-none w-full"
-													/>
+													<textarea className="border-2 resize-none w-full" />
 													<div className="pl-1">
 														<button className="btn btn-primary btn-xs">save</button>
 														<button className="btn btn-xs ml-1">cancel</button>
