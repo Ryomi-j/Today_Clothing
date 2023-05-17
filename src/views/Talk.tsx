@@ -95,6 +95,43 @@ export const Talk = () => {
 		}
 	};
 
+	const saveEditedComment = async (e: React.MouseEvent<HTMLDivElement, MouseEvent>, idx: number) => {
+		const clickedButton = e.target as HTMLButtonElement;
+		const buttonText = clickedButton.innerText;
+		console.log(buttonText, userComment);
+		if (buttonText === "SAVE" && userComment) {
+			if (comments && comments[idx].comment !== userComment) {
+				if (comments) {
+					comments[idx].comment = userComment;
+					const collectionRef = collection(db, "post");
+					const querySnapshot = await getDocs(query(collectionRef, where("imgUrl", "==", clickedPost?.imgUrl)));
+					if (querySnapshot.empty) {
+						console.log("No matching documents");
+					} else {
+						const doc = querySnapshot.docs[0];
+						const postData = doc.data() as Post;
+						const postRef = doc.ref;
+						console.log(doc.data());
+						await setDoc(postRef, { ...postData, comments: comments }, { merge: true });
+					}
+				}
+				if (commentBox && editCommentBox) {
+					commentBox.style.display = "block";
+					editCommentBox.style.display = "none";
+				}
+			}
+		}
+		setUserComment(undefined);
+		setEditState(false);
+		setUserComment(undefined);
+		setEditState(false);
+
+		if (commentBox && editCommentBox) {
+			commentBox.style.display = "block";
+			editCommentBox.style.display = "none";
+		}
+	};
+
 	return (
 		<div className="flex flex-col items-center min-h-[calc(100vh-3.3rem)] pt-16 bg-base-200">
 			<Carousel
@@ -207,7 +244,7 @@ export const Talk = () => {
 														}}
 														className="border-2 resize-none w-full"
 													/>
-													<div className="pl-1">
+													<div className="pl-1" onClick={(e) => saveEditedComment(e, idx)}>
 														<button className="btn btn-primary btn-xs">save</button>
 														<button className="btn btn-xs ml-1">cancel</button>
 													</div>
