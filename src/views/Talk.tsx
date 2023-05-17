@@ -1,7 +1,7 @@
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
 import { useRecoilValue } from "recoil";
-import { Comments, Post, postData } from "../store/post";
+import { Comments, Post } from "../store/post";
 import { useEffect, useRef, useState } from "react";
 import { BsFillSendFill } from "react-icons/bs";
 import { FcCalendar } from "react-icons/fc";
@@ -22,7 +22,7 @@ export const Talk = () => {
 	const [commentBox] = useState<HTMLElement | null>(null);
 	const [editCommentBox] = useState<HTMLElement | null>(null);
 	const [commentsState, setCommentsState] = useState<boolean[]>([]);
-	const [page, setPage] = useState(1);
+	const [, setPage] = useState(1);
 
 	const selectedData = (value: Date) => {
 		const newPosts: any = [];
@@ -381,7 +381,7 @@ export const Talk = () => {
 					</article>
 				</div>
 			</div>
-			<div className="dropdown dropdown-end absolute top-3/4 right-3">
+			<div className="dropdown dropdown-end fixed top-3/4 right-3">
 				<label tabIndex={0} className="btn bg-teal-50 border-teal-100 rounded-full ">
 					<FcCalendar />
 				</label>
