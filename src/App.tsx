@@ -6,7 +6,6 @@ import { SignUp } from "./views/SignUp";
 import "./index.css";
 import { Record } from "./views/Record";
 import { EditCloset } from "./views/EditCloset";
-import { Post } from "./views/Post";
 import React, { lazy, useEffect } from "react";
 import { auth, getUserData } from "./firebase";
 import { useRecoilState, useRecoilValue } from "recoil";
@@ -81,7 +80,6 @@ function App() {
 					<Route path="/login" element={<Login />} />
 					<Route path="/sign-up" element={<SignUp />} />
 					<Route path="/editCloset" element={<EditCloset />} />
-					<Route path="/post" element={<Post />} />
 				</Routes>
 			</main>
 			<Footer />
