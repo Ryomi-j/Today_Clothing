@@ -1,8 +1,8 @@
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
 import { useRecoilValue } from "recoil";
-import { Comments, Post, postData } from "../store/post";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { Comments, Post } from "../store/post";
+import { useEffect, useRef, useState } from "react";
 import { BsFillSendFill } from "react-icons/bs";
 import { v4 } from "uuid";
 import { userInfo, userState } from "../store/user";
@@ -10,7 +10,6 @@ import { UserWithProfile, db } from "../firebase";
 import { collection, getDocs, onSnapshot, query, setDoc, updateDoc, where } from "firebase/firestore";
 
 export const Talk = () => {
-	const postItems = useRecoilValue(postData);
 	const [posts, setPosts] = useState<Post[] | undefined>(undefined);
 	const [clickedPost, setClickedPost] = useState<Post | undefined>(undefined);
 	const isLogin = useRecoilValue(userState);
