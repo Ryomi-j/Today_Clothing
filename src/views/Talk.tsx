@@ -7,7 +7,7 @@ import { BsFillSendFill } from "react-icons/bs";
 import { v4 } from "uuid";
 import { userInfo, userState } from "../store/user";
 import { UserWithProfile, db } from "../firebase";
-import { collection, getDocs, query, setDoc, where } from "firebase/firestore";
+import { collection, getDocs, onSnapshot, query, setDoc, where } from "firebase/firestore";
 
 export const Talk = () => {
 	const postItems = useRecoilValue(postData);
@@ -21,23 +21,20 @@ export const Talk = () => {
 	const [editboxState, setEditboxState] = useState(false);
 
 	useEffect(() => {
-		const sharedPosts = postItems.filter((post) => post.isPost === true);
-		setPosts(sharedPosts);
+		const posts = collection(db, "post");
+		const unsubscribe = onSnapshot(posts, (snapshot) => {
+			const post = snapshot.docs.map((doc) => doc.data() as Post);
+			setPosts(post);
+		});
+		return unsubscribe;
 	}, []);
 
-	const getSelectedPostDocs = (clickedPost: Post) => {
-		return getDocs(query(collection(db, "post"), where("imgUrl", "==", clickedPost.imgUrl)));
+	const getSelectedPostDocs = async (post: Post) => {
+		const posts = collection(db, "post");
+		const q = query(posts, where("id", "==", post.id));
+		const selectedPostDocs = await getDocs(q);
+		return selectedPostDocs;
 	};
-
-	useEffect(() => {
-		if (clickedPost)
-			getSelectedPostDocs(clickedPost).then((selectedPostDoc) => {
-				const doc = selectedPostDoc.docs[0];
-				const postData = doc.data();
-				console.log(postData);
-				setClickedPost(postData as Post)
-			});
-	}, [comments]);
 
 	const uploadComment = () => {
 		const comment = textareaRef.current?.value;
@@ -46,11 +43,11 @@ export const Talk = () => {
 				.then((selectedPostDoc) => {
 					const doc = selectedPostDoc.docs[0];
 					const postRef = doc.ref;
-					const postData = doc.data();
+					const postData = doc.data() as Post;
 					const newComment = {
 						comment: comment,
 						createdAt: new Date().getTime(),
-						author: user?.name,
+						author: user?.name || "",
 					};
 					const comments = postData.comments ? [...postData.comments, newComment] : [newComment];
 					setDoc(
@@ -61,7 +58,7 @@ export const Talk = () => {
 						},
 						{ merge: true }
 					);
-					setComments(comments);
+					if (comments) setComments(comments);
 					if (textareaRef.current) {
 						textareaRef.current.value = "";
 					}
