@@ -35,7 +35,7 @@ export const postData = selector<Post[]>({
 			const posts = collection(db, "post");
 			const postItems = await getDocs(posts);
 			const post = postItems.docs.map((doc) => doc.data() as Post);
-			return post || [];
+			return post;
 		} catch (error) {
 			console.error(error);
 			return [];
