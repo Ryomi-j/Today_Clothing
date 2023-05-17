@@ -117,7 +117,6 @@ const TodayClothes = () => {
 			});
 		}
 	};
-	console.log(todayPost);
 
 	return (
 		<div className="flex w-screen min-h-[calc(100vh-3.3rem)] pt-16 bg-base-200">
@@ -126,7 +125,6 @@ const TodayClothes = () => {
 
 				{todayPost.length === 1 ? (
 					todayPost.map((post) => {
-						console.log(todayPost)
 						return (
 							<figure
 								key={post.id}

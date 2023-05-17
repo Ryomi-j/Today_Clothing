@@ -24,7 +24,6 @@ export const weatherData = selector<WeatherProps>({
 				humidity: response.data.main.humidity,
 				weather: response.data.weather[0].description,
 			};
-			console.log(response.data);
 			return weatherProps;
 		} catch (error) {
 			console.log(error);
