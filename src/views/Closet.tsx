@@ -1,30 +1,29 @@
 import { Link } from "react-router-dom";
 import { EmptyImageFrame, ImageFrame } from "../components/common/ImageFrame";
 import { v4 } from "uuid";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { userInfo } from "../store/user";
-import { nextWeekUserPost, postData } from "../store/post";
+import { useRecoilCallback, useRecoilState, useRecoilValue } from "recoil";
+import { nextWeekUserPost, userPostState } from "../store/post";
 import { useEffect } from "react";
 import { useWeekDates } from "../utils/useWeekDates";
 
 const Closet = () => {
-	const user = useRecoilValue(userInfo);
-	const userUid = user && user.uid;
-	const postItems = useRecoilValue(postData);
-	const [postArr, setPostArr] = useRecoilState(nextWeekUserPost);
+	const [postArr, _] = useRecoilState(nextWeekUserPost);
 	const weekDates = useWeekDates();
+	const userPosts = useRecoilValue(userPostState);
+	const getPostData = useRecoilCallback(({ set }) => async () => {
+		try {
+			set(nextWeekUserPost, userPosts || []);
+		} catch (error) {
+			console.error(error);
+			set(nextWeekUserPost, []);
+		}
+	});
 
 	useEffect(() => {
-		const newPostArr = [...postArr];
-		weekDates.forEach((date, i) => {
-			postItems.forEach((post) => {
-				if (post.uid === userUid && date.getTime() === post.date) {
-					newPostArr[i] = post;
-				}
-			});
-		});
-		setPostArr(newPostArr);
-	}, [postItems, userUid, setPostArr]);
+		if (postArr.length === 0 || postArr.every((x) => !x)) {
+			getPostData();
+		}
+	}, [userPosts]);
 
 	return (
 		<div className="flex min-h-[calc(100vh-3.3rem)] pt-16 bg-base-200">
