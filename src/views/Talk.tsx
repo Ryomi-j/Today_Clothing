@@ -190,6 +190,9 @@ export const Talk = () => {
 								<div className="badge badge-secondary badge-outline">#{post.weather}</div>
 								<div className="badge badge-outline">#{`${post.degree}C°`}</div>
 								<div className="badge badge-accent badge-outline">#{`습도_${post.humidity}%`}</div>
+								<div className="badge badge-info badge-outline">
+									#{new Date(Number(clickedPost?.date)).toString().slice(0, 15)}
+								</div>
 							</div>
 						</label>
 					);
@@ -218,6 +221,9 @@ export const Talk = () => {
 								<div className="badge badge-secondary badge-outline">#{clickedPost?.weather}</div>
 								<div className="badge badge-outline">#{`${clickedPost?.degree}C°`}</div>
 								<div className="badge badge-accent badge-outline">#{`습도_${clickedPost?.humidity}%`}</div>
+								<div className="badge badge-info badge-outline">
+									#{new Date(Number(clickedPost?.date)).toString().slice(0, 15)}
+								</div>
 							</div>
 						</div>
 						<div className="card-body max-w-3xl gap-5">
