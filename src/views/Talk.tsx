@@ -2,7 +2,7 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
 import { useRecoilValue } from "recoil";
 import { Comments, Post, postData } from "../store/post";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { BsFillSendFill } from "react-icons/bs";
 import { v4 } from "uuid";
 import { userInfo, userState } from "../store/user";
@@ -18,11 +18,15 @@ export const Talk = () => {
 	const user = useRecoilValue<UserWithProfile | null>(userInfo);
 	const textareaRef = useRef<HTMLTextAreaElement>(null);
 	const [comments, setComments] = useState<Comments[] | undefined>([]);
-	const [editboxState, setEditboxState] = useState(false);
+	const [userComment, setUserComment] = useState<string | undefined>(undefined);
+	const [editState, setEditState] = useState(false);
+	const [commentBox, setCommentBox] = useState<HTMLElement | null>(null);
+	const [editCommentBox, setEditCommentBox] = useState<HTMLElement | null>(null);
 
 	useEffect(() => {
 		const posts = collection(db, "post");
-		const unsubscribe = onSnapshot(posts, (snapshot) => {
+		const q = query(posts, where("isPost", "==", true));
+		const unsubscribe = onSnapshot(q, (snapshot) => {
 			const post = snapshot.docs.map((doc) => doc.data() as Post);
 			setPosts(post);
 		});
@@ -72,6 +76,23 @@ export const Talk = () => {
 	const handlePostClick = (post: Post) => {
 		setClickedPost(post);
 		setComments(post.comments);
+	};
+
+	const handleEditCommentBtn = (item: Comments) => {
+		if (editState) {
+			alert("이미 수정중인 댓글이 있습니다.");
+			setEditState(false);
+			return;
+		} else {
+			setEditState(true);
+			setCommentBox(document.getElementById(item.createdAt.toString()));
+			setEditCommentBox(document.getElementById(`${item.createdAt.toString()}Edit`));
+			if (commentBox && editCommentBox) {
+				commentBox.style.display = "none";
+				editCommentBox.style.display = "block";
+			}
+			setUserComment(item.comment);
+		}
 	};
 
 	return (
@@ -167,25 +188,25 @@ export const Talk = () => {
 								{comments &&
 									comments.map((item, idx) => {
 										return (
-											<div key={v4()} className="flex gap-1">
+											<div key={item.createdAt.toString()} className="flex gap-1">
 												<span className="font-bold">{item.author}</span>
-												<div
-													id={item.createdAt.toString()}
-													className={`comment pl-1 break-all ${editboxState ? "hidden" : "block"}`}
-												>
+												<div id={item.createdAt.toString()} className="comment pl-1 break-all">
 													<span className="inline-block">{item.comment}</span>
 													{item.author === user?.name && (
-														<span className="pl-1">
+														<span className="pl-1" onClick={() => handleEditCommentBtn(item)}>
 															<button className="btn btn-primary btn-xs">Edit</button>
 															<button className="btn btn-xs ml-1">delete</button>
 														</span>
 													)}
 												</div>
-												<div
-													id={`${item.createdAt.toString()}Edit`}
-													className={`pl-1 break-all ${editboxState ? "block" : "hidden"}`}
-												>
-													<textarea className="border-2 resize-none w-full" />
+												<div id={`${item.createdAt.toString()}Edit`} className="pl-1 break-all hidden">
+													<textarea
+														value={userComment}
+														onChange={(e) => {
+															setUserComment(e.target.value);
+														}}
+														className="border-2 resize-none w-full"
+													/>
 													<div className="pl-1">
 														<button className="btn btn-primary btn-xs">save</button>
 														<button className="btn btn-xs ml-1">cancel</button>
