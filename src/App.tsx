@@ -5,13 +5,14 @@ import { Nav } from "./components/Nav";
 import { SignUp } from "./views/SignUp";
 import "./index.css";
 import { Record } from "./views/Record";
-import { EditCloset } from "./views/EditCloset";
 import React, { lazy, useEffect } from "react";
 import { auth, getUserData } from "./firebase";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { userInfo, userState } from "./store/user";
 import { Talk } from "./views/Talk";
 import { postData, userPostState } from "./store/post";
+import { EditPost } from "./views/EditPost";
+import { NotFound } from "./views/NotFound";
 
 const TodayClothes = lazy(() => import("./views/TodayClothes"));
 const Closet = lazy(() => import("./views/Closet"));
@@ -19,21 +20,21 @@ const Closet = lazy(() => import("./views/Closet"));
 function App() {
 	const [login, setLogin] = useRecoilState(userState);
 	const [, setUser] = useRecoilState(userInfo);
-	const [, setUserPosts] = useRecoilState(userPostState)
-	const posts = useRecoilValue(postData)
+	const [, setUserPosts] = useRecoilState(userPostState);
+	const posts = useRecoilValue(postData);
 
 	useEffect(() => {
-		const isLogin = localStorage.getItem('isLogin') === 'true';
-		if(isLogin) setLogin(isLogin);
+		const isLogin = localStorage.getItem("isLogin") === "true";
+		if (isLogin) setLogin(isLogin);
 		auth.onAuthStateChanged(async (user) => {
-		  if (user !== null) {
-			const c = await getUserData(user);
-			setUser(c);
-			const userPosts = posts.filter(post => post.uid === user.uid)
-			setUserPosts(userPosts)
-		  }
+			if (user !== null) {
+				const c = await getUserData(user);
+				setUser(c);
+				const userPosts = posts.filter((post) => post.uid === user.uid);
+				setUserPosts(userPosts);
+			}
 		});
-	  }, []);	  
+	}, []);
 
 	return (
 		<BrowserRouter>
@@ -79,7 +80,8 @@ function App() {
 					<Route path="/talk" element={<Talk />} />
 					<Route path="/login" element={<Login />} />
 					<Route path="/sign-up" element={<SignUp />} />
-					<Route path="/editCloset" element={<EditCloset />} />
+					<Route path="/editPost" element={<EditPost />} />
+					<Route path="*" element={<NotFound />} />
 				</Routes>
 			</main>
 			<Footer />
