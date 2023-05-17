@@ -56,6 +56,7 @@ export const Record = () => {
 									}`}
 									src={post.imgUrl}
 									date={timeStamp}
+									prevPage={'record'}
 								/>
 							);
 						})}

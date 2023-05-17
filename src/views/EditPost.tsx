@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { db, storage } from "../firebase";
@@ -10,16 +10,28 @@ import { selectedDate } from "../store/editItem";
 import { doc, setDoc } from "firebase/firestore";
 import { nextWeekUserPost, userPostState } from "../store/post";
 
-export const EditCloset = () => {
+export const EditPost = () => {
+	const { search } = useLocation();
+	const [query, setQuery] = useState<{ [key: string]: string; }>({});
 	const date = useRecoilValue(selectedDate);
-	const newDate = new Date(date).toString();
-	const [postArr, setPostArr] = useRecoilState(nextWeekUserPost);
+	const [postArr, ] = useRecoilState(nextWeekUserPost);
 	const userPosts = useRecoilValue(userPostState);
 
 	const [imgUrl, setImgUrl] = useState<undefined | string>("/public/addImg.svg");
 	const [imgUpload, setImgUpload] = useState<undefined | File>(undefined);
 	const user = useRecoilValue(userInfo);
 	const userUid = user && user.uid;
+	
+	useEffect(() => {
+		if(search.length > 1) {
+			search.slice(1).split('&').forEach(x => {
+				const [k, v] = x.split('=');
+				query[k] = v;
+				setQuery(query);
+			});
+		}
+	}, []);
+
 
 	const getPostData = useRecoilCallback(({ set }) => async () => {
 		try {
@@ -37,7 +49,7 @@ export const EditCloset = () => {
 			}
 		});
 		getPostData();
-	}, []);
+	}, [postArr]);
 
 	const getImgUrl = (file: File) => {
 		const url = URL.createObjectURL(file);
@@ -58,13 +70,14 @@ export const EditCloset = () => {
 					uid: userUid || "",
 				};
 				setDoc(doc(db, "post", `${userUid}${date}v4()`), newData).then(() => {
-					setPostArr((prevPostArr) => [...prevPostArr, newData]);
+					const idx = postArr.findIndex((post) => post.date === date);
+					postArr[idx] = newData;
 					getPostData();
+					setImgUrl(downloadURL);
 				});
 			});
 		});
 	};
-
 	useEffect(() => {
 		if (imgUrl) {
 			const label = document.querySelector("#label");
@@ -81,7 +94,7 @@ export const EditCloset = () => {
 	return (
 		<div className="flex min-h-[calc(100vh-3.3rem)] pt-16 bg-base-200">
 			<div className="card gap-5 my-auto mx-auto max-h-min py-7 px-14 bg-base-100 shadow-xl">
-				<h2 className="text-4xl font-extrabold text-center pt-5 pb-5">Edit Closet</h2>
+				<h2 className="text-4xl font-extrabold text-center pt-5 pb-5">Edit Post</h2>
 				<figure className="w-96 h-96 m-auto border-2 rounded-md bg-base-200">
 					<label id="label" className="w-1/3 h-1/3 bg-no-repeat bg-center bg-contain cursor-pointer">
 						<input
@@ -99,21 +112,21 @@ export const EditCloset = () => {
 					</label>
 				</figure>
 				<div className="card-body max-h-fit">
-					<h3 className=" mb-14 text-3xl font-semibold text-center">{newDate.slice(0, 3)}</h3>
+					<h3 className=" mb-14 text-3xl font-semibold text-center">{decodeURI(query.content)}</h3>
 					<div className="flex justify-end gap-2">
 						<label htmlFor="my-modal-6" className="btn btn-primary" onClick={uploadImg}>
 							Save
 						</label>
-						<Link to="/closet">
+						<Link to={`/${query.prevPage}`}>
 							<button className="btn">Cancel</button>
 						</Link>
 					</div>
 				</div>
 			</div>
 			<Modal
-				content="이미지가 성공적으로 저장되었습니다. Closet 페이지로 이동합니다."
+				content={`이미지가 성공적으로 저장되었습니다. ${query.prevPage} 페이지로 이동합니다.`}
 				btnContent="OK"
-				link={`closet`}
+				link={`${query.prevPage}`}
 			/>
 		</div>
 	);

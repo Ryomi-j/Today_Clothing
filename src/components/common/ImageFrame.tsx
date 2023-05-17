@@ -8,9 +8,10 @@ interface ImageFrameDataType {
 	hashtag?: string;
 	deleteBtn?: boolean;
 	date?: Date;
+	prevPage?: string;
 }
 
-export const ImageFrame = ({ content, src, deleteBtn, date }: ImageFrameDataType) => {
+export const ImageFrame = ({ content, src, deleteBtn, date, prevPage }: ImageFrameDataType) => {
 	const [, setDate] = useRecoilState(selectedDate);
 
 	return (
@@ -22,7 +23,7 @@ export const ImageFrame = ({ content, src, deleteBtn, date }: ImageFrameDataType
 				<h3 className="card-title justify-center gap-1 leading-3 text-[10px] md:text-sm xl:text-lg whitespace-pre-wrap text-center">{content}</h3>
 				<div className="flex gap-2 justify-end">
 					<div className="card-actions justify-end mt-[-0.3rem] xl:mt-0">
-						<Link to="/editCloset">
+						<Link to={`/editPost?prevPage=${prevPage}&content=${content}`}>
 							{date && (
 								<button className="bg-primary text-white font-medium rounded-md text-[10px] p-1 mr-2 leading-none md:btn md:btn-primary text-xs md:btn-xs xl:btn-sm xl:p-2" onClick={() => setDate(date.getTime())}>
 									EDIT
@@ -43,12 +44,12 @@ export const ImageFrame = ({ content, src, deleteBtn, date }: ImageFrameDataType
 	);
 };
 
-export const EmptyImageFrame = ({ content, date }: ImageFrameDataType) => {
+export const EmptyImageFrame = ({ content, date, prevPage }: ImageFrameDataType) => {
 	const [, setDate] = useRecoilState(selectedDate);
 
 	return (
 		<div className="card card-compact w-32 md:w-52 md:h-52 xl:w-96 xl:h-auto bg-base-100 shadow-xl">
-			<Link to="/editCloset">
+			<Link to={`/editPost?prevPage=${prevPage}&content=${content}`}>
 				{date && (
 					<figure
 						className="w-32 h-28 md:w-52 md:h-40 xl:w-96 xl:h-96 max-w-96 max-h-96 bg-base-200 cursor-pointer rounded-t-2xl"
