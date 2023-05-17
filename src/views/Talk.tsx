@@ -17,8 +17,8 @@ export const Talk = () => {
 	const user = useRecoilValue<UserWithProfile | null>(userInfo);
 	const textareaRef = useRef<HTMLTextAreaElement>(null);
 	const [userComment, setUserComment] = useState<string>("");
-	const [commentBox, setCommentBox] = useState<HTMLElement | null>(null);
-	const [editCommentBox, setEditCommentBox] = useState<HTMLElement | null>(null);
+	const [commentBox, ] = useState<HTMLElement | null>(null);
+	const [editCommentBox, ] = useState<HTMLElement | null>(null);
 	const [commentsState, setCommentsState] = useState<boolean[]>([]);
 
 	useEffect(() => {
@@ -156,7 +156,6 @@ export const Talk = () => {
 			}
 		}
 	};
-	const [item, setItem] = useState("");
 
 	return (
 		<div className="flex flex-col items-center min-h-[calc(100vh-3.3rem)] pt-16 bg-base-200">
