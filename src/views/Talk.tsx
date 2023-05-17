@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { BsFillSendFill } from "react-icons/bs";
 import { userInfo, userState } from "../store/user";
 import { UserWithProfile, db } from "../firebase";
-import { collection, getDocs, onSnapshot, query, setDoc, updateDoc, where } from "firebase/firestore";
+import { collection, getDocs, limit, orderBy, query, setDoc, startAfter, updateDoc, where } from "firebase/firestore";
 import { Link } from "react-router-dom";
 
 export const Talk = () => {
@@ -17,9 +17,11 @@ export const Talk = () => {
 	const user = useRecoilValue<UserWithProfile | null>(userInfo);
 	const textareaRef = useRef<HTMLTextAreaElement>(null);
 	const [userComment, setUserComment] = useState<string>("");
-	const [commentBox, ] = useState<HTMLElement | null>(null);
-	const [editCommentBox, ] = useState<HTMLElement | null>(null);
+	const [commentBox] = useState<HTMLElement | null>(null);
+	const [editCommentBox] = useState<HTMLElement | null>(null);
 	const [commentsState, setCommentsState] = useState<boolean[]>([]);
+
+	const [page, setPage] = useState(1);
 
 	useEffect(() => {
 		if (clickedPost && clickedPost?.comments && clickedPost.comments.length > 0) {
@@ -28,15 +30,49 @@ export const Talk = () => {
 	}, [clickedPost]);
 
 	useEffect(() => {
-		const posts = collection(db, "post");
-		const q = query(posts, where("isPost", "==", true));
-		const unsubscribe = onSnapshot(q, (snapshot) => {
-			const post = snapshot.docs.map((doc) => doc.data() as Post);
-			setPosts(post);
-			setClickedPost(post[0]);
-		});
-		return unsubscribe;
+		const fetchData = async (): Promise<void> => {
+			const postRef = collection(db, "post");
+			const querySnapshot = await getDocs(query(postRef, where("isPost", "==", true), orderBy("createdAt"), limit(4)));
+
+			const items: Post[] = [];
+			querySnapshot.forEach((doc) => {
+				items.push({ ...doc.data() } as Post);
+			});
+			setPosts(items);
+		};
+
+		fetchData();
 	}, []);
+
+	const handleScroll = async (): Promise<void> => {
+		if (window.innerHeight + window.scrollY >= document.body.offsetHeight && posts) {
+			const postRef = collection(db, "post");
+			const querySnapshot = await getDocs(
+				query(
+					postRef,
+					where("isPost", "==", true),
+					orderBy("createdAt"),
+					startAfter(posts[posts.length - 1].createdAt),
+					limit(4)
+				)
+			);
+
+			const items: Post[] = [];
+			querySnapshot.forEach((doc) => {
+				items.push({ ...doc.data() } as Post);
+			});
+			setPosts((prevList: Post[] | undefined) => [...(prevList ?? []), ...items]);
+			setPage((prevPage) => prevPage + 1);
+		}
+	};
+
+	useEffect(() => {
+		window.addEventListener("scroll", handleScroll);
+
+		return (): void => {
+			window.removeEventListener("scroll", handleScroll);
+		};
+	}, [posts]);
 
 	const getSelectedPostDocs = async (post: Post) => {
 		const posts = collection(db, "post");
