@@ -302,7 +302,7 @@ export const Talk = () => {
 								</div>
 							</div>
 						</div>
-						<div className="card-body max-w-3xl xs:gap-5 xxxs:text-xs md:text-base p-4 ">
+						<div className="card-body max-w-sm  xs:gap-5 xxxs:text-xs md:text-base p-4 ">
 							{isLogin && (
 								<div className="flex gap-2 flex-col">
 									<span className="font-bold ">{user?.name}</span>
@@ -328,13 +328,13 @@ export const Talk = () => {
 												<span className="font-bold">{item.author}</span>
 												<div
 													id={item.createdAt.toString()}
-													className={`flex pl-1 break-all ${commentsState[idx] ? "hidden" : ""}`}
+													className={`flex flex-col pl-1 w-full break-all ${commentsState[idx] ? "hidden" : ""}`}
 												>
 													<span>{item.comment}</span>
 													{item.author === user?.name && (
-														<span className="flex items-center pl-1">
+														<div className="flex items-center justify-end pl-1">
 															<button
-																className="bg-teal-400 p-1 rounded-lg text-[1px] sm:text-xs leading-none"
+																className="bg-teal-400 p-1 rounded-lg text-[1px] sm:w-8 sm:text-xs leading-none"
 																onClick={() => {
 																	handleEditCommentBtn(item, idx);
 																}}
@@ -342,12 +342,12 @@ export const Talk = () => {
 																Edit
 															</button>
 															<button
-																className="bg-sky-500 ml-1 p-1 rounded-lg text-[1px] sm:text-xs leading-none"
+																className="bg-sky-500 ml-1 p-1 rounded-lg text-[1px] sm:w-11 sm:text-xs leading-none"
 																onClick={() => deleteComment(idx)}
 															>
 																delete
 															</button>
-														</span>
+														</div>
 													)}
 												</div>
 												<div
