@@ -24,3 +24,15 @@
     opacity: 0.75;
     transition: opacity .35s ease-in-out;
 }
+.dropdown-content {
+    background-color: beige;
+    /* width: 20rem; */
+}
+.react-calendar__navigation {
+    display: flex;
+    height: fit-content;
+}
+
+.react-calendar__month-view__weekdays {
+    align-items: center;
+}

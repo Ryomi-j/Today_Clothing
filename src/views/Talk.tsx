@@ -386,7 +386,10 @@ export const Talk = () => {
 					<FcCalendar />
 				</label>
 				<ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
-					<Calendar onClickDay={(value) => selectedData(value)} />
+					<Calendar
+						onClickDay={(value) => selectedData(value)}
+						formatDay={(locale, date) => date.toLocaleString("en", { day: "numeric" })}
+					/>
 				</ul>
 			</div>
 		</div>
