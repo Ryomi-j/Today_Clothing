@@ -128,9 +128,9 @@ const TodayClothes = () => {
 						return (
 							<figure
 								key={post.id}
-								className=" md:w-96 md:h-96 mx-auto border-2 rounded-md object-contain overflow-hidden"
+								className="max-w-md max-h-96 mx-auto border-2 rounded-md  overflow-hidden"
 							>
-								<img src={post.imgUrl} alt={`${today?.toString().slice(0, 15)} clothing image`}  className="w-full h-full"/>
+								<img src={post.imgUrl} alt={`${today?.toString().slice(0, 15)} clothing image`}  className=" md:h-96"/>
 							</figure>
 						);
 					})
