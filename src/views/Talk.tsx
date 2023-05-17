@@ -4,7 +4,6 @@ import { useRecoilValue } from "recoil";
 import { Comments, Post } from "../store/post";
 import { useEffect, useRef, useState } from "react";
 import { BsFillSendFill } from "react-icons/bs";
-import { v4 } from "uuid";
 import { userInfo, userState } from "../store/user";
 import { UserWithProfile, db } from "../firebase";
 import { collection, getDocs, onSnapshot, query, setDoc, updateDoc, where } from "firebase/firestore";
@@ -12,16 +11,21 @@ import { Link } from "react-router-dom";
 
 export const Talk = () => {
 	const [posts, setPosts] = useState<Post[] | undefined>(undefined);
-	const [clickedPost, setClickedPost] = useState<Post | undefined>(undefined);
+	const [clickedPost, setClickedPost] = useState<Post>({} as Post);
 	const isLogin = useRecoilValue(userState);
 
 	const user = useRecoilValue<UserWithProfile | null>(userInfo);
 	const textareaRef = useRef<HTMLTextAreaElement>(null);
-	const [comments, setComments] = useState<Comments[] | undefined>([]);
-	const [userComment, setUserComment] = useState<string | undefined>(undefined);
-	const [editState, setEditState] = useState(false);
+	const [userComment, setUserComment] = useState<string>("");
 	const [commentBox, setCommentBox] = useState<HTMLElement | null>(null);
 	const [editCommentBox, setEditCommentBox] = useState<HTMLElement | null>(null);
+	const [commentsState, setCommentsState] = useState<boolean[]>([]);
+
+	useEffect(() => {
+		if (clickedPost && clickedPost?.comments && clickedPost.comments.length > 0) {
+			setCommentsState(new Array(clickedPost.comments.length).fill(false));
+		}
+	}, [clickedPost]);
 
 	useEffect(() => {
 		const posts = collection(db, "post");
@@ -29,6 +33,7 @@ export const Talk = () => {
 		const unsubscribe = onSnapshot(q, (snapshot) => {
 			const post = snapshot.docs.map((doc) => doc.data() as Post);
 			setPosts(post);
+			setClickedPost(post[0]);
 		});
 		return unsubscribe;
 	}, []);
@@ -62,7 +67,7 @@ export const Talk = () => {
 						},
 						{ merge: true }
 					);
-					if (comments) setComments(comments);
+					if (comments) setClickedPost((prev) => ({ ...prev, comments } as Post));
 					if (textareaRef.current) {
 						textareaRef.current.value = "";
 					}
@@ -75,22 +80,14 @@ export const Talk = () => {
 
 	const handlePostClick = (post: Post) => {
 		setClickedPost(post);
-		setComments(post.comments);
 	};
 
-	const handleEditCommentBtn = (item: Comments) => {
-		if (editState) {
-			alert("이미 수정중인 댓글이 있습니다.");
-			setEditState(false);
-			return;
-		} else {
-			setEditState(true);
-			setCommentBox(document.getElementById(item.createdAt.toString()));
-			setEditCommentBox(document.getElementById(`${item.createdAt.toString()}Edit`));
-			if (commentBox && editCommentBox) {
-				commentBox.style.display = "none";
-				editCommentBox.style.display = "block";
-			}
+	const handleEditCommentBtn = (item: Comments, idx: number) => {
+		if (commentsState.every((x) => !x)) {
+			setCommentsState((prev) => {
+				prev[idx] = true;
+				return [...prev];
+			});
 			setUserComment(item.comment);
 		}
 	};
@@ -98,11 +95,16 @@ export const Talk = () => {
 	const saveEditedComment = async (e: React.MouseEvent<HTMLDivElement, MouseEvent>, idx: number) => {
 		const clickedButton = e.target as HTMLButtonElement;
 		const buttonText = clickedButton.innerText;
-		console.log(buttonText, userComment);
-		if (buttonText === "SAVE" && userComment) {
-			if (comments && comments[idx].comment !== userComment) {
-				if (comments) {
-					comments[idx].comment = userComment;
+		if (buttonText === "save") {
+			if (
+				clickedPost !== undefined &&
+				clickedPost.comments &&
+				clickedPost.comments.length > 0 &&
+				clickedPost.comments[idx] &&
+				clickedPost.comments[idx].comment !== userComment
+			) {
+				if (clickedPost.comments) {
+					clickedPost.comments[idx].comment = userComment;
 					const collectionRef = collection(db, "post");
 					const querySnapshot = await getDocs(query(collectionRef, where("imgUrl", "==", clickedPost?.imgUrl)));
 					if (querySnapshot.empty) {
@@ -111,8 +113,10 @@ export const Talk = () => {
 						const doc = querySnapshot.docs[0];
 						const postData = doc.data() as Post;
 						const postRef = doc.ref;
-						console.log(doc.data());
-						await setDoc(postRef, { ...postData, comments: comments }, { merge: true });
+						if (postData && postData.comments && postData.comments[idx]) {
+							postData.comments[idx] = clickedPost.comments[idx];
+							await setDoc(postRef, { ...postData }, { merge: true });
+						}
 					}
 				}
 				if (commentBox && editCommentBox) {
@@ -121,10 +125,12 @@ export const Talk = () => {
 				}
 			}
 		}
-		setUserComment(undefined);
-		setEditState(false);
-		setUserComment(undefined);
-		setEditState(false);
+
+		setUserComment("");
+		setCommentsState((prev) => {
+			prev[idx] = false;
+			return [...prev];
+		});
 
 		if (commentBox && editCommentBox) {
 			commentBox.style.display = "block";
@@ -139,15 +145,18 @@ export const Talk = () => {
 		if (querySnapshot.empty) {
 			console.log("No matching documents");
 		} else {
-			if (comments) {
+			if (clickedPost !== undefined && clickedPost.comments) {
 				const doc = querySnapshot.docs[0];
 				const postRef = doc.ref;
-				const newComments = [...comments.slice(0, idx), ...comments.slice(idx + 1)];
+				const newComments = [...clickedPost.comments.slice(0, idx), ...clickedPost.comments.slice(idx + 1)];
 				await updateDoc(postRef, { comments: newComments });
-				setComments(newComments);
+				setClickedPost((prev) => {
+					return { ...prev, comments: newComments } as Post;
+				});
 			}
 		}
 	};
+	const [item, setItem] = useState("");
 
 	return (
 		<div className="flex flex-col items-center min-h-[calc(100vh-3.3rem)] pt-16 bg-base-200">
@@ -185,18 +194,21 @@ export const Talk = () => {
 				</Link>
 			</Carousel>
 			<div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6 my-10 justify-center items-center max-w-screen-2xl">
-				{posts?.map((post) => {
+				{posts?.map((post, idx) => {
 					return (
 						<label
-							key={v4()}
+							key={idx}
 							htmlFor={`${post.createdAt}-${post.uid}`}
 							className="card card-compact bg-base-100 shadow-xl cursor-pointer h-80"
 							onClick={() => {
 								handlePostClick(post);
 							}}
 						>
-							<figure className="mx-5 mt-5 overflow-hidden object-cover rounded-lg">
-								<img src={post.imgUrl} alt={`${post.uid}-${post.date}-clothing info`} className="rounded-xl" />
+							<figure className="mx-auto mt-5 w-4/5 h-3/5 overflow-hidden object-cover rounded-lg">
+								<div
+									className="w-full h-full bg-no-repeat bg-cover"
+									style={{ backgroundImage: `url(${post.imgUrl})` }}
+								></div>
 							</figure>
 							<div className="card-body flex-row flex-wrap items-center text-center">
 								<div className="badge badge-primary badge-outline">#{post.location}</div>
@@ -204,7 +216,7 @@ export const Talk = () => {
 								<div className="badge badge-outline">#{`${post.degree}C°`}</div>
 								<div className="badge badge-accent badge-outline">#{`습도_${post.humidity}%`}</div>
 								<div className="badge badge-info badge-outline">
-									#{new Date(Number(clickedPost?.date)).toString().slice(0, 15)}
+									#{new Date(Number(post.date)).toString().slice(0, 15)}
 								</div>
 							</div>
 						</label>
@@ -257,18 +269,24 @@ export const Talk = () => {
 								</div>
 							)}
 							<div className="flex flex-col gap-1 max-h-96 overflow-auto justify-center">
-								{comments &&
-									comments.map((item, idx) => {
+								{clickedPost &&
+									clickedPost.comments &&
+									clickedPost.comments.map((item, idx) => {
 										return (
-											<div key={v4()} className="flex gap-1">
+											<div key={idx.toString()} className="flex gap-1">
 												<span className="font-bold">{item.author}</span>
-												<div id={item.createdAt.toString()} className="flex pl-1 break-all">
+												<div
+													id={item.createdAt.toString()}
+													className={`flex pl-1 break-all ${commentsState[idx] ? "hidden" : ""}`}
+												>
 													<span>{item.comment}</span>
 													{item.author === user?.name && (
 														<span className="flex items-center pl-1">
 															<button
 																className="bg-teal-400 p-1 rounded-lg text-[1px] sm:text-xs leading-none"
-																onClick={() => handleEditCommentBtn(item)}
+																onClick={() => {
+																	handleEditCommentBtn(item, idx);
+																}}
 															>
 																Edit
 															</button>
@@ -281,7 +299,10 @@ export const Talk = () => {
 														</span>
 													)}
 												</div>
-												<div id={`${item.createdAt.toString()}Edit`} className="pl-1 break-all w-full hidden">
+												<div
+													id={`${item.createdAt.toString()}Edit`}
+													className={`pl-1 break-all w-full ${commentsState[idx] ? "" : "hidden"}`}
+												>
 													<textarea
 														value={userComment}
 														onChange={(e) => {
