@@ -1,16 +1,18 @@
 import { Link } from "react-router-dom";
 import { useRecoilState } from "recoil";
-import { userState } from "../store/user";
+import { userInfo, userState } from "../store/user";
 import { logout } from "../firebase";
 
 export const Nav = () => {
 	const [login, setLogin] = useRecoilState(userState);
-
+	const [, setUserInfo] = useRecoilState(userInfo);
 	const handleLogout = () => {
 		if (!login) return;
 		logout();
 		setLogin(false);
-		localStorage.setItem('isLogin', 'false')
+		setUserInfo(null);
+
+		localStorage.setItem("isLogin", "false");
 		window.location.reload();
 	};
 
