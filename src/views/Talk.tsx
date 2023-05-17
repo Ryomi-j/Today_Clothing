@@ -7,7 +7,7 @@ import { BsFillSendFill } from "react-icons/bs";
 import { v4 } from "uuid";
 import { userInfo, userState } from "../store/user";
 import { UserWithProfile, db } from "../firebase";
-import { collection, getDocs, onSnapshot, query, setDoc, where } from "firebase/firestore";
+import { collection, getDocs, onSnapshot, query, setDoc, updateDoc, where } from "firebase/firestore";
 
 export const Talk = () => {
 	const postItems = useRecoilValue(postData);
@@ -132,6 +132,23 @@ export const Talk = () => {
 		}
 	};
 
+	const deleteComment = async (idx: number) => {
+		const collectionRef = collection(db, "post");
+		const querySnapshot = await getDocs(query(collectionRef, where("id", "==", clickedPost?.id)));
+
+		if (querySnapshot.empty) {
+			console.log("No matching documents");
+		} else {
+			if (comments) {
+				const doc = querySnapshot.docs[0];
+				const postRef = doc.ref;
+				const newComments = [...comments.slice(0, idx), ...comments.slice(idx + 1)];
+				await updateDoc(postRef, { comments: newComments });
+				setComments(newComments);
+			}
+		}
+	};
+
 	return (
 		<div className="flex flex-col items-center min-h-[calc(100vh-3.3rem)] pt-16 bg-base-200">
 			<Carousel
@@ -230,9 +247,13 @@ export const Talk = () => {
 												<div id={item.createdAt.toString()} className="comment pl-1 break-all">
 													<span className="inline-block">{item.comment}</span>
 													{item.author === user?.name && (
-														<span className="pl-1" onClick={() => handleEditCommentBtn(item)}>
-															<button className="btn btn-primary btn-xs">Edit</button>
-															<button className="btn btn-xs ml-1">delete</button>
+														<span className="pl-1">
+															<button className="btn btn-primary btn-xs" onClick={() => handleEditCommentBtn(item)}>
+																Edit
+															</button>
+															<button className="btn btn-xs ml-1" onClick={() => deleteComment(idx)}>
+																delete
+															</button>
 														</span>
 													)}
 												</div>
