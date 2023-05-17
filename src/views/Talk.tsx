@@ -8,6 +8,7 @@ import { v4 } from "uuid";
 import { userInfo, userState } from "../store/user";
 import { UserWithProfile, db } from "../firebase";
 import { collection, getDocs, onSnapshot, query, setDoc, updateDoc, where } from "firebase/firestore";
+import { Link } from "react-router-dom";
 
 export const Talk = () => {
 	const [posts, setPosts] = useState<Post[] | undefined>(undefined);
@@ -158,31 +159,43 @@ export const Talk = () => {
 				infiniteLoop={true}
 				className="flex justify-center max-w-screen-2xl"
 			>
-				<div className="overflow-hidden">
-					<div className="detail p-4 text-left text-4xl">
-						<p className="text-red-600 text-4xl">Early Bird Sale</p>다가온 여름, 먼저 준비하세요
+				<Link to="/talk">
+					<div className="overflow-hidden">
+						<div className="detail flex flex-col gap-1 sm:gap-4 items-center p-0.5 xs:p-2 md:p-4 text-left text-xs ">
+							<p className="text-red-600 md:font-medium text-sm xs:text-2xl font-medium md:text-4xl">Early Bird Sale</p>
+							<p className="text-xs xs:text-base md:text-lg">여름상품, 신상할인</p>
+						</div>
+						<img
+							src="https://firebasestorage.googleapis.com/v0/b/today-clothing.appspot.com/o/add%2Fyoung-woman-gfdde5ca04_1920.jpg?alt=media&token=cd90a93e-4db0-47f3-8249-ae1f8e6a4a97"
+							alt="summer sale AD"
+						/>
 					</div>
-					<img src="https://firebasestorage.googleapis.com/v0/b/today-clothing.appspot.com/o/add%2Fyoung-woman-gfdde5ca04_1920.jpg?alt=media&token=cd90a93e-4db0-47f3-8249-ae1f8e6a4a97" />
-				</div>
-				<div>
-					<div className="detail p-4 text-left text-4xl">
-						<p className="text-red-600 text-4xl">Big Sale</p> 봄 상품 80% sale
+				</Link>
+				<Link to="/talk">
+					<div>
+						<div className="detail flex flex-col gap-1 sm:gap-4 items-center p-0.5 xs:p-2 md:p-4 text-left text-xs ">
+							<p className="text-red-600 md:font-medium text-sm xs:text-2xl font-medium md:text-4xl">Big Sale</p>{" "}
+							<p className="text-xs xs:text-base md:text-lg">봄 상품 80% sale</p>
+						</div>
+						<img
+							src="https://firebasestorage.googleapis.com/v0/b/today-clothing.appspot.com/o/add%2Fman-g97c9fcec5_1920.jpg?alt=media&token=1ca0e230-7b37-48d6-a4f8-9738524168f6"
+							alt="spring sale AD"
+						/>
 					</div>
-					<img src="https://firebasestorage.googleapis.com/v0/b/today-clothing.appspot.com/o/add%2Fman-g97c9fcec5_1920.jpg?alt=media&token=1ca0e230-7b37-48d6-a4f8-9738524168f6" />
-				</div>
+				</Link>
 			</Carousel>
-			<div className="grid grid-cols-3 gap-6 my-10 justify-center items-center max-w-screen-2xl">
+			<div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6 my-10 justify-center items-center max-w-screen-2xl">
 				{posts?.map((post) => {
 					return (
 						<label
 							key={v4()}
 							htmlFor={`${post.createdAt}-${post.uid}`}
-							className="card card-compact bg-base-100 shadow-xl cursor-pointer block"
+							className="card card-compact bg-base-100 shadow-xl cursor-pointer h-80"
 							onClick={() => {
 								handlePostClick(post);
 							}}
 						>
-							<figure className="mx-5 mt-5 h-72 overflow-hidden object-cover">
+							<figure className="mx-5 mt-5 overflow-hidden object-cover rounded-lg">
 								<img src={post.imgUrl} alt={`${post.uid}-${post.date}-clothing info`} className="rounded-xl" />
 							</figure>
 							<div className="card-body flex-row flex-wrap items-center text-center">
@@ -199,24 +212,24 @@ export const Talk = () => {
 				})}
 			</div>
 			<input type="checkbox" id={`${clickedPost?.createdAt}-${clickedPost?.uid}`} className="modal-toggle" />
-			<div className="modal ">
-				<div className="modal-box relative max-w-3xl">
+			<div className="modal">
+				<div className="modal-box relative max-w-3xl xxxs:p-0 sm:p-1.5">
 					<label
 						htmlFor={`${clickedPost?.createdAt}-${clickedPost?.uid}`}
 						className="btn btn-sm btn-circle absolute right-2 top-2"
 					>
 						✕
 					</label>
-					<article className="flex">
-						<div>
-							<figure className="mx-5 mt-5 max-w-xs overflow-hidden object-cover">
+					<article className="flex flex-col md:flex-row">
+						<div className="m-auto sm:w-96">
+							<figure className="mb-0 xs:m-5 max-w-xs h-auto md:h-auto overflow-hidden object-cover rounded-lg p-5">
 								<img
 									src={clickedPost?.imgUrl}
 									alt={`${clickedPost?.uid}-${clickedPost?.date}-clothing info`}
 									className="rounded-xl"
 								/>
 							</figure>
-							<div className="card-body flex-row flex-wrap items-center text-center">
+							<div className="card-body flex-row flex-wrap items-center text-center p-3 xs:p-4">
 								<div className="badge badge-primary badge-outline">#{clickedPost?.location}</div>
 								<div className="badge badge-secondary badge-outline">#{clickedPost?.weather}</div>
 								<div className="badge badge-outline">#{`${clickedPost?.degree}C°`}</div>
@@ -226,11 +239,11 @@ export const Talk = () => {
 								</div>
 							</div>
 						</div>
-						<div className="card-body max-w-3xl gap-5">
+						<div className="card-body max-w-3xl xs:gap-5 xxxs:text-xs md:text-base p-4 ">
 							{isLogin && (
-								<div className="flex gap-2">
-									<span className="font-bold">{user?.name}</span>
-									<div className="flex items-center w-full  border-solid border-2 border-indigo-600 rounded-lg">
+								<div className="flex gap-2 flex-col">
+									<span className="font-bold ">{user?.name}</span>
+									<div className="flex items-center w-full  border-solid border-2 border-slate-300 rounded-lg">
 										<textarea
 											className="textarea w-full focus:outline-none resize-none overflow-auto"
 											maxLength={100}
@@ -243,26 +256,32 @@ export const Talk = () => {
 									</div>
 								</div>
 							)}
-							<div className="flex flex-col max-h-96 overflow-auto">
+							<div className="flex flex-col gap-1 max-h-96 overflow-auto justify-center">
 								{comments &&
 									comments.map((item, idx) => {
 										return (
-											<div key={item.createdAt.toString()} className="flex gap-1">
+											<div key={v4()} className="flex gap-1">
 												<span className="font-bold">{item.author}</span>
-												<div id={item.createdAt.toString()} className="comment pl-1 break-all">
-													<span className="inline-block">{item.comment}</span>
+												<div id={item.createdAt.toString()} className="flex pl-1 break-all">
+													<span>{item.comment}</span>
 													{item.author === user?.name && (
-														<span className="pl-1">
-															<button className="btn btn-primary btn-xs" onClick={() => handleEditCommentBtn(item)}>
+														<span className="flex items-center pl-1">
+															<button
+																className="bg-teal-400 p-1 rounded-lg text-[1px] sm:text-xs leading-none"
+																onClick={() => handleEditCommentBtn(item)}
+															>
 																Edit
 															</button>
-															<button className="btn btn-xs ml-1" onClick={() => deleteComment(idx)}>
+															<button
+																className="bg-sky-500 ml-1 p-1 rounded-lg text-[1px] sm:text-xs leading-none"
+																onClick={() => deleteComment(idx)}
+															>
 																delete
 															</button>
 														</span>
 													)}
 												</div>
-												<div id={`${item.createdAt.toString()}Edit`} className="pl-1 break-all hidden">
+												<div id={`${item.createdAt.toString()}Edit`} className="pl-1 break-all w-full hidden">
 													<textarea
 														value={userComment}
 														onChange={(e) => {
@@ -270,9 +289,16 @@ export const Talk = () => {
 														}}
 														className="border-2 resize-none w-full"
 													/>
-													<div className="pl-1" onClick={(e) => saveEditedComment(e, idx)}>
-														<button className="btn btn-primary btn-xs">save</button>
-														<button className="btn btn-xs ml-1">cancel</button>
+													<div
+														className="flex justify-end items-center pl-1 gap-1"
+														onClick={(e) => saveEditedComment(e, idx)}
+													>
+														<button className="text-white bg-secondary p-1 rounded-lg text-[1px] sm:text-xs leading-non">
+															save
+														</button>
+														<button className="bg-slate-300 p-1 rounded-lg text-[1px] sm:text-xs leading-none">
+															cancel
+														</button>
 													</div>
 												</div>
 											</div>
