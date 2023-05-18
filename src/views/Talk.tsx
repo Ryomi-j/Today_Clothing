@@ -10,6 +10,7 @@ import { UserWithProfile, db } from "../firebase";
 import { collection, getDocs, limit, orderBy, query, setDoc, startAfter, updateDoc, where } from "firebase/firestore";
 import { Link } from "react-router-dom";
 import Calendar from "react-calendar";
+import BarLoader from "react-spinners/ClipLoader";
 
 export const Talk = () => {
 	const [posts, setPosts] = useState<Post[] | undefined>(undefined);
@@ -23,6 +24,7 @@ export const Talk = () => {
 	const [editCommentBox] = useState<HTMLElement | null>(null);
 	const [commentsState, setCommentsState] = useState<boolean[]>([]);
 	const [, setPage] = useState(1);
+	const [isLoading, setIsLoading] = useState(false);
 
 	const selectedData = (value: Date) => {
 		const newPosts: any = [];
@@ -45,6 +47,7 @@ export const Talk = () => {
 	}, [clickedPost]);
 
 	useEffect(() => {
+		setIsLoading(true);
 		const fetchData = async (): Promise<void> => {
 			const postRef = collection(db, "post");
 			const querySnapshot = await getDocs(query(postRef, where("isPost", "==", true), orderBy("createdAt"), limit(4)));
@@ -52,9 +55,13 @@ export const Talk = () => {
 			const items: Post[] = [];
 			querySnapshot.forEach((doc) => {
 				items.push({ ...doc.data() } as Post);
+				setPosts(items);
 			});
-			setPosts(items);
 		};
+		setTimeout(() => {
+			
+			setIsLoading(false);
+		}, 2000);
 
 		fetchData();
 	}, []);
@@ -244,6 +251,15 @@ export const Talk = () => {
 					</div>
 				</Link>
 			</Carousel>
+			{isLoading && (
+				<BarLoader
+					color="#cc36d7"
+					size={70}
+					aria-label="BarLoader Spinner"
+					data-testid="loader"
+					className="fixed bottom-1/4 z-10"
+				/>
+			)}
 			<div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6 my-10 justify-center items-center max-w-screen-2xl">
 				{posts?.map((post, idx) => {
 					return (

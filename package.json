@@ -31,6 +31,7 @@
     "react-icons": "^4.8.0",
     "react-responsive-carousel": "^3.2.23",
     "react-router-dom": "^6.10.0",
+    "react-spinners": "^0.13.8",
     "recoil": "^0.7.7",
     "tailwindcss": "^3.3.1",
     "typescript": "^5.0.2",
