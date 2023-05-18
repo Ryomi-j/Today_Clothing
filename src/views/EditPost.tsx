@@ -1,37 +1,40 @@
 import { Link, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { deleteObject, getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { db, storage } from "../firebase";
 import { useRecoilCallback, useRecoilState, useRecoilValue } from "recoil";
 import { userInfo } from "../store/user";
 import { v4 } from "uuid";
-import { Modal } from "../components/common/Modal";
 import { selectedDate } from "../store/editItem";
-import { doc, setDoc } from "firebase/firestore";
+import { deleteDoc, doc, setDoc } from "firebase/firestore";
 import { nextWeekUserPost, userPostState } from "../store/post";
+import { Modal } from "../components/common/Modal";
 
 export const EditPost = () => {
 	const { search } = useLocation();
-	const [query, setQuery] = useState<{ [key: string]: string; }>({});
+	const [query, setQuery] = useState<{ [key: string]: string }>({});
 	const date = useRecoilValue(selectedDate);
-	const [postArr, ] = useRecoilState(nextWeekUserPost);
+	const [postArr, setPostArr] = useRecoilState(nextWeekUserPost);
 	const userPosts = useRecoilValue(userPostState);
 
 	const [imgUrl, setImgUrl] = useState<undefined | string>("/public/addImg.svg");
 	const [imgUpload, setImgUpload] = useState<undefined | File>(undefined);
 	const user = useRecoilValue(userInfo);
 	const userUid = user && user.uid;
-	
+	const [postId, setPostId] = useState("");
+
 	useEffect(() => {
-		if(search.length > 1) {
-			search.slice(1).split('&').forEach(x => {
-				const [k, v] = x.split('=');
-				query[k] = v;
-				setQuery(query);
-			});
+		if (search.length > 1) {
+			search
+				.slice(1)
+				.split("&")
+				.forEach((x) => {
+					const [k, v] = x.split("=");
+					query[k] = v;
+					setQuery(query);
+				});
 		}
 	}, []);
-
 
 	const getPostData = useRecoilCallback(({ set }) => async () => {
 		try {
@@ -46,6 +49,7 @@ export const EditPost = () => {
 		postArr.forEach((post) => {
 			if (post && post.date === date) {
 				setImgUrl(post.imgUrl);
+				setPostId(post.id);
 			}
 		});
 		getPostData();
@@ -72,11 +76,33 @@ export const EditPost = () => {
 				setDoc(doc(db, "post", `${userUid}${date}v4()`), newData).then(() => {
 					getPostData();
 					setImgUrl(downloadURL);
-					console.log(postArr)
 				});
 			});
 		});
 	};
+
+	const deleteImg = () => {
+		const imgRef = ref(storage, imgUrl);
+		deleteObject(imgRef)
+			.then(() => {
+				console.log("Image deleted successfully");
+			})
+			.catch((error) => {
+				console.error("Error deleting image: ", error);
+			});
+
+		const docs = doc(db, "posts", postId);
+		deleteDoc(docs)
+			.then(() => {
+				console.log("Document deleted successfully");
+				const newPostArr = postArr.filter(post => post.id !== postId) 
+				setPostArr(newPostArr)
+			})
+			.catch((error) => {
+				console.error("Error deleting document: ", error);
+			});
+	};
+
 	useEffect(() => {
 		if (imgUrl) {
 			const label = document.querySelector("#label");
@@ -111,7 +137,9 @@ export const EditPost = () => {
 					</label>
 				</figure>
 				<div className="card-body max-h-fit">
-					<h3 className=" mb-14 text-3xl font-semibold text-center">{ query.content ? decodeURIComponent(query.content) : new Date(date).toString().slice(0,4)}</h3>
+					<h3 className=" mb-14 text-3xl font-semibold text-center">
+						{query.content ? decodeURIComponent(query.content) : new Date(date).toString().slice(0, 4)}
+					</h3>
 					<div className="flex justify-end gap-2">
 						<label htmlFor="my-modal-6" className="btn btn-primary" onClick={uploadImg}>
 							Save
@@ -119,6 +147,9 @@ export const EditPost = () => {
 						<Link to={`/${query.prevPage}`}>
 							<button className="btn">Cancel</button>
 						</Link>
+						<label htmlFor="my-modal-6" className="btn btn-primary" onClick={deleteImg}>
+							delete
+						</label>
 					</div>
 				</div>
 			</div>
