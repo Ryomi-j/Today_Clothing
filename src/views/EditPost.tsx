@@ -72,6 +72,7 @@ export const EditPost = () => {
 				setDoc(doc(db, "post", `${userUid}${date}v4()`), newData).then(() => {
 					getPostData();
 					setImgUrl(downloadURL);
+					console.log(postArr)
 				});
 			});
 		});
