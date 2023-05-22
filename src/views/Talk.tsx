@@ -5,7 +5,7 @@ import { Post, postData } from "../store/post";
 import { useEffect, useState } from "react";
 import { v4 } from "uuid";
 
-export const Talk = () => {
+const Talk = () => {
 	const postItems = useRecoilValue(postData);
 	const [posts, setPosts] = useState<Post[] | undefined>(undefined);
 	const [clickedPost, setClickedPost] = useState<Post | undefined>(undefined);
@@ -65,3 +65,5 @@ export const Talk = () => {
 		</div>
 	);
 };
+
+export default Talk

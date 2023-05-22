@@ -11,10 +11,10 @@ import React, { lazy, useEffect } from "react";
 import { auth, getUserData } from "./firebase";
 import { useRecoilState } from "recoil";
 import { userInfo, userState } from "./store/user";
-import { Talk } from "./views/Talk";
 
 const TodayClothes = lazy(() => import("./views/TodayClothes"));
 const Closet = lazy(() => import("./views/Closet"));
+const Talk = lazy(() => import("./views/Talk"))
 
 function App() {
 	const [login, setLogin] = useRecoilState(userState);
@@ -57,9 +57,6 @@ function App() {
 							</React.Suspense>
 						}
 					/>
-					<Route path="/talk" element={<Talk />} />
-					<Route path="/login" element={<Login />} />
-					<Route path="/sign-up" element={<SignUp />} />
 					<Route
 						path="/closet"
 						element={
@@ -68,6 +65,16 @@ function App() {
 							</React.Suspense>
 						}
 					/>
+					<Route
+						path="/talk"
+						element={
+							<React.Suspense fallback={<div>Loading...</div>}>
+								<Talk />
+							</React.Suspense>
+						}
+					/>
+					<Route path="/login" element={<Login />} />
+					<Route path="/sign-up" element={<SignUp />} />
 					<Route path="/record" element={<Record />} />
 					<Route path="/editCloset" element={<EditCloset />} />
 					<Route path="/post" element={<Post />} />
