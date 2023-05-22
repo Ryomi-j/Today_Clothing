@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import { EmptyImageFrame, ImageFrame } from "../components/common/ImageFrame";
-import { v4 } from "uuid";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { userInfo } from "../store/user";
 import { postData, userPost } from "../store/post";
@@ -49,9 +48,9 @@ const Closet = () => {
 						const content = date ? date.toString().slice(0, 3) : "";
 						const post = postArr.find((post) => post && Number(date) === post.date);
 						if (post) {
-							return <ImageFrame key={v4()} content={content} date={date} src={post.imgUrl} />;
+							return <ImageFrame key={i} content={content} date={date} src={post.imgUrl} />;
 						} else {
-							return <EmptyImageFrame key={v4()} content={content} date={date} />;
+							return <EmptyImageFrame key={i} content={content} date={date} />;
 						}
 					})}
 				</div>

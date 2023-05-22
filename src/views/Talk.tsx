@@ -3,7 +3,6 @@ import { Carousel } from "react-responsive-carousel";
 import { useRecoilValue } from "recoil";
 import { Post, postData } from "../store/post";
 import { useEffect, useState } from "react";
-import { v4 } from "uuid";
 
 const Talk = () => {
 	const postItems = useRecoilValue(postData);
@@ -14,7 +13,7 @@ const Talk = () => {
 		const sharedPosts = postItems.filter((post) => post.isPost === true);
 		setPosts(sharedPosts);
 	}, []);
-	console.log(posts);
+
 	return (
 		<div className="flex flex-col items-center min-h-[calc(100vh-3.3rem)] pt-16 bg-base-200">
 			<Carousel
@@ -39,10 +38,10 @@ const Talk = () => {
 				</div>
 			</Carousel>
 			<div className="grid grid-cols-3 gap-6 my-10 justify-center items-center max-w-screen-2xl">
-				{posts?.map((post) => {
+				{posts?.map((post, idx) => {
 					return (
 						<label
-						id={v4()}
+						id={`${idx}/${post.createdAt}`}
 							htmlFor={`${post.createdAt}-${post.uid}`}
 							className="card card-compact bg-base-100 shadow-xl cursor-pointer block"
 							onClick={() => {
