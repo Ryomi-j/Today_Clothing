@@ -3,33 +3,79 @@ import { BsFillSendFill } from "react-icons/bs";
 import { v4 } from "uuid";
 import { Post } from "../store/post";
 import { useRef, useState } from "react";
+import { collection, getDocs, query, setDoc, where } from "firebase/firestore";
+import { db } from "../firebase";
 
 interface PostDetailModalProps {
 	clickedPost: Post;
 	isLogin: boolean;
 	userName: string;
-    isChecked: boolean;
-    onClose:React.MouseEventHandler<HTMLLabelElement> 
+	isChecked: boolean;
+	onClose: React.MouseEventHandler<HTMLLabelElement>;
+	posts: Post[];
+	setPosts: Function;
 }
 
-export const PostDetailModal = ({ clickedPost, isLogin, userName, isChecked, onClose }: PostDetailModalProps) => {
-    const textareaRef = useRef(null)
-    const [editboxState, setEditboxState] = useState(false)
-    
+export const PostDetailModal = ({
+	clickedPost,
+	isLogin,
+	userName,
+	isChecked,
+	onClose,
+	posts,
+	setPosts,
+}: PostDetailModalProps) => {
+	const [editboxState, setEditboxState] = useState(false);
+	const textareaRef = useRef<HTMLTextAreaElement>(null);
+	const [comments, setComments] = useState(clickedPost.comments);
 
-    if(!isChecked) return <></>
+	if (!isChecked) return <></>;
 
-	const writeComment = () => {}
-    
-    return (
+	const getSelectedPostRef = async (post: Post) => {
+		const posts = collection(db, "post");
+		const q = query(posts, where("id", "==", post.id));
+		const selectedPostDocs = await getDocs(q);
+		return selectedPostDocs.docs[0].ref;
+	};
+
+	const writeComment = () => {
+		const comment = textareaRef.current?.value;
+
+		if (comment && comments) {
+			const newComment = {
+				author: userName,
+				comment: comment,
+				createdAt: new Date().getTime(),
+			};
+
+			const newComments = comments ? [...comments, newComment] : [newComment];
+
+			getSelectedPostRef(clickedPost).then((postRef) => {
+				const newData = {
+					...clickedPost,
+					comments: newComments,
+				};
+				setDoc(postRef, newData, { merge: true });
+				setComments(newComments);
+				const idx = posts.findIndex((post) => post.id === clickedPost.id);
+				posts[idx] = newData;
+				setPosts(posts);
+				if (textareaRef.current) {
+					textareaRef.current.value = "";
+				}
+			});
+		}
+	};
+
+	return (
 		<>
-			<input type="checkbox" id="my-modal-6" className="modal-toggle" checked/>
+			<input type="checkbox" id="my-modal-6" className="modal-toggle" checked readOnly />
 			<div className="modal ">
 				<div className="modal-box relative max-w-3xl">
 					<label
 						htmlFor={`${clickedPost?.createdAt}-${clickedPost?.uid}`}
 						className="btn btn-sm btn-circle absolute right-2 top-2"
-                        onClick={onClose}
+						onClick={onClose}
 					>
 						✕
 					</label>
@@ -67,8 +113,8 @@ export const PostDetailModal = ({ clickedPost, isLogin, userName, isChecked, onC
 								</div>
 							)}
 							<div className="flex flex-col max-h-96 overflow-auto">
-								{clickedPost.comments &&
-									clickedPost.comments.map((item, idx) => {
+								{comments &&
+									comments.map((item, idx) => {
 										return (
 											<div key={v4()} className="flex gap-1">
 												<span className="font-bold">{item.author}</span>

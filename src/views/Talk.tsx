@@ -10,7 +10,7 @@ const Talk = () => {
 	const postItems = useRecoilValue(postData);
 	const user = useRecoilValue(userInfo);
 	const isLogin = useRecoilValue(userState);
-	const [posts, setPosts] = useState<Post[] | undefined>(undefined);
+	const [posts, setPosts] = useState<Post[] | []>([]);
 	const [clickedPost, setClickedPost] = useState<Post | undefined>(undefined);
 	const [modalState, setModalState] = useState(false);
 
@@ -22,6 +22,10 @@ const Talk = () => {
 	const handleCloseModal = () => {
 		setModalState(false);
 	};
+
+	const setNewData = (posts : Post[]) => {
+		setPosts(posts)
+	}
 
 	return (
 		<div className="flex flex-col items-center min-h-[calc(100vh-3.3rem)] pt-16 bg-base-200">
@@ -78,6 +82,8 @@ const Talk = () => {
 					userName={user?.name ?? ""}
 					isChecked={true}
 					onClose={handleCloseModal}
+					posts={posts}
+					setPosts={setNewData}
 				/>
 			)}
 		</div>
