@@ -3,16 +3,25 @@ import { Carousel } from "react-responsive-carousel";
 import { useRecoilValue } from "recoil";
 import { Post, postData } from "../store/post";
 import { useEffect, useState } from "react";
+import { userInfo, userState } from "../store/user";
+import { PostDetailModal } from "../components/PostDetailModal";
 
 const Talk = () => {
 	const postItems = useRecoilValue(postData);
+	const user = useRecoilValue(userInfo);
+	const isLogin = useRecoilValue(userState);
 	const [posts, setPosts] = useState<Post[] | undefined>(undefined);
 	const [clickedPost, setClickedPost] = useState<Post | undefined>(undefined);
+	const [modalState, setModalState] = useState(false);
 
 	useEffect(() => {
 		const sharedPosts = postItems.filter((post) => post.isPost === true);
 		setPosts(sharedPosts);
 	}, []);
+
+	const handleCloseModal = () => {
+		setModalState(false);
+	};
 
 	return (
 		<div className="flex flex-col items-center min-h-[calc(100vh-3.3rem)] pt-16 bg-base-200">
@@ -41,11 +50,12 @@ const Talk = () => {
 				{posts?.map((post, idx) => {
 					return (
 						<label
-						id={`${idx}/${post.createdAt}`}
+							id={`${idx}/${post.createdAt}`}
 							htmlFor={`${post.createdAt}-${post.uid}`}
 							className="card card-compact bg-base-100 shadow-xl cursor-pointer block"
 							onClick={() => {
 								setClickedPost(post);
+								setModalState(true);
 							}}
 						>
 							<figure className="mx-5 mt-5 max-h-72 overflow-hidden object-cover">
@@ -61,6 +71,15 @@ const Talk = () => {
 					);
 				})}
 			</div>
+			{modalState && clickedPost && (
+				<PostDetailModal
+					clickedPost={clickedPost}
+					isLogin={isLogin}
+					userName={user?.name ?? ""}
+					isChecked={true}
+					onClose={handleCloseModal}
+				/>
+			)}
 		</div>
 	);
 };
