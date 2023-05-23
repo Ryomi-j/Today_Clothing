@@ -2,17 +2,24 @@ import { collection, getDocs } from "firebase/firestore";
 import { atom, selector } from "recoil";
 import { db } from "../firebase";
 
+export interface Comments {
+	author: string;
+	comment: string;
+	createdAt: number;
+}
+
 export interface Post {
-	date?: number;
+	date: number;
 	id: string;
 	imgUrl: string;
-	uid?: string;
+	uid: string;
 	createdAt?: number;
 	location?: string;
 	weather?: string;
 	humidity?: string;
 	degree?: number;
 	isPost?: boolean;
+	comments?: Comments[]
 }
 
 export interface DefaultPost {
