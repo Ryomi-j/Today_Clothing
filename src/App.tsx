@@ -10,11 +10,11 @@ import { Post } from "./views/Post";
 import React, { lazy, useEffect } from "react";
 import { auth, getUserData } from "./firebase";
 import { useRecoilState } from "recoil";
-import { userInfo, userState } from "./store/user";
+import { User, userInfo, userState } from "./store/user";
 
 const TodayClothes = lazy(() => import("./views/TodayClothes"));
 const Closet = lazy(() => import("./views/Closet"));
-const Talk = lazy(() => import("./views/Talk"))
+const Talk = lazy(() => import("./views/Talk"));
 
 function App() {
 	const [login, setLogin] = useRecoilState(userState);
@@ -24,7 +24,9 @@ function App() {
 		auth.onAuthStateChanged(async (user) => {
 			if (user !== null) {
 				const c = await getUserData(user.uid);
-				setUser(c || null);
+				if (c !== null) {
+					setUser(c as unknown as User);
+				}
 				setLogin(true);
 			} else {
 				setLogin(false);
