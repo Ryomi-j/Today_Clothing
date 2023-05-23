@@ -15,8 +15,9 @@ const Talk = () => {
 	const [modalState, setModalState] = useState(false);
 
 	useEffect(() => {
+		const savedPostData = localStorage.getItem('posts')
 		const sharedPosts = postItems.filter((post) => post.isPost === true);
-		setPosts(sharedPosts);
+		savedPostData !== null ? setPosts(JSON.parse(savedPostData)) : setPosts(sharedPosts);
 	}, []);
 
 	const handleCloseModal = () => {
@@ -25,7 +26,8 @@ const Talk = () => {
 
 	const setNewData = (posts : Post[]) => {
 		setPosts(posts)
-	}
+		localStorage.setItem('posts', JSON.stringify(posts))
+	};
 
 	return (
 		<div className="flex flex-col items-center min-h-[calc(100vh-3.3rem)] pt-16 bg-base-200">

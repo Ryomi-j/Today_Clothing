@@ -60,6 +60,7 @@ export const PostDetailModal = ({
 				const idx = posts.findIndex((post) => post.id === clickedPost.id);
 				posts[idx] = newData;
 				setPosts(posts);
+				localStorage.setItem('posts', JSON.stringify(posts))
 				if (textareaRef.current) {
 					textareaRef.current.value = "";
 				}
