@@ -1,9 +1,8 @@
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { BsFillSendFill } from "react-icons/bs";
-import { v4 } from "uuid";
 import { Post } from "../store/post";
-import { useRef, useState } from "react";
-import { collection, getDocs, query, setDoc, where } from "firebase/firestore";
+import { useEffect, useRef, useState } from "react";
+import { collection, getDocs, query, setDoc, updateDoc, where } from "firebase/firestore";
 import { db } from "../firebase";
 
 interface PostDetailModalProps {
@@ -28,6 +27,8 @@ export const PostDetailModal = ({
 	const [editboxState, setEditboxState] = useState(false);
 	const textareaRef = useRef<HTMLTextAreaElement>(null);
 	const [comments, setComments] = useState(clickedPost.comments);
+	const [commentsState, setCommentsState] = useState<boolean[]>([]);
+	const [clickedPostItem, setClickedPostItem] = useState<Post>(clickedPost)
 
 	if (!isChecked) return <></>;
 
@@ -60,11 +61,39 @@ export const PostDetailModal = ({
 				const idx = posts.findIndex((post) => post.id === clickedPost.id);
 				posts[idx] = newData;
 				setPosts(posts);
-				localStorage.setItem('posts', JSON.stringify(posts))
+				localStorage.setItem("posts", JSON.stringify(posts));
 				if (textareaRef.current) {
 					textareaRef.current.value = "";
 				}
 			});
+		}
+	};
+
+	useEffect(() => {
+		if (clickedPost && clickedPost.comments && clickedPost.comments.length > 0) {
+			setCommentsState(new Array(clickedPost.comments.length).fill(false));
+		}
+	}, [clickedPost]);
+
+	const handleComment = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>, idx: number) => {
+		if (e.target.innerText === "EDIT") {
+			
+		}
+
+		if (e.target.innerText === "DELETE") {
+			if (clickedPostItem.comments) {
+				const newComments = [...clickedPostItem.comments.slice(0, idx), ...clickedPostItem.comments.slice(idx + 1)];
+				getSelectedPostRef(clickedPost).then(async (postRef) => {
+					await updateDoc(postRef, { comments: newComments });
+				});
+				setComments(newComments)
+				const newData = {
+					...clickedPost,
+					comments: newComments
+				}
+				setClickedPostItem(newData)
+				console.log(clickedPostItem)
+			}
 		}
 	};
 
@@ -117,15 +146,15 @@ export const PostDetailModal = ({
 								{comments &&
 									comments.map((item, idx) => {
 										return (
-											<div key={v4()} className="flex gap-1">
+											<div key={idx} className="flex gap-1">
 												<span className="font-bold">{item.author}</span>
 												<div
 													id={item.createdAt.toString()}
-													className={`comment pl-1 break-all ${editboxState ? "hidden" : "block"}`}
+													className={`comment pl-1 break-all ${commentsState[idx] ? "hidden" : "block"}`}
 												>
 													<span className="inline-block">{item.comment}</span>
 													{item.author === userName && (
-														<span className="pl-1">
+														<span className="pl-1" onClick={(e) => handleComment(e, idx)}>
 															<button className="btn btn-primary btn-xs">Edit</button>
 															<button className="btn btn-xs ml-1">delete</button>
 														</span>
@@ -133,7 +162,7 @@ export const PostDetailModal = ({
 												</div>
 												<div
 													id={`${item.createdAt.toString()}Edit`}
-													className={`pl-1 break-all ${editboxState ? "block" : "hidden"}`}
+													className={`pl-1 break-all ${commentsState[idx] ? "block" : "hidden"}`}
 												>
 													<textarea className="border-2 resize-none w-full" />
 													<div className="pl-1">
