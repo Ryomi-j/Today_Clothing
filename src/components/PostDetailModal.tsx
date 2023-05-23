@@ -29,6 +29,7 @@ export const PostDetailModal = ({
 	const [comments, setComments] = useState(clickedPost.comments);
 	const [commentsState, setCommentsState] = useState<boolean[]>([]);
 	const [clickedPostItem, setClickedPostItem] = useState<Post>(clickedPost)
+	const [newComment, setNewComment] = useState<string>("")
 
 	if (!isChecked) return <></>;
 
@@ -77,7 +78,13 @@ export const PostDetailModal = ({
 
 	const handleComment = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>, idx: number) => {
 		if (e.target.innerText === "EDIT") {
-			
+			if (commentsState.every((x) => !x)) {
+				setCommentsState((prev) => {
+					prev[idx] = true;
+					return [...prev];
+				});
+			}
+			if(clickedPostItem.comments) setNewComment(clickedPostItem.comments[idx].comment)
 		}
 
 		if (e.target.innerText === "DELETE") {
@@ -166,7 +173,7 @@ export const PostDetailModal = ({
 													id={`${item.createdAt.toString()}Edit`}
 													className={`pl-1 break-all ${commentsState[idx] ? "block" : "hidden"}`}
 												>
-													<textarea className="border-2 resize-none w-full" />
+													<textarea value={newComment} onChange={(e) => setNewComment(e.target.value)} className="border-2 resize-none w-full" />
 													<div className="pl-1">
 														<button className="btn btn-primary btn-xs">save</button>
 														<button className="btn btn-xs ml-1">cancel</button>
