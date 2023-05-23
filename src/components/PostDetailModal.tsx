@@ -92,7 +92,9 @@ export const PostDetailModal = ({
 					comments: newComments
 				}
 				setClickedPostItem(newData)
-				console.log(clickedPostItem)
+				const index = posts.findIndex((post) => post.id === clickedPost.id);
+				posts[index] = newData;
+				localStorage.setItem("posts", JSON.stringify(posts));
 			}
 		}
 	};
