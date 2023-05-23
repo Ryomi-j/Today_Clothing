@@ -85,7 +85,9 @@ export const PostDetailModal = ({
 					return [...prev];
 				});
 			}
-			if (clickedPostItem.comments) setNewComment(clickedPostItem.comments[idx].comment);
+			if (clickedPostItem.comments) {
+				setNewComment(comments[idx].comment);
+			}
 		}
 
 		if (clickedBtn.innerText === "DELETE") {
@@ -110,13 +112,9 @@ export const PostDetailModal = ({
 	const handleEditComment = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, idx: number) => {
 		const clickedBtn = e.target as HTMLButtonElement;
 		if (clickedBtn.innerText === "SAVE" && clickedPostItem.comments) {
-			const selectedComment = clickedPostItem.comments[idx];
-			selectedComment.comment = newComment;
-			const newComments = [
-				...clickedPostItem.comments.slice(0, idx),
-				selectedComment,
-				...clickedPostItem.comments.slice(idx + 1),
-			];
+			const commentsArr = [...comments];
+			commentsArr[idx].comment = newComment;
+			const newComments = [...commentsArr];
 			getSelectedPostRef(clickedPost).then(async (postRef) => {
 				await updateDoc(postRef, { comments: newComments });
 			});
