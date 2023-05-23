@@ -26,10 +26,10 @@ export const PostDetailModal = ({
 }: PostDetailModalProps) => {
 	const [editboxState, setEditboxState] = useState(false);
 	const textareaRef = useRef<HTMLTextAreaElement>(null);
-	const [comments, setComments] = useState(clickedPost.comments);
+	const [comments, setComments] = useState(clickedPost.comments || []);
 	const [commentsState, setCommentsState] = useState<boolean[]>([]);
-	const [clickedPostItem, setClickedPostItem] = useState<Post>(clickedPost)
-	const [newComment, setNewComment] = useState<string>("")
+	const [clickedPostItem, setClickedPostItem] = useState<Post>(clickedPost);
+	const [newComment, setNewComment] = useState<string>("");
 
 	if (!isChecked) return <></>;
 
@@ -77,32 +77,69 @@ export const PostDetailModal = ({
 	}, [clickedPost]);
 
 	const handleComment = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>, idx: number) => {
-		if (e.target.innerText === "EDIT") {
+		const clickedBtn = e.target as HTMLButtonElement;
+		if (clickedBtn.innerText === "EDIT") {
 			if (commentsState.every((x) => !x)) {
 				setCommentsState((prev) => {
 					prev[idx] = true;
 					return [...prev];
 				});
 			}
-			if(clickedPostItem.comments) setNewComment(clickedPostItem.comments[idx].comment)
+			if (clickedPostItem.comments) setNewComment(clickedPostItem.comments[idx].comment);
 		}
 
-		if (e.target.innerText === "DELETE") {
+		if (clickedBtn.innerText === "DELETE") {
 			if (clickedPostItem.comments) {
 				const newComments = [...clickedPostItem.comments.slice(0, idx), ...clickedPostItem.comments.slice(idx + 1)];
 				getSelectedPostRef(clickedPost).then(async (postRef) => {
 					await updateDoc(postRef, { comments: newComments });
 				});
-				setComments(newComments)
+				setComments(newComments);
 				const newData = {
 					...clickedPost,
-					comments: newComments
-				}
-				setClickedPostItem(newData)
+					comments: newComments,
+				};
+				setClickedPostItem(newData);
 				const index = posts.findIndex((post) => post.id === clickedPost.id);
 				posts[index] = newData;
 				localStorage.setItem("posts", JSON.stringify(posts));
 			}
+		}
+	};
+
+	const handleEditComment = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, idx: number) => {
+		const clickedBtn = e.target as HTMLButtonElement;
+		if (clickedBtn.innerText === "SAVE" && clickedPostItem.comments) {
+			const selectedComment = clickedPostItem.comments[idx];
+			selectedComment.comment = newComment;
+			const newComments = [
+				...clickedPostItem.comments.slice(0, idx),
+				selectedComment,
+				...clickedPostItem.comments.slice(idx + 1),
+			];
+			getSelectedPostRef(clickedPost).then(async (postRef) => {
+				await updateDoc(postRef, { comments: newComments });
+			});
+			setComments(newComments);
+			const newData = {
+				...clickedPostItem,
+				comments: newComments,
+			};
+			setClickedPostItem(newData);
+			const index = posts.findIndex((post) => post.id === clickedPost.id);
+			posts[index] = newData;
+			localStorage.setItem("posts", JSON.stringify(posts));
+			setCommentsState((prev) => {
+				prev[idx] = false;
+				return [...prev];
+			});
+		}
+
+		if (clickedBtn.innerText === "CANCEL") {
+			setCommentsState((prev) => {
+				prev[idx] = false;
+				return [...prev];
+			});
 		}
 	};
 
@@ -173,8 +210,12 @@ export const PostDetailModal = ({
 													id={`${item.createdAt.toString()}Edit`}
 													className={`pl-1 break-all ${commentsState[idx] ? "block" : "hidden"}`}
 												>
-													<textarea value={newComment} onChange={(e) => setNewComment(e.target.value)} className="border-2 resize-none w-full" />
-													<div className="pl-1">
+													<textarea
+														value={newComment}
+														onChange={(e) => setNewComment(e.target.value)}
+														className="border-2 resize-none w-full"
+													/>
+													<div className="pl-1" onClick={(e) => handleEditComment(e, idx)}>
 														<button className="btn btn-primary btn-xs">save</button>
 														<button className="btn btn-xs ml-1">cancel</button>
 													</div>
