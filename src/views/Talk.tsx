@@ -56,6 +56,7 @@ const Talk = () => {
 				{posts?.map((post, idx) => {
 					return (
 						<label
+							key={idx}
 							id={`${idx}/${post.createdAt}`}
 							htmlFor={`${post.createdAt}-${post.uid}`}
 							className="card card-compact bg-base-100 shadow-xl cursor-pointer block"
