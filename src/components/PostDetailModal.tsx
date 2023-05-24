@@ -1,16 +1,18 @@
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { BsFillSendFill } from "react-icons/bs";
 import { Post } from "../store/post";
-import { useEffect, useRef, useState } from "react";
+import { MouseEventHandler, useEffect, useRef, useState } from "react";
 import { collection, getDocs, query, setDoc, updateDoc, where } from "firebase/firestore";
 import { db } from "../firebase";
+import { useRecoilValue } from "recoil";
+import { userInfo } from "../store/user";
 
 interface PostDetailModalProps {
 	clickedPost: Post;
 	isLogin: boolean;
 	userName: string;
 	isChecked: boolean;
-	onClose: React.MouseEventHandler<HTMLLabelElement>;
+	onClose: MouseEventHandler<HTMLSpanElement>;
 	posts: Post[];
 	setPosts: Function;
 }
@@ -24,6 +26,7 @@ export const PostDetailModal = ({
 	posts,
 	setPosts,
 }: PostDetailModalProps) => {
+	const user = useRecoilValue(userInfo);
 	const [editboxState, setEditboxState] = useState(false);
 	const textareaRef = useRef<HTMLTextAreaElement>(null);
 	const [comments, setComments] = useState(clickedPost.comments || []);
@@ -141,26 +144,42 @@ export const PostDetailModal = ({
 		}
 	};
 
+	const deletePost = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
+		getSelectedPostRef(clickedPost).then(async (postRef) => {
+			await updateDoc(postRef, { isPost: false, comments: [] });
+		});
+		const index = posts.findIndex((post) => post.id === clickedPost.id);
+		const newPosts = [...posts.slice(0, index), ...posts.slice(index + 1)]
+		setPosts(newPosts)
+		onClose(e);
+	};
+
 	return (
 		<>
 			<input type="checkbox" id="my-modal-6" className="modal-toggle" checked readOnly />
 			<div className="modal ">
 				<div className="modal-box relative max-w-3xl">
-					<label
-						htmlFor={`${clickedPost?.createdAt}-${clickedPost?.uid}`}
-						className="btn btn-sm btn-circle absolute right-2 top-2"
-						onClick={onClose}
-					>
+					<span className="btn btn-sm btn-circle absolute right-2 top-2" onClick={onClose}>
 						✕
-					</label>
+					</span>
 					<article className="flex">
 						<div>
-							<figure className="mx-5 mt-5 max-w-xs overflow-hidden object-cover">
+							<figure className="mx-5 mt-5 max-w-xs overflow-hidden object-cover relative">
 								<img
 									src={clickedPost?.imgUrl}
 									alt={`${clickedPost?.uid}-${clickedPost?.date}-clothing info`}
 									className="rounded-xl"
 								/>
+								{user && clickedPost.uid === user.uid && (
+									<span
+										className="absolute top-1 right-2 btn btn-ghost btn-xs btn-circle"
+										onClick={(e) => {
+											deletePost(e);
+										}}
+									>
+										✕
+									</span>
+								)}
 							</figure>
 							<div className="card-body flex-row flex-wrap items-center text-center">
 								<div className="badge badge-primary badge-outline">#{clickedPost?.location}</div>
