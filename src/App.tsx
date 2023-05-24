@@ -3,13 +3,14 @@ import { Footer } from "./components/Footer";
 import { Login } from "./views/Login";
 import { Nav } from "./components/Nav";
 import { SignUp } from "./views/SignUp";
-import "./index.css";
 import { Record } from "./views/Record";
+import { EditPost } from "./views/EditPost";
+import "./index.css";
 import React, { lazy, useEffect } from "react";
 import { auth, getUserData } from "./firebase";
 import { useRecoilState } from "recoil";
 import { User, userInfo, userState } from "./store/user";
-import { EditPost } from "./views/EditPost";
+import { userPost } from "./store/post";
 
 const TodayClothes = lazy(() => import("./views/TodayClothes"));
 const Closet = lazy(() => import("./views/Closet"));
@@ -18,6 +19,7 @@ const Talk = lazy(() => import("./views/Talk"));
 function App() {
 	const [login, setLogin] = useRecoilState(userState);
 	const [, setUser] = useRecoilState(userInfo);
+	const [, setUserPosts] = useRecoilState(userPost)
 
 	useEffect(() => {
 		auth.onAuthStateChanged(async (user) => {
@@ -25,6 +27,7 @@ function App() {
 				const c = await getUserData(user.uid);
 				if (c !== null) {
 					setUser(c as unknown as User);
+					setUserPosts(JSON.parse(localStorage.getItem('userPosts') || "[]"))
 				}
 				setLogin(true);
 			} else {

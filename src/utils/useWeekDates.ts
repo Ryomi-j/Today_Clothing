@@ -1,7 +1,7 @@
 import { useRecoilState } from "recoil";
 import { getDoc, doc, setDoc } from "firebase/firestore";
 import { DateTime } from "luxon";
-import { nextMondayState, weekDatesState } from "../store/editItem";
+import { nextMondayState, weekDatesState } from "../store/date";
 import { useEffect } from "react";
 import { db } from "../firebase";
 

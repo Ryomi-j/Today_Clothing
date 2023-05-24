@@ -1,29 +1,30 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useRef } from "react";
-import { UserWithProfile, getUserData, loginGoogle, signIn } from "../firebase";
-import { useRecoilCallback, useRecoilState } from "recoil";
-import { userInfo, userState } from "../store/user";
+import { getUserData, loginGoogle, signIn } from "../firebase";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { User, userInfo, userState } from "../store/user";
 import { GetGeoInfo } from "../utils/userGeolocation";
+import { postData, userPost } from "../store/post";
 
 export const Login = () => {
 	const idInput = useRef<HTMLInputElement>(null);
 	const pwInput = useRef<HTMLInputElement>(null);
 	const [, setLogin] = useRecoilState(userState);
+	const [, setUser] = useRecoilState(userInfo);
+	const [, setUserPosts] = useRecoilState(userPost);
+	const posts = useRecoilValue(postData);
 	const navigate = useNavigate();
-
-	const setUser = useRecoilCallback(({ set }) => (newUser: UserWithProfile | null) => {
-		set(userInfo, newUser);
-	  });
 
 	const handleLogin = () => {
 		const id = idInput?.current?.value + "@todayClothing.com" ?? "";
 		const pw = pwInput?.current?.value ?? "";
-		signIn(id, pw).then(async (success: any) => {
-			if (success) {
-				const c = await getUserData(success);
-				setUser(c);
+		signIn(id, pw).then(async (user: any) => {
+			if (user) {
+				const c = await getUserData(user.uid);
+				setUser(c as unknown as User);
+				setUserPosts(() => posts.filter((post) => post.uid === user.uid));
 				setLogin(true);
-				navigate(`/closet/${success.uid}`);
+				navigate(`/closet/${user.uid}`);
 				localStorage.setItem("isLogin", "true");
 			}
 		});
@@ -31,13 +32,12 @@ export const Login = () => {
 
 	const googleLogin = () => {
 		loginGoogle()
-			.then(async (user) => {
-				if (user) {
-					const c = await getUserData(user);
-					setUser(c);
-					setLogin(true);
-					navigate(`/closet/${user.uid}`);
-				}
+			.then(async (uid) => {
+				const c = await getUserData(uid || "");
+				setUser(c as unknown as User);
+				setUserPosts(() => posts.filter((post) => post.uid === uid));
+				setLogin(true);
+				navigate(`/closet/${uid}`);
 			})
 			.catch((error) => {
 				console.log(error);
@@ -55,13 +55,23 @@ export const Login = () => {
 							<label className="label md:w-24  pr-5">
 								<span className="label-text font-bold h-fit">ID</span>
 							</label>
-							<input type="text" placeholder="id" className="input input-bordered w-36 h-8 xs:w-52 xs:h-12 md:auto" ref={idInput} />
+							<input
+								type="text"
+								placeholder="id"
+								className="input input-bordered w-36 h-8 xs:w-52 xs:h-12 md:auto"
+								ref={idInput}
+							/>
 						</div>
 						<div className="form-control flex-row justify-center md:w-auto">
 							<label className="label md:w-24 pr-3 ">
 								<span className="label-text font-bold">PW</span>
 							</label>
-							<input type="password" placeholder="password" className="input input-bordered w-36 h-8 xs:w-52 xs:h-12 md:auto" ref={pwInput} />
+							<input
+								type="password"
+								placeholder="password"
+								className="input input-bordered w-36 h-8 xs:w-52 xs:h-12 md:auto"
+								ref={pwInput}
+							/>
 						</div>
 						<div className="flex mt-6 items-center">
 							<label className="btn btn-primary w-1/3 m-auto btn-sm text-xs xs:btn-md" id="login" onClick={handleLogin}>

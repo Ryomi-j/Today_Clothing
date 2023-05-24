@@ -3,7 +3,7 @@ import { Modal } from "../components/common/Modal";
 import { BiShareAlt } from "react-icons/bi";
 import { weatherData } from "../api/weatherApi";
 import { useEffect, useState } from "react";
-import { Post, defaultData, userPostState } from "../store/post";
+import { DefaultPost, Post, defaultData, userPost } from "../store/post";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
 import { collection, getDocs, query, setDoc, where } from "firebase/firestore";
@@ -13,8 +13,9 @@ const TodayClothes = () => {
 	const weather = useRecoilValue(weatherData);
 	const defaultImgs = useRecoilValue(defaultData);
 	const [today, setToday] = useState(new Date());
-	const [todayPost, setTodayPost] = useState<Post[] | undefined>(undefined);
-	const userPosts = useRecoilValue(userPostState);
+	const [todayPost, setTodayPost] = useState<Post[] | DefaultPost[] | undefined>(undefined);
+
+	const userPosts: Post[] = useRecoilValue(userPost);
 	let currentPost: Post[] | undefined = userPosts.filter((post) => {
 		if (!post.date) {
 			return false;
@@ -27,7 +28,7 @@ const TodayClothes = () => {
 	let month = today.getMonth() + 1;
 	let date = today.getDate();
 	let day = today.getDay();
-	let posts: Post[] | undefined;
+	let posts: Post[] | DefaultPost[] | undefined;
 
 	useEffect(() => {
 		if (currentPost && currentPost.length === 0) {
@@ -53,42 +54,19 @@ const TodayClothes = () => {
 				case weather.temp < 28:
 					posts = defaultImgs.filter((img) => img.degree >= 23 && img.degree < 28);
 					break;
-				case weather.temp >= 28:
-					posts = defaultImgs.filter((img) => img.degree >= 28);
-					break;
 				default:
-					posts = undefined;
+					posts = defaultImgs.filter((img) => img.degree >= 28);
 					break;
 			}
 		}
-	}, []);
+	}, [userPosts, weather]);
 
 	useEffect(() => {
 		setToday(new Date());
+		localStorage.setItem("userPosts", JSON.stringify(userPosts));
+
 		if (currentPost && currentPost.length > 0) {
 			setTodayPost(currentPost);
-			getDocs(query(collection(db, "post"), where("imgUrl", "==", currentPost[0].imgUrl)))
-				.then((selectedPost) => {
-					selectedPost.forEach((doc) => {
-						const postRef = doc.ref;
-						const postData = doc.data();
-						setDoc(
-							postRef,
-							{
-								...postData,
-								createdAt: new Date().getTime(),
-								location: weather.location,
-								humidity: weather.humidity,
-								weather: weather.weather,
-								degree: weather.temp,
-							},
-							{ merge: true }
-						);
-					});
-				})
-				.catch((error) => {
-					console.error(error);
-				});
 		} else {
 			setTodayPost(posts);
 		}
@@ -111,6 +89,11 @@ const TodayClothes = () => {
 						{
 							...postData,
 							isPost: true,
+							createdAt: new Date().getTime(),
+							location: weather.location,
+							humidity: weather.humidity,
+							weather: weather.weather,
+							degree: weather.temp,
 						},
 						{ merge: true }
 					);
@@ -126,11 +109,8 @@ const TodayClothes = () => {
 				{todayPost.length === 1 ? (
 					todayPost.map((post) => {
 						return (
-							<figure
-								key={post.id}
-								className="max-w-md max-h-96 mx-auto border-2 rounded-md  overflow-hidden"
-							>
-								<img src={post.imgUrl} alt={`${today?.toString().slice(0, 15)} clothing image`}  className=" md:h-96"/>
+							<figure key={post.id} className="max-w-md max-h-96 mx-auto border-2 rounded-md  overflow-hidden">
+								<img src={post.imgUrl} alt={`${today?.toString().slice(0, 15)} clothing image`} className=" md:h-96" />
 							</figure>
 						);
 					})

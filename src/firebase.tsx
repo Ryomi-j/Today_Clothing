@@ -24,7 +24,6 @@ const firebaseConfig = {
 	measurementId: "G-MSJBXTPKP2",
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 export const auth = getAuth();
@@ -34,13 +33,11 @@ export interface UserWithProfile extends User {
 	name: string;
   }  
 
-// 가입
 export const signUp = async (email: string, password: string, displayName: string) => {
 	try {
 		const userCredential = await createUserWithEmailAndPassword(auth, email, password);
 		const user = userCredential.user;
 
-		// Firestore에 사용자 정보 저장
 		const userData = {
 			uid: user.uid,
 			createdAt: user.metadata.creationTime,
@@ -83,7 +80,6 @@ export const isDuplicateNickName = async (nickname: string): Promise<boolean> =>
 	}
 };
 
-// 로그인
 export const signIn = (email: string, password: string) => {
 	return signInWithEmailAndPassword(auth, email, password)
 		.then((userCredential) => {
@@ -119,7 +115,7 @@ export const loginGoogle = () => {
 			};
 			const newUser = doc(db, "users", user.uid);
 			setDoc(newUser, userData, { merge: true });
-			return user;
+			return user.uid;
 		})
 		.catch((error) => {
 			console.log(error);
@@ -127,15 +123,15 @@ export const loginGoogle = () => {
 };
 
 export const logout = () => {
-	signOut(auth);
+	signOut(auth)
 };
 
-export const getUserData = async (user: User) => {
+export const getUserData = async (uid: string) => {
 	try {
-		const userDoc = doc(db, "users", user.uid);
+		const userDoc = doc(db, "users", uid);
 		const userSnapshot = await getDoc(userDoc);
 		if (userSnapshot.exists()) {
-			const userData = userSnapshot.data() as UserWithProfile;
+			const userData = userSnapshot.data() as User;
 			return userData;
 		} else {
 			return null;

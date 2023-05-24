@@ -1,9 +1,8 @@
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { BsFillSendFill } from "react-icons/bs";
-import { Post } from "../store/post";
+import { Post, getSelectedPostRef } from "../store/post";
 import { MouseEventHandler, useEffect, useRef, useState } from "react";
-import { collection, getDocs, query, setDoc, updateDoc, where } from "firebase/firestore";
-import { db } from "../firebase";
+import { setDoc, updateDoc } from "firebase/firestore";
 import { useRecoilValue } from "recoil";
 import { userInfo } from "../store/user";
 
@@ -27,7 +26,6 @@ export const PostDetailModal = ({
 	setPosts,
 }: PostDetailModalProps) => {
 	const user = useRecoilValue(userInfo);
-	const [editboxState, setEditboxState] = useState(false);
 	const textareaRef = useRef<HTMLTextAreaElement>(null);
 	const [comments, setComments] = useState(clickedPost.comments || []);
 	const [commentsState, setCommentsState] = useState<boolean[]>([]);
@@ -35,13 +33,6 @@ export const PostDetailModal = ({
 	const [newComment, setNewComment] = useState<string>("");
 
 	if (!isChecked) return <></>;
-
-	const getSelectedPostRef = async (post: Post) => {
-		const posts = collection(db, "post");
-		const q = query(posts, where("id", "==", post.id));
-		const selectedPostDocs = await getDocs(q);
-		return selectedPostDocs.docs[0].ref;
-	};
 
 	const writeComment = () => {
 		const comment = textareaRef.current?.value;
@@ -149,8 +140,8 @@ export const PostDetailModal = ({
 			await updateDoc(postRef, { isPost: false, comments: [] });
 		});
 		const index = posts.findIndex((post) => post.id === clickedPost.id);
-		const newPosts = [...posts.slice(0, index), ...posts.slice(index + 1)]
-		setPosts(newPosts)
+		const newPosts = [...posts.slice(0, index), ...posts.slice(index + 1)];
+		setPosts(newPosts);
 		onClose(e);
 	};
 

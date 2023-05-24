@@ -2,29 +2,19 @@ import { Link } from "react-router-dom";
 import { EmptyImageFrame, ImageFrame } from "../components/common/ImageFrame";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { userInfo } from "../store/user";
-import { postData, userPost } from "../store/post";
-import { useEffect, useMemo } from "react";
+import { postData, nextWeekUserPost, Post, getSelectedPostRef, deleteImg } from "../store/post";
+import { useEffect, useState } from "react";
+import { useWeekDates } from "../utils/useWeekDates";
+import { Modal } from "../components/common/Modal";
+import { updateDoc } from "firebase/firestore";
 
 const Closet = () => {
 	const user = useRecoilValue(userInfo);
 	const userUid = user && user.uid;
 	const postItems = useRecoilValue(postData);
-	const [postArr, setPostArr] = useRecoilState(userPost);
-	const weekDates = useMemo(() => {
-		const today = new Date();
-		const nextMonday = new Date(
-			today.getFullYear(),
-			today.getMonth(),
-			today.getDate() + ((1 + 7 - today.getDay()) % 7)
-		);
-		const dates = [];
-		for (let i = 0; i < 7; i++) {
-			const date = new Date(nextMonday);
-			date.setDate(nextMonday.getDate() + i);
-			dates.push(date);
-		}
-		return dates;
-	}, []);
+	const [postArr, setPostArr] = useRecoilState(nextWeekUserPost);
+	const [clickedPost, setClickedPost] = useState<Post>()
+	const weekDates = useWeekDates();
 
 	useEffect(() => {
 		const newPostArr = [...postArr];
@@ -38,6 +28,19 @@ const Closet = () => {
 		setPostArr(newPostArr);
 	}, [postItems, userUid, weekDates, setPostArr]);
 
+	const deletePost = () => {
+		if(clickedPost){
+			deleteImg(clickedPost?.imgUrl)
+			getSelectedPostRef(clickedPost).then(async (postRef) => {
+				await updateDoc(postRef, {imgUrl: ''})
+			})
+			const idx = postArr.findIndex(post => post.id === clickedPost.id)
+			const newPostArr = [...postArr]
+			newPostArr[idx] = {...postArr[idx], imgUrl: ""}
+			setPostArr(newPostArr)
+		}
+	};
+
 	return (
 		<div className="flex min-h-[calc(100vh-3.3rem)] pt-16 bg-base-200">
 			<div className="card gap-5 my-8 mx-auto min-w-2/5 bg-base-100 shadow-xl p-7">
@@ -47,8 +50,8 @@ const Closet = () => {
 						const date = weekDates[i];
 						const content = date ? date.toString().slice(0, 3) : "";
 						const post = postArr.find((post) => post && Number(date) === post.date);
-						if (post) {
-							return <ImageFrame key={i} content={content} date={date} src={post.imgUrl} />;
+						if (post && post.imgUrl !== '') {
+							return <ImageFrame key={i} content={content} date={date} post={post} deleteBtn={true}  handleClickPost={setClickedPost}  />;
 						} else {
 							return <EmptyImageFrame key={i} content={content} date={date} />;
 						}
@@ -60,7 +63,7 @@ const Closet = () => {
 					</Link>
 				</div>
 			</div>
-			{/* <Modal content="오늘 당신의 의상을 공유하시겠습니까?" btnContent="OK" btnContent2="Cancel"/> */}
+			<Modal content="해당 게시물을 삭제하시겠습니까?" btnContent="OK" btnContent2="Cancel" handleClick={deletePost} />
 		</div>
 	);
 };
