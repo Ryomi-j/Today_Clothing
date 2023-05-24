@@ -2,11 +2,17 @@ import { collection, getDocs } from "firebase/firestore";
 import { atom, selector } from "recoil";
 import { db } from "../firebase";
 
+export interface Comments {
+	author: string;
+	comment: string;
+	createdAt: number;
+}
+
 export interface Post {
-	date?: number;
+	date: number;
 	id: string;
 	imgUrl: string;
-	uid?: string;
+	uid: string;
 	createdAt?: number;
 	location?: string;
 	weather?: string;
@@ -50,7 +56,7 @@ export const userPostState = atom<Post[]>({
 
 export const nextWeekUserPost = atom<Post[]>({
 	key: "nextWeekUserPost",
-	default: new Array(7).fill(null),
+	default: new Array(7),
 });
 
 export const defaultData = selector<DefaultPost[]>({

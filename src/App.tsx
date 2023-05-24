@@ -7,31 +7,28 @@ import "./index.css";
 import { Record } from "./views/Record";
 import React, { lazy, useEffect } from "react";
 import { auth, getUserData } from "./firebase";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { userInfo, userState } from "./store/user";
-import { Talk } from "./views/Talk";
-import { postData, userPostState } from "./store/post";
+import { useRecoilState } from "recoil";
+import { User, userInfo, userState } from "./store/user";
 import { EditPost } from "./views/EditPost";
-import { NotFound } from "./views/NotFound";
 
 const TodayClothes = lazy(() => import("./views/TodayClothes"));
 const Closet = lazy(() => import("./views/Closet"));
+const Talk = lazy(() => import("./views/Talk"));
 
 function App() {
 	const [login, setLogin] = useRecoilState(userState);
 	const [, setUser] = useRecoilState(userInfo);
-	const [, setUserPosts] = useRecoilState(userPostState);
-	const posts = useRecoilValue(postData);
 
 	useEffect(() => {
-		const isLogin = localStorage.getItem("isLogin") === "true";
-		if (isLogin) setLogin(isLogin);
 		auth.onAuthStateChanged(async (user) => {
 			if (user !== null) {
-				const c = await getUserData(user);
-				setUser(c);
-				const userPosts = posts.filter((post) => post.uid === user.uid);
-				setUserPosts(userPosts);
+				const c = await getUserData(user.uid);
+				if (c !== null) {
+					setUser(c as unknown as User);
+				}
+				setLogin(true);
+			} else {
+				setLogin(false);
 			}
 		});
 	}, []);
@@ -70,18 +67,17 @@ function App() {
 						}
 					/>
 					<Route
-						path="/record"
+						path="/talk"
 						element={
 							<React.Suspense fallback={<div>Loading...</div>}>
-								<Record />
+								<Talk />
 							</React.Suspense>
 						}
 					/>
-					<Route path="/talk" element={<Talk />} />
 					<Route path="/login" element={<Login />} />
 					<Route path="/sign-up" element={<SignUp />} />
-					<Route path="/editPost" element={<EditPost />} />
-					<Route path="*" element={<NotFound />} />
+					<Route path="/record" element={<Record />} />
+					<Route path="/editCloset" element={<EditPost />} />
 				</Routes>
 			</main>
 			<Footer />
