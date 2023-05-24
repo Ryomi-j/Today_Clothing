@@ -80,6 +80,7 @@ const Talk = () => {
 								<div className="badge badge-secondary badge-outline">#{post.weather}</div>
 								<div className="badge badge-outline">#{`${post.degree}C°`}</div>
 								<div className="badge badge-accent badge-outline">#{`습도_${post.humidity}%`}</div>
+								<div className="badge badge-secondary badge-outline">#{new Date(post.date).toString().slice(0, 15)}</div>
 							</div>
 						</label>
 					);
