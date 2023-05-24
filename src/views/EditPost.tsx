@@ -132,7 +132,7 @@ export const EditPost = () => {
 			<Modal
 				content={`이미지가 성공적으로 저장되었습니다. ${query.prevPage} 페이지로 이동합니다.`}
 				btnContent="OK"
-				link={`${query.prevPage}`}
+				link={query.prevPage}
 			/>
 		</div>
 	);
