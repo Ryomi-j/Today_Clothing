@@ -80,7 +80,7 @@ function App() {
 					<Route path="/login" element={<Login />} />
 					<Route path="/sign-up" element={<SignUp />} />
 					<Route path="/record" element={<Record />} />
-					<Route path="/editCloset" element={<EditPost />} />
+					<Route path="/editPost" element={<EditPost />} />
 				</Routes>
 			</main>
 			<Footer />
