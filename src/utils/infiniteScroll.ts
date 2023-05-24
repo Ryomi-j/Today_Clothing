@@ -6,12 +6,14 @@ import { Post } from "../store/post";
 interface infiniteScrollProps {
 	setPosts: React.Dispatch<React.SetStateAction<Post[] | []>>;
 	posts: Post[] | [];
+	setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const infiniteScroll = ({setPosts, posts} : infiniteScrollProps) => {
+export const infiniteScroll = ({ setPosts, posts, setIsLoading }: infiniteScrollProps) => {
 	const [, setPage] = useState(1);
 
 	useEffect(() => {
+		setIsLoading(true);
 		const fetchData = async (): Promise<void> => {
 			const postRef = collection(db, "post");
 			const querySnapshot = await getDocs(query(postRef, where("isPost", "==", true), orderBy("createdAt"), limit(3)));
@@ -21,9 +23,11 @@ export const infiniteScroll = ({setPosts, posts} : infiniteScrollProps) => {
 				items.push({ ...doc.data() } as Post);
 			});
 			setPosts(items);
+			setIsLoading(false);
 		};
-
-		fetchData();
+		setTimeout(() => {
+			fetchData();
+		}, 1000);
 	}, []);
 
 	const handleScroll = async (): Promise<void> => {
@@ -35,7 +39,7 @@ export const infiniteScroll = ({setPosts, posts} : infiniteScrollProps) => {
 					where("isPost", "==", true),
 					orderBy("createdAt"),
 					startAfter(posts[posts.length - 1].createdAt),
-					limit(4)
+					limit(3)
 				)
 			);
 
@@ -43,8 +47,15 @@ export const infiniteScroll = ({setPosts, posts} : infiniteScrollProps) => {
 			querySnapshot.forEach((doc) => {
 				items.push({ ...doc.data() } as Post);
 			});
-			setPosts((prevList: Post[] | undefined) => [...(prevList ?? []), ...items]);
-			setPage((prevPage) => prevPage + 1);
+			if (items.length === 0) setIsLoading(false);
+			else {
+				setIsLoading(true);
+				setTimeout(() => {
+					setPosts((prevList: Post[] | undefined) => [...(prevList ?? []), ...items]);
+					setPage((prevPage) => prevPage + 1);
+					setIsLoading(false);
+				}, 1000);
+			}
 		}
 	};
 

@@ -6,6 +6,7 @@ import { useState } from "react";
 import { userInfo, userState } from "../store/user";
 import { PostDetailModal } from "../components/PostDetailModal";
 import { infiniteScroll } from "../utils/infiniteScroll";
+import BarLoader from "react-spinners/ClipLoader";
 
 const Talk = () => {
 	const user = useRecoilValue(userInfo);
@@ -13,8 +14,9 @@ const Talk = () => {
 	const [posts, setPosts] = useState<Post[] | []>([]);
 	const [clickedPost, setClickedPost] = useState<Post | undefined>(undefined);
 	const [modalState, setModalState] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
 
-	infiniteScroll({setPosts, posts})
+	infiniteScroll({setPosts, posts, setIsLoading})
 
 	const handleCloseModal = () => {
 		setModalState(false);
@@ -48,6 +50,15 @@ const Talk = () => {
 					<img src="https://firebasestorage.googleapis.com/v0/b/today-clothing.appspot.com/o/add%2Fman-g97c9fcec5_1920.jpg?alt=media&token=1ca0e230-7b37-48d6-a4f8-9738524168f6" />
 				</div>
 			</Carousel>
+			{isLoading && (
+				<BarLoader
+					color="#cc36d7"
+					size={70}
+					aria-label="BarLoader Spinner"
+					data-testid="loader"
+					className="fixed bottom-1/4 z-10"
+				/>
+			)}
 			<div className="grid grid-cols-3 gap-6 my-10 justify-center items-center max-w-screen-2xl">
 				{posts?.map((post, idx) => {
 					return (
