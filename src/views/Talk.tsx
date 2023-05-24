@@ -1,24 +1,20 @@
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
 import { useRecoilValue } from "recoil";
-import { Post, postData } from "../store/post";
-import { useEffect, useState } from "react";
+import { Post } from "../store/post";
+import { useState } from "react";
 import { userInfo, userState } from "../store/user";
 import { PostDetailModal } from "../components/PostDetailModal";
+import { infiniteScroll } from "../utils/infiniteScroll";
 
 const Talk = () => {
-	const postItems = useRecoilValue(postData);
 	const user = useRecoilValue(userInfo);
 	const isLogin = useRecoilValue(userState);
 	const [posts, setPosts] = useState<Post[] | []>([]);
 	const [clickedPost, setClickedPost] = useState<Post | undefined>(undefined);
 	const [modalState, setModalState] = useState(false);
 
-	useEffect(() => {
-		const savedPostData = localStorage.getItem('posts')
-		const sharedPosts = postItems.filter((post) => post.isPost === true);
-		savedPostData !== null ? setPosts(JSON.parse(savedPostData)) : setPosts(sharedPosts);
-	}, []);
+	infiniteScroll({setPosts, posts})
 
 	const handleCloseModal = () => {
 		setModalState(false);
