@@ -51,9 +51,9 @@ const Closet = () => {
 						const content = date ? date.toString().slice(0, 3) : "";
 						const post = postArr.find((post) => post && Number(date) === post.date);
 						if (post && post.imgUrl !== '') {
-							return <ImageFrame key={i} content={content} date={date} post={post} deleteBtn={true}  handleClickPost={setClickedPost}  />;
+							return <ImageFrame key={i} content={content} date={date} post={post} deleteBtn={true}  handleClickPost={setClickedPost} prevPage="closet" />;
 						} else {
-							return <EmptyImageFrame key={i} content={content} date={date} />;
+							return <EmptyImageFrame key={i} content={content} date={date} prevPage="closet" />;
 						}
 					})}
 				</div>
