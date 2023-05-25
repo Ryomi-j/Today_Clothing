@@ -6,6 +6,7 @@ import { logout } from "../firebase";
 export const Nav = () => {
 	const [login, setLogin] = useRecoilState(userState);
 	const [, setUserInfo] = useRecoilState(userInfo);
+	
 	const handleLogout = () => {
 		if (!login) return;
 		logout();
@@ -49,7 +50,7 @@ export const Nav = () => {
 							</>
 						)}
 						<li className="font-medium" onClick={handleLogout}>
-							{login ? <Link to="/login">Logout</Link> : <Link to="/login">Login</Link>}
+							{login ? <Link to="/login">Login</Link> : <Link to="/login">Login</Link>}
 						</li>
 					</ul>
 				</div>

@@ -102,7 +102,10 @@ export const SignUp = () => {
 									className="input input-bordered w-36 h-8 xs:w-52 sm:h-12 md:auto"
 									onChange={handleNickNameChange}
 								/>
-								<button className="btn btn-xs text-[8px] xs:btn-sm sm:btn-md p-1 md:flex-col text-xs ml-1" onClick={checkId}>
+								<button
+									className="btn btn-xs text-[8px] xs:btn-sm sm:btn-md p-1 md:flex-col text-xs ml-1"
+									onClick={checkId}
+								>
 									<p>Check</p>
 									<p className="hidden md:block">Availability</p>
 								</button>
@@ -123,7 +126,10 @@ export const SignUp = () => {
 									className="input input-bordered w-36 h-8 xs:w-52 sm:h-12 md:auto"
 									onChange={handleIdChange}
 								/>
-								<button className="btn btn-xs text-[8px] xs:btn-sm sm:btn-md p-1 md:flex-col text-xs ml-1" onClick={checkId}>
+								<button
+									className="btn btn-xs text-[8px] xs:btn-sm sm:btn-md p-1 md:flex-col text-xs ml-1"
+									onClick={checkId}
+								>
 									<p>Check</p>
 									<p className="hidden md:block">Availability</p>
 								</button>

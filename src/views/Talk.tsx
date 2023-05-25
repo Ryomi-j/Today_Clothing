@@ -7,6 +7,7 @@ import { userInfo, userState } from "../store/user";
 import { PostDetailModal } from "../components/PostDetailModal";
 import { infiniteScroll } from "../utils/infiniteScroll";
 import BarLoader from "react-spinners/ClipLoader";
+import { Link } from "react-router-dom";
 
 const Talk = () => {
 	const user = useRecoilValue(userInfo);
@@ -16,15 +17,15 @@ const Talk = () => {
 	const [modalState, setModalState] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
 
-	infiniteScroll({setPosts, posts, setIsLoading})
+	infiniteScroll({ setPosts, posts, setIsLoading });
 
 	const handleCloseModal = () => {
 		setModalState(false);
 	};
 
-	const setNewData = (posts : Post[]) => {
-		setPosts(posts)
-		localStorage.setItem('posts', JSON.stringify(posts))
+	const setNewData = (posts: Post[]) => {
+		setPosts(posts);
+		localStorage.setItem("posts", JSON.stringify(posts));
 	};
 
 	return (
@@ -37,18 +38,30 @@ const Talk = () => {
 				infiniteLoop={true}
 				className="flex justify-center max-w-screen-2xl"
 			>
-				<div className="overflow-hidden">
-					<div className="detail p-4 text-left text-4xl">
-						<p className="text-red-600 text-4xl">Early Bird Sale</p>다가온 여름, 먼저 준비하세요
+				<Link to="/talk">
+					<div className="overflow-hidden">
+						<div className="detail flex flex-col gap-1 sm:gap-4 items-center p-0.5 xs:p-2 md:p-4 text-left text-xs ">
+							<p className="text-red-600 md:font-medium text-sm xs:text-2xl font-medium md:text-4xl">Early Bird Sale</p>
+							<p className="text-xs xs:text-base md:text-lg">여름상품, 신상할인</p>
+						</div>
+						<img
+							src="https://firebasestorage.googleapis.com/v0/b/today-clothing.appspot.com/o/add%2Fyoung-woman-gfdde5ca04_1920.jpg?alt=media&token=cd90a93e-4db0-47f3-8249-ae1f8e6a4a97"
+							alt="summer sale AD"
+						/>
 					</div>
-					<img src="https://firebasestorage.googleapis.com/v0/b/today-clothing.appspot.com/o/add%2Fyoung-woman-gfdde5ca04_1920.jpg?alt=media&token=cd90a93e-4db0-47f3-8249-ae1f8e6a4a97" />
-				</div>
-				<div>
-					<div className="detail p-4 text-left text-4xl">
-						<p className="text-red-600 text-4xl">Big Sale</p> 봄 상품 80% sale
+				</Link>
+				<Link to="/talk">
+					<div>
+						<div className="detail flex flex-col gap-1 sm:gap-4 items-center p-0.5 xs:p-2 md:p-4 text-left text-xs ">
+							<p className="text-red-600 md:font-medium text-sm xs:text-2xl font-medium md:text-4xl">Big Sale</p>{" "}
+							<p className="text-xs xs:text-base md:text-lg">봄 상품 80% sale</p>
+						</div>
+						<img
+							src="https://firebasestorage.googleapis.com/v0/b/today-clothing.appspot.com/o/add%2Fman-g97c9fcec5_1920.jpg?alt=media&token=1ca0e230-7b37-48d6-a4f8-9738524168f6"
+							alt="spring sale AD"
+						/>
 					</div>
-					<img src="https://firebasestorage.googleapis.com/v0/b/today-clothing.appspot.com/o/add%2Fman-g97c9fcec5_1920.jpg?alt=media&token=1ca0e230-7b37-48d6-a4f8-9738524168f6" />
-				</div>
+				</Link>
 			</Carousel>
 			{isLoading && (
 				<BarLoader
@@ -59,28 +72,33 @@ const Talk = () => {
 					className="fixed bottom-1/4 z-10"
 				/>
 			)}
-			<div className="grid grid-cols-3 gap-6 my-10 justify-center items-center max-w-screen-2xl">
+			<div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6 my-10 justify-center items-center max-w-screen-2xl">
 				{posts?.map((post, idx) => {
 					return (
 						<label
 							key={idx}
 							id={`${idx}/${post.createdAt}`}
 							htmlFor={`${post.createdAt}-${post.uid}`}
-							className="card card-compact bg-base-100 shadow-xl cursor-pointer block"
+							className="card card-compact bg-base-100 shadow-xl cursor-pointer h-80"
 							onClick={() => {
 								setClickedPost(post);
 								setModalState(true);
 							}}
 						>
-							<figure className="mx-5 mt-5 max-h-72 overflow-hidden object-cover">
-								<img src={post.imgUrl} alt={`${post.uid}-${post.date}-clothing info`} className="rounded-xl" />
+							<figure className="mx-auto mt-5 w-4/5 h-3/5 overflow-hidden object-cover rounded-lg">
+								<div
+									className="w-full h-full bg-no-repeat bg-cover"
+									style={{ backgroundImage: `url(${post.imgUrl})` }}
+								></div>
 							</figure>
 							<div className="card-body flex-row flex-wrap items-center text-center">
 								<div className="badge badge-primary badge-outline">#{post.location}</div>
 								<div className="badge badge-secondary badge-outline">#{post.weather}</div>
 								<div className="badge badge-outline">#{`${post.degree}C°`}</div>
 								<div className="badge badge-accent badge-outline">#{`습도_${post.humidity}%`}</div>
-								<div className="badge badge-secondary badge-outline">#{new Date(post.date).toString().slice(0, 15)}</div>
+								<div className="badge badge-secondary badge-outline">
+									#{new Date(post.date).toString().slice(0, 15)}
+								</div>
 							</div>
 						</label>
 					);
@@ -101,4 +119,4 @@ const Talk = () => {
 	);
 };
 
-export default Talk
+export default Talk;

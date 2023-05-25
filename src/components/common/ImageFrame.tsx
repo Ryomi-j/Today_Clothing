@@ -39,7 +39,7 @@ export const ImageFrame = ({ content, post, deleteBtn, date, prevPage, handleCli
 					</div>
 					{deleteBtn && handleClickPost && post && (
 						<div className="form-control" onClick={() => handleClickPost(post)}>
-							<label htmlFor="my-modal-6" className="btn btn-xs">
+							<label htmlFor="my-modal-6" className="btn font-medium rounded-md text-[7px] p-1 mr-2 leading-none text-xs md:btn md:btn-xs xl:btn-sm xl:p-2">
 								delete
 							</label>
 						</div>

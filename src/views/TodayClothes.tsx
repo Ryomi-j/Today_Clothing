@@ -104,13 +104,19 @@ const TodayClothes = () => {
 	return (
 		<div className="flex w-screen min-h-[calc(100vh-3.3rem)] pt-16 bg-base-200">
 			<div className="card m-auto w-fit h-auto bg-base-100 shadow-xl xxxs:p-5 sm:py-7 sm:px-10">
-				<h2 className="xxxs:text-xl xs:text-4xl font-extrabold text-center xxxs:p-2  xs:py-5">Today's Clothes</h2>
-
+				<h2 className="xxxs:text-xl xs:text-4xl font-extrabold text-center xxxs:p-2 xs:py-5">Today's Clothes</h2>
 				{todayPost.length === 1 ? (
 					todayPost.map((post) => {
 						return (
-							<figure key={post.id} className="max-w-md max-h-96 mx-auto border-2 rounded-md  overflow-hidden">
-								<img src={post.imgUrl} alt={`${today?.toString().slice(0, 15)} clothing image`} className=" md:h-96" />
+							<figure
+								key={post.id}
+								className=" md:w-96 md:h-96 mx-auto border-2 rounded-md object-contain overflow-hidden"
+							>
+								<img
+									src={post.imgUrl}
+									alt={`${today?.toString().slice(0, 15)} clothing image`}
+									className="w-full"
+								/>
 							</figure>
 						);
 					})
@@ -133,7 +139,7 @@ const TodayClothes = () => {
 					</Carousel>
 				)}
 				<div className="card-body p-1">
-					<p className="mt-8 mb-8 xxs:text-xs xs:text-xl text-center break-all">
+					<p className="mt-8 mb-8 xxs:text-xs xs:text-xl text-center">
 						{year}년 {month}월 {date}일 {days[day]}요일 <br />
 						습도 {weather.humidity}% 온도 {weather.temp}C° {weather.weather}
 					</p>
@@ -143,7 +149,7 @@ const TodayClothes = () => {
 								htmlFor="my-modal-6"
 								className="btn btn-primary xxxs:btn-sm xxxs:w-full xxs:justify-center xxs:p-0 xs:w-1/3"
 							>
-								<span className="xxxs:hidden sm:block">Share</span>{" "}
+								<span className="xxxs:hidden sm:block">Share</span>
 								<BiShareAlt className="xxs:p-0 pl-2 xxs:text-xs xs:text-xl" />
 							</label>
 						</div>

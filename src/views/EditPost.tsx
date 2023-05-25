@@ -7,8 +7,8 @@ import { userInfo } from "../store/user";
 import { v4 } from "uuid";
 import { Modal } from "../components/common/Modal";
 import { selectedDate } from "../store/date";
-import {  doc,  setDoc } from "firebase/firestore";
-import {  nextWeekUserPost, userPost } from "../store/post";
+import { doc, setDoc } from "firebase/firestore";
+import { nextWeekUserPost, userPost } from "../store/post";
 
 export const EditPost = () => {
 	const { search } = useLocation();
@@ -48,7 +48,7 @@ export const EditPost = () => {
 	useEffect(() => {
 		postArr.forEach((post) => {
 			if (post && post.date === date) {
-				setImgUrl(post.imgUrl);
+				setImgUrl(post.imgUrl); //  처음 기존의 이미지 렌더링
 			}
 		});
 		localStorage.getItem("userPosts")
@@ -81,6 +81,7 @@ export const EditPost = () => {
 			});
 		});
 	};
+	console.log(imgUrl)
 
 	useEffect(() => {
 		if (imgUrl) {

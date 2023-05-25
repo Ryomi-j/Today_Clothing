@@ -149,18 +149,14 @@ export const PostDetailModal = ({
 		<>
 			<input type="checkbox" id="my-modal-6" className="modal-toggle" checked readOnly />
 			<div className="modal ">
-				<div className="modal-box relative max-w-3xl">
+				<div className="modal-box relative max-w-3xl xxxs:p-0 sm:p-1.5">
 					<span className="btn btn-sm btn-circle absolute right-2 top-2" onClick={onClose}>
 						✕
 					</span>
-					<article className="flex">
-						<div>
-							<figure className="mx-5 mt-5 max-w-xs overflow-hidden object-cover relative">
-								<img
-									src={clickedPost?.imgUrl}
-									alt={`${clickedPost?.uid}-${clickedPost?.date}-clothing info`}
-									className="rounded-xl"
-								/>
+					<article className="flex flex-col md:flex-row">
+						<div className="m-auto sm:w-96">
+							<figure className="mb-0 xs:m-5 max-w-xs h-auto md:h-auto overflow-hidden object-cover rounded-lg p-5">
+								<img src={clickedPost?.imgUrl} alt={`${clickedPost?.uid}-${clickedPost?.date}-clothing info`} />
 								{user && clickedPost.uid === user.uid && (
 									<span
 										className="absolute top-1 right-2 btn btn-ghost btn-xs btn-circle"
@@ -172,7 +168,7 @@ export const PostDetailModal = ({
 									</span>
 								)}
 							</figure>
-							<div className="card-body flex-row flex-wrap items-center text-center">
+							<div className="card-body flex-row flex-wrap items-center text-center p-3 xs:p-4">
 								<div className="badge badge-primary badge-outline">#{clickedPost?.location}</div>
 								<div className="badge badge-secondary badge-outline">#{clickedPost?.weather}</div>
 								<div className="badge badge-outline">#{`${clickedPost?.degree}C°`}</div>
@@ -182,11 +178,11 @@ export const PostDetailModal = ({
 								</div>
 							</div>
 						</div>
-						<div className="card-body max-w-3xl gap-5">
+						<div className="card-body max-w-3xl xs:gap-5 xxxs:text-xs md:text-base p-4 ">
 							{isLogin && (
-								<div className="flex gap-2">
+								<div className="flex gap-2 flex-col">
 									<span className="font-bold">{userName}</span>
-									<div className="flex items-center w-full  border-solid border-2 border-indigo-600 rounded-lg">
+									<div className="flex items-center w-full  border-solid border-2 border-slate-300 rounded-lg">
 										<textarea
 											className="textarea w-full focus:outline-none resize-none overflow-auto"
 											maxLength={100}
@@ -199,7 +195,7 @@ export const PostDetailModal = ({
 									</div>
 								</div>
 							)}
-							<div className="flex flex-col max-h-96 overflow-auto">
+							<div className="flex flex-col gap-1 max-h-96 overflow-auto justify-center">
 								{comments &&
 									comments.map((item, idx) => {
 										return (
@@ -207,28 +203,39 @@ export const PostDetailModal = ({
 												<span className="font-bold">{item.author}</span>
 												<div
 													id={item.createdAt.toString()}
-													className={`comment pl-1 break-all ${commentsState[idx] ? "hidden" : "block"}`}
+													className={`flex pl-1 break-all ${commentsState[idx] ? "hidden" : ""}`}
 												>
-													<span className="inline-block">{item.comment}</span>
+													<span>{item.comment}</span>
 													{item.author === userName && (
-														<span className="pl-1" onClick={(e) => handleComment(e, idx)}>
-															<button className="btn btn-primary btn-xs">Edit</button>
-															<button className="btn btn-xs ml-1">delete</button>
+														<span className="flex items-center pl-1" onClick={(e) => handleComment(e, idx)}>
+															<button className="p-1 rounded-lg text-[1px] sm:text-xs leading-none hover:bg-slate-300">
+																Edit
+															</button>
+															<button className="p-1 rounded-lg text-[1px] sm:text-xs leading-none hover:bg-slate-300">
+																delete
+															</button>
 														</span>
 													)}
 												</div>
 												<div
 													id={`${item.createdAt.toString()}Edit`}
-													className={`pl-1 break-all ${commentsState[idx] ? "block" : "hidden"}`}
+													className={`pl-1 break-all w-full ${commentsState[idx] ? "" : "hidden"}`}
 												>
 													<textarea
 														value={newComment}
 														onChange={(e) => setNewComment(e.target.value)}
 														className="border-2 resize-none w-full"
 													/>
-													<div className="pl-1" onClick={(e) => handleEditComment(e, idx)}>
-														<button className="btn btn-primary btn-xs">save</button>
-														<button className="btn btn-xs ml-1">cancel</button>
+													<div
+														className="flex justify-end items-center pl-1 gap-1"
+														onClick={(e) => handleEditComment(e, idx)}
+													>
+														<button className="text-white bg-secondary p-1 rounded-lg text-[1px] sm:text-xs leading-non">
+															save
+														</button>
+														<button className="bg-slate-300 p-1 rounded-lg text-[1px] sm:text-xs leading-none">
+															cancel
+														</button>
 													</div>
 												</div>
 											</div>
