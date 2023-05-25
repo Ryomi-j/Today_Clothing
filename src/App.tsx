@@ -10,9 +10,9 @@ import Closet from "./views/Closet";
 import "./index.css";
 import React, { lazy, useEffect } from "react";
 import { auth, getUserData } from "./firebase";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { User, userInfo } from "./store/user";
-import { userPost } from "./store/post";
+import { postData, userPost } from "./store/post";
 
 const Login = lazy(() => import("./views/Login"));
 
@@ -20,18 +20,21 @@ function App() {
 	const isLogin = JSON.parse(localStorage.getItem("isLogin") || "");
 	const [, setUser] = useRecoilState(userInfo);
 	const [, setUserPosts] = useRecoilState(userPost);
+	const posts = useRecoilValue(postData)
 
 	useEffect(() => {
 		auth.onAuthStateChanged(async (user) => {
-			if (user !== null) {
+			if (user) {
 				const c = await getUserData(user.uid);
-				if (c !== null) {
+				if (c) {
 					setUser(c as unknown as User);
-					setUserPosts(JSON.parse(localStorage.getItem("userPosts") || "[]"));
+					const userPosts = posts.filter(post => post.uid === user.uid)
+					setUserPosts(userPosts);
 				}
+
 			}
 		});
-	}, []);
+	}, []);	
 
 	return (
 		<BrowserRouter>
