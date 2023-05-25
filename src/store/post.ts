@@ -44,20 +44,40 @@ export const postData = selector<Post[]>({
 	},
 });
 
-export const defaultData = selector<DefaultPost[]>({
-	key: "defaultData",
-	get: async () => {
-		try {
-			const posts = collection(db, "defaultData");
-			const postItems = await getDocs(posts);
-			const post = postItems.docs.map((doc) => doc.data() as DefaultPost);
-			return post || [];
-		} catch (error) {
-			console.error(error);
-			return [];
-		}
-	},
-});
+export const getPostDefaultData = async (degree: number) => {
+	let degreeRange: number;
+
+	switch (true) {
+		case degree < 0:
+			degreeRange = 0;
+			break;
+		case degree < 5:
+			degreeRange = 5;
+			break;
+		case degree < 9:
+			degreeRange = 9;
+			break;
+		case degree < 12:
+			degreeRange = 12;
+			break;
+		case degree < 17:
+			degreeRange = 17;
+			break;
+		case degree < 20:
+			degreeRange = 20;
+			break;
+		case degree < 23:
+			degreeRange = 23;
+			break;
+		default:
+			degreeRange = 28;
+			break;
+	}
+
+	const q = query(collection(db, "defaultData"), where("degree", "==", degreeRange));
+	const querySnapshot = await getDocs(q);
+	return querySnapshot.docs[0].data();
+};
 
 export const nextWeekUserPost = atom<Post[]>({
 	key: "nextweekUserPost",

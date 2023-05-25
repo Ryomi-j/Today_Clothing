@@ -3,27 +3,24 @@ import { Modal } from "../components/common/Modal";
 import { BiShareAlt } from "react-icons/bi";
 import { WeatherProps, defaultWeatherData, weatherData } from "../api/weatherApi";
 import { useEffect, useState } from "react";
-import { DefaultPost, Post, defaultData, userPost } from "../store/post";
+import { Post, getPostDefaultData, userPost } from "../store/post";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
 import { collection, getDocs, query, setDoc, where } from "firebase/firestore";
 import { db } from "../firebase";
 
-const TodayClothes =  () => {
-	const [weather, setWeather] = useState<WeatherProps>(defaultWeatherData)
-	const defaultImgs = useRecoilValue(defaultData);
-	const [today, setToday] = useState(new Date());
-	const [todayPost, setTodayPost] = useState<Post[] | DefaultPost[] | undefined>(undefined);
-
-	useEffect(()=> {
-		const getWeatherInfo = async () => {
-			const weatherInfo = await weatherData()
-			setWeather(weatherInfo)
-		}
-		getWeatherInfo()
-	}, [])
-
+const TodayClothes = () => {
 	const userPosts: Post[] = useRecoilValue(userPost);
+	const [weather, setWeather] = useState<WeatherProps>(defaultWeatherData);
+	const [today, setToday] = useState(new Date());
+	const [todayPost, setTodayPost] = useState<Post[] | undefined>(undefined);
+
+	const days = ["일", "월", "화", "수", "목", "금", "토"];
+	let year = today.getFullYear();
+	let month = today.getMonth() + 1;
+	let date = today.getDate();
+	let day = today.getDay();
+
 	let currentPost: Post[] | undefined = userPosts.filter((post) => {
 		if (!post.date) {
 			return false;
@@ -31,53 +28,25 @@ const TodayClothes =  () => {
 		return new Date(+post.date)?.toString().slice(0, 15) === today.toString().slice(0, 15);
 	});
 
-	const days = ["일", "월", "화", "수", "목", "금", "토"];
-	let year = today.getFullYear();
-	let month = today.getMonth() + 1;
-	let date = today.getDate();
-	let day = today.getDay();
-	let posts: Post[] | DefaultPost[] | undefined;
-
 	useEffect(() => {
-		if (currentPost && currentPost.length === 0) {
-			switch (true) {
-				case weather.temp < 4:
-					posts = defaultImgs.filter((img) => img.degree < 4);
-					break;
-				case weather.temp < 9:
-					posts = defaultImgs.filter((img) => img.degree >= 4 && img.degree < 9);
-					break;
-				case weather.temp < 12:
-					posts = defaultImgs.filter((img) => img.degree >= 9 && img.degree < 12);
-					break;
-				case weather.temp < 17:
-					posts = defaultImgs.filter((img) => img.degree >= 12 && img.degree < 17);
-					break;
-				case weather.temp < 20:
-					posts = defaultImgs.filter((img) => img.degree >= 17 && img.degree < 20);
-					break;
-				case weather.temp < 23:
-					posts = defaultImgs.filter((img) => img.degree >= 20 && img.degree < 23);
-					break;
-				case weather.temp < 28:
-					posts = defaultImgs.filter((img) => img.degree >= 23 && img.degree < 28);
-					break;
-				default:
-					posts = defaultImgs.filter((img) => img.degree >= 28);
-					break;
+		const getWeatherInfo = async () => {
+			const weatherInfo = await weatherData();
+			setWeather(weatherInfo);
+			return weatherInfo;
+		};
+		getWeatherInfo().then((res) => {
+			setToday(new Date());
+
+			if (currentPost && currentPost.length > 0) {
+				setTodayPost(currentPost);
+			} else {
+				const defaultData = async () => {
+					const data = await getPostDefaultData(res.temp);
+					setTodayPost([data] as Post[]);
+				};
+				defaultData();
 			}
-		}
-	}, [userPosts, weather]);
-
-	useEffect(() => {
-		setToday(new Date());
-		localStorage.setItem("userPosts", JSON.stringify(userPosts));
-
-		if (currentPost && currentPost.length > 0) {
-			setTodayPost(currentPost);
-		} else {
-			setTodayPost(posts);
-		}
+		});
 	}, []);
 
 	if (todayPost === undefined) {
@@ -147,7 +116,7 @@ const TodayClothes =  () => {
 						{year}년 {month}월 {date}일 {days[day]}요일 <br />
 						습도 {weather.humidity}% 온도 {weather.temp}C° {weather.weather}
 					</p>
-					{todayPost.length === 1 && (
+					{currentPost.length === 1 && (
 						<div className="flex flex-row-reverse">
 							<label
 								htmlFor="my-modal-6"
