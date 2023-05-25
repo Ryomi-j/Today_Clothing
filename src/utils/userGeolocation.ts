@@ -1,9 +1,10 @@
-import { useRecoilState } from "recoil";
-import { geolocation } from "../store/geolocation";
 import { useEffect } from "react";
 
+const userLocationString = localStorage.getItem('userLocation');
+export const userLocation = userLocationString !== null ? JSON.parse(userLocationString) : [37.57, 126.9];
+
 export const GetGeoInfo = () => {
-	const [, setLocation] = useRecoilState(geolocation);
+	const [, setLocation] = userLocation
 
 	useEffect(() => {
 		navigator.geolocation.getCurrentPosition(function (position) {
