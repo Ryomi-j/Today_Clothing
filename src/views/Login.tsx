@@ -6,7 +6,7 @@ import { User, userInfo } from "../store/user";
 import { GetGeoInfo } from "../utils/userGeolocation";
 import { postData, userPost } from "../store/post";
 
-export const Login = () => {
+const Login = () => {
 	const idInput = useRef<HTMLInputElement>(null);
 	const pwInput = useRef<HTMLInputElement>(null);
 	const [, setUser] = useRecoilState(userInfo);
@@ -84,3 +84,5 @@ export const Login = () => {
 		</>
 	);
 };
+
+export default Login
