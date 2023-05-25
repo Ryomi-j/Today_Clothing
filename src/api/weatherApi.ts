@@ -1,38 +1,42 @@
 import axios from "axios";
-import { selector } from "recoil";
-import { geolocation } from "../store/geolocation";
+import { userLocation } from "../utils/userGeolocation";
 
-interface WeatherProps {
+export interface WeatherProps {
 	location: string;
 	temp: number;
 	humidity: number;
 	weather: string;
 }
 
-export const weatherData = selector<WeatherProps>({
-	key: "weatherData",
-	get: async ({ get }) => {
-		const [lat, lon] = get(geolocation);
-		const API_KEY = import.meta.env.VITE_WEATHER_API_KEY;
-		const WEATHER_API = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&lang=kr`;
+export const defaultWeatherData = {
+	location: "",
+	temp: 0,
+	humidity: 0,
+	weather: "",
+};
 
-		try {
-			const response = await axios.get(WEATHER_API);
-			const weatherProps: WeatherProps = {
+export const weatherData = async () => {
+	const [lat, lon] = userLocation;
+	const API_KEY = import.meta.env.VITE_WEATHER_API_KEY;
+	const WEATHER_API = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&lang=kr`;
+
+	try {
+		const weatherInfo = await axios.get(WEATHER_API).then((response) => {
+			return {
 				location: response.data.name,
 				temp: +(response.data.main.temp - 273.15).toFixed(1),
 				humidity: response.data.main.humidity,
 				weather: response.data.weather[0].description,
 			};
-			return weatherProps;
-		} catch (error) {
-			console.log(error);
-			return {
-				location: "",
-				temp: 0,
-				humidity: 0,
-				weather: "",
-			};
-		}
-	},
-});
+		});
+		return weatherInfo;
+	} catch (error) {
+		console.log(error);
+		return {
+			location: "",
+			temp: 0,
+			humidity: 0,
+			weather: "",
+		};
+	}
+};

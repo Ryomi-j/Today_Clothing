@@ -1,7 +1,7 @@
 import { useRecoilValue } from "recoil";
 import { Modal } from "../components/common/Modal";
 import { BiShareAlt } from "react-icons/bi";
-import { weatherData } from "../api/weatherApi";
+import { WeatherProps, defaultWeatherData, weatherData } from "../api/weatherApi";
 import { useEffect, useState } from "react";
 import { DefaultPost, Post, defaultData, userPost } from "../store/post";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
@@ -9,11 +9,19 @@ import { Carousel } from "react-responsive-carousel";
 import { collection, getDocs, query, setDoc, where } from "firebase/firestore";
 import { db } from "../firebase";
 
-const TodayClothes = () => {
-	const weather = useRecoilValue(weatherData);
+const TodayClothes =  () => {
+	const [weather, setWeather] = useState<WeatherProps>(defaultWeatherData)
 	const defaultImgs = useRecoilValue(defaultData);
 	const [today, setToday] = useState(new Date());
 	const [todayPost, setTodayPost] = useState<Post[] | DefaultPost[] | undefined>(undefined);
+
+	useEffect(()=> {
+		const getWeatherInfo = async () => {
+			const weatherInfo = await weatherData()
+			setWeather(weatherInfo)
+		}
+		getWeatherInfo()
+	}, [])
 
 	const userPosts: Post[] = useRecoilValue(userPost);
 	let currentPost: Post[] | undefined = userPosts.filter((post) => {
@@ -112,11 +120,7 @@ const TodayClothes = () => {
 								key={post.id}
 								className=" md:w-96 md:h-96 mx-auto border-2 rounded-md object-contain overflow-hidden"
 							>
-								<img
-									src={post.imgUrl}
-									alt={`${today?.toString().slice(0, 15)} clothing image`}
-									className="w-full"
-								/>
+								<img src={post.imgUrl} alt={`${today?.toString().slice(0, 15)} clothing image`} className="w-full" />
 							</figure>
 						);
 					})
