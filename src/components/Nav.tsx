@@ -13,7 +13,6 @@ export const Nav = () => {
 		setUserInfo(null);
 
 		localStorage.setItem("isLogin", "false");
-		window.location.reload();
 	};
 
 	return (
