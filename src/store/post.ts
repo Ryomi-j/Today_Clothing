@@ -20,7 +20,7 @@ export interface Post {
 	humidity?: string;
 	degree?: number;
 	isPost?: boolean;
-	comments?: Comments[]
+	comments?: Comments[];
 }
 
 export interface DefaultPost {
@@ -97,12 +97,8 @@ export const getSelectedPostRef = async (post: Post) => {
 };
 
 export const deleteImg = (imgUrl: string) => {
-	const storage = getStorage()
-	const postRef = ref(storage, imgUrl)
+	const storage = getStorage();
+	const postRef = ref(storage, imgUrl);
 
-	deleteObject(postRef).then(() => {
-		alert('success')
-	}).catch((e) => {
-		alert(e)
-	})
-}
+	deleteObject(postRef);
+};
