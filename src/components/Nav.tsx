@@ -1,16 +1,15 @@
 import { Link } from "react-router-dom";
 import { useRecoilState } from "recoil";
-import { userInfo, userState } from "../store/user";
+import { userInfo } from "../store/user";
 import { logout } from "../firebase";
 
 export const Nav = () => {
-	const [login, setLogin] = useRecoilState(userState);
 	const [, setUserInfo] = useRecoilState(userInfo);
+	const isLogin = JSON.parse(localStorage.getItem('isLogin') || '')
 	
 	const handleLogout = () => {
-		if (!login) return;
+		if (!isLogin) return;
 		logout();
-		setLogin(false);
 		setUserInfo(null);
 
 		localStorage.setItem("isLogin", "false");
@@ -39,7 +38,7 @@ export const Nav = () => {
 						<li className="font-medium">
 							<Link to="/talk">Talk</Link>
 						</li>
-						{login && (
+						{isLogin && (
 							<>
 								<li className="font-medium">
 									<Link to="/TodayClothes">Today's Clothing</Link>
@@ -50,7 +49,7 @@ export const Nav = () => {
 							</>
 						)}
 						<li className="font-medium" onClick={handleLogout}>
-							{login ? <Link to="/login">Login</Link> : <Link to="/login">Login</Link>}
+							{isLogin ? <Link to="/login">Login</Link> : <Link to="/login">Login</Link>}
 						</li>
 					</ul>
 				</div>
@@ -68,7 +67,7 @@ export const Nav = () => {
 					<li className="font-medium">
 						<Link to="/talk">Talk</Link>
 					</li>
-					{login && (
+					{isLogin && (
 						<>
 							<li className="font-medium">
 								<Link to="/TodayClothes">Today's Clothing</Link>
@@ -79,7 +78,7 @@ export const Nav = () => {
 						</>
 					)}
 					<li className="font-medium" onClick={handleLogout}>
-						{login ? <Link to="/login">Logout</Link> : <Link to="/login">Login</Link>}
+						{isLogin ? <Link to="/login">Logout</Link> : <Link to="/login">Login</Link>}
 					</li>
 				</ul>
 			</div>

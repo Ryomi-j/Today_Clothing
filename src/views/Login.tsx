@@ -2,14 +2,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { useRef } from "react";
 import { getUserData, loginGoogle, signIn } from "../firebase";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { User, userInfo, userState } from "../store/user";
+import { User, userInfo } from "../store/user";
 import { GetGeoInfo } from "../utils/userGeolocation";
 import { postData, userPost } from "../store/post";
 
 export const Login = () => {
 	const idInput = useRef<HTMLInputElement>(null);
 	const pwInput = useRef<HTMLInputElement>(null);
-	const [, setLogin] = useRecoilState(userState);
 	const [, setUser] = useRecoilState(userInfo);
 	const [, setUserPosts] = useRecoilState(userPost);
 	const posts = useRecoilValue(postData);
@@ -23,8 +22,7 @@ export const Login = () => {
 				const c = await getUserData(user.uid);
 				setUser(c as unknown as User);
 				setUserPosts(() => posts.filter((post) => post.uid === user.uid));
-				setLogin(true);
-				navigate(`/closet/${user.uid}`);
+				navigate(`/closet`);
 				localStorage.setItem("isLogin", "true");
 			}
 		});
@@ -36,8 +34,8 @@ export const Login = () => {
 				const c = await getUserData(uid || "");
 				setUser(c as unknown as User);
 				setUserPosts(() => posts.filter((post) => post.uid === uid));
-				setLogin(true);
 				navigate(`/closet/${uid}`);
+				localStorage.setItem("isLogin", "true");
 			})
 			.catch((error) => {
 				console.log(error);

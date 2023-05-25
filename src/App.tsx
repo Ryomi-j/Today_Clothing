@@ -9,7 +9,7 @@ import "./index.css";
 import React, { lazy, useEffect } from "react";
 import { auth, getUserData } from "./firebase";
 import { useRecoilState } from "recoil";
-import { User, userInfo, userState } from "./store/user";
+import { User, userInfo } from "./store/user";
 import { userPost } from "./store/post";
 
 const TodayClothes = lazy(() => import("./views/TodayClothes"));
@@ -17,7 +17,7 @@ const Closet = lazy(() => import("./views/Closet"));
 const Talk = lazy(() => import("./views/Talk"));
 
 function App() {
-	const [login, setLogin] = useRecoilState(userState);
+	const isLogin = JSON.parse(localStorage.getItem('isLogin') || '')
 	const [, setUser] = useRecoilState(userInfo);
 	const [, setUserPosts] = useRecoilState(userPost)
 
@@ -29,10 +29,7 @@ function App() {
 					setUser(c as unknown as User);
 					setUserPosts(JSON.parse(localStorage.getItem('userPosts') || "[]"))
 				}
-				setLogin(true);
-			} else {
-				setLogin(false);
-			}
+			} 
 		});
 	}, []);
 
@@ -44,7 +41,7 @@ function App() {
 					<Route
 						path="/*"
 						element={
-							login ? (
+							isLogin ? (
 								<React.Suspense fallback={<div>Loading...</div>}>
 									<TodayClothes />
 								</React.Suspense>
