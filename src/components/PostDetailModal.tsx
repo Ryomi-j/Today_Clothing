@@ -35,12 +35,12 @@ export const PostDetailModal = ({
 	if (!isChecked) return <></>;
 
 	const writeComment = () => {
-		const comment = textareaRef.current?.value;
+		const writtenComment = textareaRef.current?.value;
 
-		if (comment && comments) {
+		if (writtenComment && comments) {
 			const newComment = {
 				author: userName,
-				comment: comment,
+				comment: writtenComment,
 				createdAt: new Date().getTime(),
 			};
 
