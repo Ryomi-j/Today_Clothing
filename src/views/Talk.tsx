@@ -3,7 +3,7 @@ import { Carousel } from "react-responsive-carousel";
 import { useRecoilValue } from "recoil";
 import { Post } from "../store/post";
 import { useState } from "react";
-import { userInfo, userState } from "../store/user";
+import { userInfo } from "../store/user";
 import { PostDetailModal } from "../components/PostDetailModal";
 import { infiniteScroll } from "../utils/infiniteScroll";
 import BarLoader from "react-spinners/ClipLoader";
@@ -11,7 +11,7 @@ import { Link } from "react-router-dom";
 
 const Talk = () => {
 	const user = useRecoilValue(userInfo);
-	const isLogin = useRecoilValue(userState);
+	const isLogin = JSON.parse(localStorage.getItem("isLogin") || "");
 	const [posts, setPosts] = useState<Post[] | []>([]);
 	const [clickedPost, setClickedPost] = useState<Post | undefined>(undefined);
 	const [modalState, setModalState] = useState(false);
@@ -25,7 +25,6 @@ const Talk = () => {
 
 	const setNewData = (posts: Post[]) => {
 		setPosts(posts);
-		localStorage.setItem("posts", JSON.stringify(posts));
 	};
 
 	return (

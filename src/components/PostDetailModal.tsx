@@ -56,7 +56,6 @@ export const PostDetailModal = ({
 				const idx = posts.findIndex((post) => post.id === clickedPost.id);
 				posts[idx] = newData;
 				setPosts(posts);
-				localStorage.setItem("posts", JSON.stringify(posts));
 				if (textareaRef.current) {
 					textareaRef.current.value = "";
 				}
@@ -98,7 +97,6 @@ export const PostDetailModal = ({
 				setClickedPostItem(newData);
 				const index = posts.findIndex((post) => post.id === clickedPost.id);
 				posts[index] = newData;
-				localStorage.setItem("posts", JSON.stringify(posts));
 			}
 		}
 	};
@@ -209,10 +207,10 @@ export const PostDetailModal = ({
 													{item.author === userName && (
 														<span className="flex items-center pl-1" onClick={(e) => handleComment(e, idx)}>
 															<button className="p-1 rounded-lg text-[1px] sm:text-xs leading-none hover:bg-slate-300">
-																Edit
+																EDIT
 															</button>
 															<button className="p-1 rounded-lg text-[1px] sm:text-xs leading-none hover:bg-slate-300">
-																delete
+																DELETE
 															</button>
 														</span>
 													)}
@@ -231,10 +229,10 @@ export const PostDetailModal = ({
 														onClick={(e) => handleEditComment(e, idx)}
 													>
 														<button className="text-white bg-secondary p-1 rounded-lg text-[1px] sm:text-xs leading-non">
-															save
+															SAVE
 														</button>
 														<button className="bg-slate-300 p-1 rounded-lg text-[1px] sm:text-xs leading-none">
-															cancel
+															CANCEL
 														</button>
 													</div>
 												</div>
