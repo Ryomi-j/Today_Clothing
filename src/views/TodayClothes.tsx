@@ -14,6 +14,7 @@ const TodayClothes = () => {
 	const [weather, setWeather] = useState<WeatherProps>(defaultWeatherData);
 	const [today, setToday] = useState(new Date());
 	const [todayPost, setTodayPost] = useState<Post[] | undefined>(undefined);
+	const temps = [0, 5, 9, 12, 17, 20, 23, 28];
 
 	const days = ["일", "월", "화", "수", "목", "금", "토"];
 	let year = today.getFullYear();
@@ -28,6 +29,21 @@ const TodayClothes = () => {
 		return new Date(+post.date)?.toString().slice(0, 15) === today.toString().slice(0, 15);
 	});
 
+	const findPrevPost = (weatherInfo: WeatherProps) => {
+		const tempIdx = temps.findIndex((temp) => {
+			if (temp) {
+				temp > weatherInfo.temp;
+			}
+		});
+
+		const prevSimilarTempUserPosts = userPosts.filter((post) => {
+			if (post.degree) {
+				post.degree <= temps[tempIdx] && post.degree >= temps[tempIdx - 1];
+			}
+		});
+		return prevSimilarTempUserPosts;
+	};
+
 	useEffect(() => {
 		const getWeatherInfo = async () => {
 			const weatherInfo = await weatherData();
@@ -39,6 +55,9 @@ const TodayClothes = () => {
 
 			if (currentPost && currentPost.length > 0) {
 				setTodayPost(currentPost);
+			} else if (findPrevPost(res).length > 0) {
+				const prevPosts = findPrevPost(res).reverse().slice(0, 3)
+				setTodayPost(prevPosts)
 			} else {
 				const defaultData = async () => {
 					const data = await getPostDefaultData(res.temp);
