@@ -48,7 +48,7 @@ export const Nav = () => {
 							</>
 						)}
 						<li className="font-medium" onClick={handleLogout}>
-							{isLogin ? <Link to="/login">Login</Link> : <Link to="/login">Login</Link>}
+							{isLogin ? <Link to="/login">Logout</Link> : <Link to="/login">Login</Link>}
 						</li>
 					</ul>
 				</div>
