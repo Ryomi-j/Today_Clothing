@@ -56,16 +56,29 @@ export const EditPost = () => {
 		} 
 	}, []);
 
+	useEffect(() => {
+		if (imgUrl && imgUrl.length > 0) {
+			const label = document.querySelector("#label");
+			if (label instanceof HTMLElement) {
+				label.style.backgroundImage = `url(${imgUrl})`;
+				if (imgUrl !== "/public/addImg.svg") {
+					label.style.width = "100%";
+					label.style.height = "100%";
+				}
+			}
+		}
+	}, [imgUrl]);
+
 	
 	const getImgUrl = (file: File) => {
 		const url = URL.createObjectURL(file);
 		setImgUrl(url);
 	};
-	
+
 	const uploadImg = () => {
 		if (!imgUpload) return;
 		if (clickedPost && clickedPost.imgUrl) deleteImg(clickedPost.imgUrl);
-		
+
 		const fileName = `${userUid + imgUpload.name + v4()}`;
 		const imgRef = ref(storage, `imgs/${fileName}`);
 		uploadBytes(imgRef, imgUpload).then((snapshot) => {
@@ -83,18 +96,6 @@ export const EditPost = () => {
 			});
 		});
 	};
-	useEffect(() => {
-		if (imgUrl && imgUrl.length > 0) {
-			const label = document.querySelector("#label");
-			if (label instanceof HTMLElement) {
-				label.style.backgroundImage = `url(${imgUrl})`;
-				if (imgUrl !== "/public/addImg.svg") {
-					label.style.width = "100%";
-					label.style.height = "100%";
-				}
-			}
-		}
-	}, [imgUrl]);
 
 	return (
 		<div className="flex min-h-[calc(100vh-3.3rem)] pt-16 bg-base-200">
