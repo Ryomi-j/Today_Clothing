@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { isDuplicateId, isDuplicateNickName, signUp } from "../firebase";
+import { isDuplicateId, isDuplicateNickName, logout, signUp } from "../firebase";
 import { useNavigate } from "react-router-dom";
 
 export const SignUp = () => {
@@ -10,18 +10,18 @@ export const SignUp = () => {
 	const [id, setId] = useState("");
 	const [isIdDuplicate, setIsIdDuplicate] = useState(false);
 	const [nickName, setNickName] = useState("");
-	const [isNickNameDuplicate, setIsNickNameDuplicate] = useState(false);
-
+	const [isNicknameDuplicate, setIsNicknameDuplicate] = useState(false);
 	const nav = useNavigate();
 
-	const checkIdValidation = (id: string): boolean => {
-		const validId = /^[a-zA-Z0-9]{6,12}$/;
-		return !/\s/.test(id) && validId.test(id);
-	};
+	const isValidId = (id: string): boolean => {
+		const validId = /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z0-9]{6,12}$/;
+		return validId.test(id);
+	  };	  
 
-	const checkPasswordValidation = (password: string): boolean => {
-		const validPassword = /^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9]{6,12}$/;
-		return !/\s/.test(password) && validPassword.test(password);
+	const isValidPassword = (password: string): boolean => {
+		const validPassword = /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z0-9]{6,12}$/;
+		console.log(validPassword.test(password))
+		return validPassword.test(password);
 	};
 
 	const handleIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,18 +33,18 @@ export const SignUp = () => {
 		setNickName(event.target.value);
 	};
 
-	const checkNickName = async () => {
+	const isValidNickname = async () => {
 		const result = await isDuplicateNickName(nickName);
 		if (result) {
 			alert("이미 사용중인 닉네임입니다.");
 		} else {
 			alert("사용가능한 닉네임입니다.");
-			setIsNickNameDuplicate(true);
+			setIsNicknameDuplicate(true);
 		}
 	};
 
 	const checkId = async () => {
-		if (!checkIdValidation(id)) {
+		if (!isValidId(id)) {
 			alert("영문/숫자 조합 6~12자리의 id를 입력해주세요");
 		} else {
 			const result = await isDuplicateId(id + "@todayclothing.com");
@@ -64,19 +64,18 @@ export const SignUp = () => {
 		let nickname = nicknameInput?.current?.value;
 
 		if (!isIdDuplicate) return alert("아이디 중복검사가 필요합니다.");
-		else if (checkIdValidation(id)) {
-			alert("영문/숫자 조합 6~12자리의 id를 입력해주세요.");
-		} else if (checkPasswordValidation(pw)) {
+		else if (!isValidPassword(pw)) {
 			alert("영문/숫자 조합 6~12자리의 password를 입력해주세요.");
 		} else if (pw !== _pw) {
 			alert("password가 일치하지 않습니다.");
 		} else if (!nickname) {
 			alert("닉네임을 입력하세요");
-		} else if (!isNickNameDuplicate) {
+		} else if (!isNicknameDuplicate) {
 			alert("닉네임 중복검사가 필요합니다.");
 		} else {
 			signUp(email, pw, nickname);
-			alert("축하합니다. 가입이 완료되었습니다 :)");
+			alert("축하합니다. 가입이 완료되었습니다. 로그인 페이지로 이동합니다. :)");
+			logout()
 			nav("/login");
 		}
 	};
@@ -89,22 +88,22 @@ export const SignUp = () => {
 						<h2 className="text-center text-xl xs:text-4xl md:text-5xl font-bold">Sign Up</h2>
 						<div className="form-control sm:flex-row sm:justify-center sm:items-center mt-1 sm:mt-4 xs:mt-8 md:mt-16 ">
 							<label htmlFor="nickName" className="label w-24 sm:justify-end">
-								<span className="label-text pr-3 font-bold">Nick-Name</span>
+								<span className="label-text pr-3 font-bold">Nickname</span>
 							</label>
 							<div className="flex">
 								<input
 									type="text"
 									id="nickName"
-									placeholder="Nick Name"
+									placeholder="Nickname"
 									minLength={1}
 									maxLength={15}
-									ref={idInput}
+									ref={nicknameInput}
 									className="input input-bordered w-36 h-8 xs:w-52 sm:h-12 md:auto"
 									onChange={handleNickNameChange}
 								/>
 								<button
 									className="btn btn-xs text-[8px] xs:btn-sm sm:btn-md p-1 md:flex-col text-xs ml-1"
-									onClick={checkId}
+									onClick={isValidNickname}
 								>
 									<p>Check</p>
 									<p className="hidden md:block">Availability</p>
@@ -154,7 +153,7 @@ export const SignUp = () => {
 								<span className="label-text font-bold">Confrim PW</span>
 							</label>
 							<input
-								type="text"
+								type="password"
 								id="confirmPw"
 								placeholder="password 재확인"
 								minLength={6}
