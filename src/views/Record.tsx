@@ -2,10 +2,11 @@ import { Link } from "react-router-dom";
 import { MdNavigateBefore } from "react-icons/md";
 import { useRecoilState } from "recoil";
 import { useEffect, useState } from "react";
-import { Post, userPost } from "../store/post";
+import { Post, deletePost, userPost } from "../store/post";
 import { ImageFrame } from "../components/common/ImageFrame";
 import { RiEmotionSadLine } from "react-icons/ri";
 import { useWeekDates } from "../utils/useWeekDates";
+import { Modal } from "../components/common/Modal";
 
 export const Record = () => {
 	const [userPosts, setUserPosts] = useRecoilState(userPost);
@@ -13,6 +14,7 @@ export const Record = () => {
 	const nextMonday = useWeekDates()[0];
 	const [userRecords, setUserRecords] = useState<Post[]>([]);
 	const [isLoading, setIsLoading] = useState(false);
+	const [clickedPost, setClickedPost] = useState<Post>();
 
 	useEffect(() => {
 		setIsLoading(true);
@@ -21,7 +23,11 @@ export const Record = () => {
 			setUserRecords(posts);
 			setIsLoading(false);
 		}
-	}, []);
+	}, [userPost, userPosts]);
+
+	const handleDeletePost = () => {
+		if (clickedPost) deletePost({ clickedPost, userPosts, setUserPosts });
+	};
 
 	return (
 		<div className="flex min-h-[calc(100vh-3.3rem)] pt-16 bg-base-200">
@@ -58,10 +64,18 @@ export const Record = () => {
 									post={post}
 									date={timeStamp}
 									prevPage={"record"}
+									deleteBtn={true}
+									handleClickPost={setClickedPost}
 								/>
 							);
 						})}
 					</div>
+					<Modal
+						content="해당 게시물을 삭제하시겠습니까?"
+						btnContent="OK"
+						btnContent2="Cancel"
+						handleClick={handleDeletePost}
+					/>
 				</div>
 			)}
 		</div>
