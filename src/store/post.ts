@@ -107,11 +107,11 @@ interface DeletePostProps {
 	clickedPost: Post;
 	postArr?: Post[];
 	setPostArr?: SetterOrUpdater<Post[]>;
-	postItems: Post[];
-	setPostItems: SetterOrUpdater<Post[]>;
+	userPosts: Post[];
+	setUserPosts: SetterOrUpdater<Post[]>;
 }
 
-export const deletePost = ({ clickedPost, postArr, setPostArr, postItems, setPostItems }: DeletePostProps) => {
+export const deletePost = ({ clickedPost, postArr, setPostArr, userPosts, setUserPosts }: DeletePostProps) => {
 	if (clickedPost) {
 		deleteImg(clickedPost?.imgUrl);
 		getSelectedPostRef(clickedPost).then(async (postRef) => {
@@ -124,7 +124,7 @@ export const deletePost = ({ clickedPost, postArr, setPostArr, postItems, setPos
 				});
 				setPostArr(newPostArr);
 			}
-			setPostItems(postItems.filter((post) => post.imgUrl !== clickedPost.imgUrl));
+			setUserPosts(userPosts.filter((post) => post.imgUrl !== clickedPost.imgUrl));
 		});
 	}
 };

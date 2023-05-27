@@ -7,7 +7,7 @@ import { useWeekDates } from "../utils/useWeekDates";
 import { Modal } from "../components/common/Modal";
 
 const Closet = () => {
-	const [postItems, setPostItems] = useRecoilState(userPost);
+	const [userPosts, setUserPosts] = useRecoilState(userPost);
 	const [postArr, setPostArr] = useRecoilState(nextWeekUserPost);
 	const [clickedPost, setClickedPost] = useState<Post>();
 	const weekDates = useWeekDates();
@@ -15,17 +15,17 @@ const Closet = () => {
 	useEffect(() => {
 		const newPostArr = [...postArr.map((post) => ({ ...post }))];
 		weekDates.forEach((date, i) => {
-			postItems.forEach((post) => {
+			userPosts.forEach((post) => {
 				if (date.getTime() === post.date) {
 					newPostArr[i] = { ...post };
 				}
 			});
 		});
 		setPostArr(newPostArr);
-	}, [postItems, nextWeekUserPost]);
+	}, [userPosts, nextWeekUserPost]);
 
 	const handleDeletePost = () => {
-		if (clickedPost) deletePost({ clickedPost, postArr, setPostArr, postItems, setPostItems });
+		if (clickedPost) deletePost({ clickedPost, postArr, setPostArr, userPosts, setUserPosts });
 	};
 
 	return (
