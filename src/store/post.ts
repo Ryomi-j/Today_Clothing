@@ -29,6 +29,14 @@ export interface DefaultPost {
 	degree: number;
 }
 
+interface DeletePostProps {
+	clickedPost: Post;
+	postArr?: Post[];
+	setPostArr?: SetterOrUpdater<Post[]>;
+	userPosts: Post[];
+	setUserPosts: SetterOrUpdater<Post[]>;
+}
+
 export const postData = selector<Post[]>({
 	key: "postData",
 	get: async () => {
@@ -85,9 +93,9 @@ export const nextWeekUserPost = atom<Post[]>({
 });
 
 export const userPost = atom<Post[]>({
-	key: 'userPost',
-	default: []
-})
+	key: "userPost",
+	default: [],
+});
 
 export const getSelectedPostRef = async (post: Post) => {
 	const posts = collection(db, "post");
@@ -102,14 +110,6 @@ export const deleteImg = (imgUrl: string) => {
 
 	deleteObject(postRef);
 };
-
-interface DeletePostProps {
-	clickedPost: Post;
-	postArr?: Post[];
-	setPostArr?: SetterOrUpdater<Post[]>;
-	userPosts: Post[];
-	setUserPosts: SetterOrUpdater<Post[]>;
-}
 
 export const deletePost = ({ clickedPost, postArr, setPostArr, userPosts, setUserPosts }: DeletePostProps) => {
 	if (clickedPost) {
