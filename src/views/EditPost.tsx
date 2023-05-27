@@ -2,25 +2,26 @@ import { Link, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { db, storage } from "../firebase";
-import { useRecoilCallback, useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { userInfo } from "../store/user";
 import { v4 } from "uuid";
 import { Modal } from "../components/common/Modal";
 import { selectedDate } from "../store/date";
 import { doc, setDoc } from "firebase/firestore";
-import { nextWeekUserPost, userPost } from "../store/post";
+import { Post, deleteImg, nextWeekUserPost, userPost } from "../store/post";
 
 export const EditPost = () => {
 	const { search } = useLocation();
 	const [query, setQuery] = useState<{ [key: string]: string }>({});
 	const date = useRecoilValue(selectedDate);
-	const [postArr, setPostArr] = useRecoilState(nextWeekUserPost);
-	const userPosts = useRecoilValue(userPost);
-
+	const postArr = useRecoilValue(nextWeekUserPost);
+	const [clickedPost, setClickedPost] = useState<Post>();
+	const [, setIdx] = useState(0);
 	const [imgUrl, setImgUrl] = useState<undefined | string>("/public/addImg.svg");
 	const [imgUpload, setImgUpload] = useState<undefined | File>(undefined);
 	const user = useRecoilValue(userInfo);
 	const userUid = user && user.uid;
+	const [userPosts, setUserPosts] = useRecoilState(userPost);
 
 	useEffect(() => {
 		if (search.length > 1) {
@@ -30,40 +31,41 @@ export const EditPost = () => {
 				.forEach((x) => {
 					const [k, v] = x.split("=");
 					query[k] = v;
-					setQuery(query);
 				});
+			setQuery({ ...query });
 		}
+
+		if (query.prevPage === "closet") {
+			postArr.forEach((post) => {
+				if (post && post.date === date) {
+					setClickedPost(post);
+					setImgUrl(post.imgUrl);
+					setIdx(new Date(date).getDay() - 1);
+				}
+			});
+		} 
+
+		if (query.prevPage === "record") {
+			userPosts.forEach((post, i) => {
+				if (post && post.date === date) {
+					setClickedPost(post);
+					setImgUrl(post.imgUrl);
+					setIdx(i);
+				}
+			});
+		} 
 	}, []);
 
-	const getPostData = useRecoilCallback(({ set }) => async () => {
-		try {
-			set(nextWeekUserPost, userPosts || []);
-			localStorage.setItem("userPosts", JSON.stringify(userPosts));
-		} catch (error) {
-			console.error(error);
-			set(nextWeekUserPost, []);
-		}
-	});
-
-	useEffect(() => {
-		postArr.forEach((post) => {
-			if (post && post.date === date) {
-				setImgUrl(post.imgUrl); //  처음 기존의 이미지 렌더링
-			}
-		});
-		localStorage.getItem("userPosts")
-			? setPostArr(JSON.parse(localStorage.getItem("userPosts") || "[]"))
-			: getPostData();
-	}, []);
-
+	
 	const getImgUrl = (file: File) => {
 		const url = URL.createObjectURL(file);
 		setImgUrl(url);
 	};
-
+	
 	const uploadImg = () => {
 		if (!imgUpload) return;
-
+		if (clickedPost && clickedPost.imgUrl) deleteImg(clickedPost.imgUrl);
+		
 		const fileName = `${userUid + imgUpload.name + v4()}`;
 		const imgRef = ref(storage, `imgs/${fileName}`);
 		uploadBytes(imgRef, imgUpload).then((snapshot) => {
@@ -75,16 +77,14 @@ export const EditPost = () => {
 					uid: userUid || "",
 				};
 				setDoc(doc(db, "post", `${userUid}${date}v4()`), newData).then(() => {
-					setPostArr((prevPostArr) => [...prevPostArr, newData]);
-					getPostData();
+					const newPostArr = userPosts.filter((post) => post.imgUrl !== clickedPost?.imgUrl);
+					setUserPosts([...newPostArr, newData]);
 				});
 			});
 		});
 	};
-	console.log(imgUrl)
-
 	useEffect(() => {
-		if (imgUrl) {
+		if (imgUrl && imgUrl.length > 0) {
 			const label = document.querySelector("#label");
 			if (label instanceof HTMLElement) {
 				label.style.backgroundImage = `url(${imgUrl})`;
