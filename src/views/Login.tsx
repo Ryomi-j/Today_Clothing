@@ -22,7 +22,7 @@ const Login = () => {
 				const c = await getUserData(user.uid);
 				setUser(c as unknown as User);
 				setUserPosts(() => posts.filter((post) => post.uid === user.uid));
-				navigate(`/closet`);
+				navigate(`/todayClothes`);
 				localStorage.setItem("isLogin", "true");
 			}
 		});
@@ -34,7 +34,7 @@ const Login = () => {
 				const c = await getUserData(uid || "");
 				setUser(c as unknown as User);
 				setUserPosts(() => posts.filter((post) => post.uid === uid));
-				navigate(`/closet/${uid}`);
+				navigate(`/todayClothes/${uid}`);
 				localStorage.setItem("isLogin", "true");
 			})
 			.catch((error) => {
