@@ -60,7 +60,7 @@ const TodayClothes = () => {
 				const postRef = doc.ref;
 				const postData = doc.data();
 				if (postData.isPost) return alert("이미 등록된 게시물입니다.");
-				else
+				else {
 					setDoc(
 						postRef,
 						{
@@ -74,6 +74,7 @@ const TodayClothes = () => {
 						},
 						{ merge: true }
 					);
+				}
 			});
 		}
 	};
@@ -85,11 +86,12 @@ const TodayClothes = () => {
 				{todayPost.length === 1 ? (
 					todayPost.map((post) => {
 						return (
-							<figure
-								key={post.id}
-								className=" md:w-96 md:h-96 mx-auto border-2 rounded-md object-contain overflow-hidden"
-							>
-								<img src={post.imgUrl} alt={`${today?.toString().slice(0, 15)} clothing image`} className="w-full" />
+							<figure key={post.id} className="md:w-96 md:h-96 mx-auto border-2 rounded-md overflow-hidden">
+								<img
+									src={post.imgUrl}
+									alt={`${today?.toString().slice(0, 15)} clothing image`}
+									className="object-cover"
+								/>
 							</figure>
 						);
 					})
