@@ -201,15 +201,15 @@ export const PostDetailModal = ({
 												<span className="font-bold">{item.author}</span>
 												<div
 													id={item.createdAt.toString()}
-													className={`flex pl-1 break-all ${commentsState[idx] ? "hidden" : ""}`}
+													className={`flex pl-1 break-all flex-wrap ${commentsState[idx] ? "hidden" : ""}`}
 												>
 													<span>{item.comment}</span>
 													{item.author === userName && (
-														<span className="flex items-center pl-1" onClick={(e) => handleComment(e, idx)}>
-															<button className="p-1 rounded-lg text-[1px] sm:text-xs leading-none hover:bg-slate-300">
+														<span className="flex items-center gap-1 pl-1" onClick={(e) => handleComment(e, idx)}>
+															<button className=" bg-slate-200 p-1 rounded-lg text-[1px] sm:text-xs leading-none">
 																EDIT
 															</button>
-															<button className="p-1 rounded-lg text-[1px] sm:text-xs leading-none hover:bg-slate-300">
+															<button className="bg-slate-300 p-1 rounded-lg text-[1px] sm:text-xs leading-none">
 																DELETE
 															</button>
 														</span>
