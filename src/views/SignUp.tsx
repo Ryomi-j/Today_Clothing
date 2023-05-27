@@ -20,7 +20,6 @@ export const SignUp = () => {
 
 	const isValidPassword = (password: string): boolean => {
 		const validPassword = /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z0-9]{6,12}$/;
-		console.log(validPassword.test(password))
 		return validPassword.test(password);
 	};
 
