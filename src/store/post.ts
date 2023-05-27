@@ -1,5 +1,5 @@
-import { collection, getDocs, query, where } from "firebase/firestore";
-import { atom, selector } from "recoil";
+import { collection, deleteDoc, getDocs, query, where } from "firebase/firestore";
+import { SetterOrUpdater, atom, selector } from "recoil";
 import { db } from "../firebase";
 import { deleteObject, getStorage, ref } from "firebase/storage";
 
@@ -101,4 +101,30 @@ export const deleteImg = (imgUrl: string) => {
 	const postRef = ref(storage, imgUrl);
 
 	deleteObject(postRef);
+};
+
+interface DeletePostProps {
+	clickedPost: Post;
+	postArr?: Post[];
+	setPostArr?: SetterOrUpdater<Post[]>;
+	postItems: Post[];
+	setPostItems: SetterOrUpdater<Post[]>;
+}
+
+export const deletePost = ({ clickedPost, postArr, setPostArr, postItems, setPostItems }: DeletePostProps) => {
+	if (clickedPost) {
+		deleteImg(clickedPost?.imgUrl);
+		getSelectedPostRef(clickedPost).then(async (postRef) => {
+			await deleteDoc(postRef);
+			if (postArr && setPostArr) {
+				const idx = postArr.findIndex((post) => post.imgUrl === clickedPost.imgUrl);
+				const newPostArr = new Array(7);
+				postArr.forEach((post, i) => {
+					if (i !== idx) newPostArr[i] = { ...post };
+				});
+				setPostArr(newPostArr);
+			}
+			setPostItems(postItems.filter((post) => post.imgUrl !== clickedPost.imgUrl));
+		});
+	}
 };

@@ -1,44 +1,31 @@
 import { Link } from "react-router-dom";
 import { EmptyImageFrame, ImageFrame } from "../components/common/ImageFrame";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { userInfo } from "../store/user";
-import { postData, nextWeekUserPost, Post, getSelectedPostRef, deleteImg } from "../store/post";
+import { useRecoilState } from "recoil";
+import { nextWeekUserPost, Post, userPost, deletePost } from "../store/post";
 import { useEffect, useState } from "react";
 import { useWeekDates } from "../utils/useWeekDates";
 import { Modal } from "../components/common/Modal";
-import { updateDoc } from "firebase/firestore";
 
 const Closet = () => {
-	const user = useRecoilValue(userInfo);
-	const userUid = user && user.uid;
-	const postItems = useRecoilValue(postData);
+	const [postItems, setPostItems] = useRecoilState(userPost);
 	const [postArr, setPostArr] = useRecoilState(nextWeekUserPost);
 	const [clickedPost, setClickedPost] = useState<Post>();
 	const weekDates = useWeekDates();
 
 	useEffect(() => {
-		const newPostArr = [...postArr];
+		const newPostArr = [...postArr.map((post) => ({ ...post }))];
 		weekDates.forEach((date, i) => {
 			postItems.forEach((post) => {
-				if (post.uid === userUid && date.getTime() === post.date) {
-					newPostArr[i] = post;
+				if (date.getTime() === post.date) {
+					newPostArr[i] = { ...post };
 				}
 			});
 		});
 		setPostArr(newPostArr);
-	}, [postItems, weekDates, setPostArr]);
+	}, [postItems, nextWeekUserPost]);
 
-	const deletePost = () => {
-		if (clickedPost) {
-			deleteImg(clickedPost?.imgUrl);
-			getSelectedPostRef(clickedPost).then(async (postRef) => {
-				await updateDoc(postRef, { imgUrl: "" });
-			});
-			const idx = postArr.findIndex((post) => post.id === clickedPost.id);
-			const newPostArr = [...postArr];
-			newPostArr[idx] = { ...postArr[idx], imgUrl: "" };
-			setPostArr(newPostArr);
-		}
+	const handleDeletePost = () => {
+		if (clickedPost) deletePost({ clickedPost, postArr, setPostArr, postItems, setPostItems });
 	};
 
 	return (
@@ -73,7 +60,12 @@ const Closet = () => {
 					</Link>
 				</div>
 			</div>
-			<Modal content="해당 게시물을 삭제하시겠습니까?" btnContent="OK" btnContent2="Cancel" handleClick={deletePost} />
+			<Modal
+				content="해당 게시물을 삭제하시겠습니까?"
+				btnContent="OK"
+				btnContent2="Cancel"
+				handleClick={handleDeletePost}
+			/>
 		</div>
 	);
 };
