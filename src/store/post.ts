@@ -56,25 +56,25 @@ export const getPostDefaultData = async (degree: number) => {
 	let degreeRange: number;
 
 	switch (true) {
-		case degree < 0:
+		case degree < 5:
 			degreeRange = 0;
 			break;
-		case degree < 5:
+		case degree < 9:
 			degreeRange = 5;
 			break;
-		case degree < 9:
+		case degree < 12:
 			degreeRange = 9;
 			break;
-		case degree < 12:
+		case degree < 17:
 			degreeRange = 12;
 			break;
-		case degree < 17:
+		case degree < 20:
 			degreeRange = 17;
 			break;
-		case degree < 20:
+		case degree < 23:
 			degreeRange = 20;
 			break;
-		case degree < 23:
+		case degree < 28:
 			degreeRange = 23;
 			break;
 		default:
