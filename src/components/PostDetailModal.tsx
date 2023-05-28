@@ -153,11 +153,11 @@ export const PostDetailModal = ({
 					</span>
 					<article className="flex flex-col md:flex-row">
 						<div className="m-auto sm:w-96">
-							<figure className="mb-0 xs:m-5 max-w-xs h-auto md:h-auto overflow-hidden object-cover rounded-lg p-5">
+							<figure className="relative mb-0 xs:m-5 max-w-xs h-auto md:h-auto overflow-hidden object-cover rounded-lg p-5">
 								<img src={clickedPost?.imgUrl} alt={`${clickedPost?.uid}-${clickedPost?.date}-clothing info`} />
 								{user && clickedPost.uid === user.uid && (
 									<span
-										className="absolute top-1 right-2 btn btn-ghost btn-xs btn-circle"
+										className="absolute top-5 right-5 btn btn-ghost btn-xs btn-circle"
 										onClick={(e) => {
 											deletePost(e);
 										}}
