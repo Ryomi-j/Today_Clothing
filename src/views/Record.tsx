@@ -15,7 +15,6 @@ export const Record = () => {
 	const [userRecords, setUserRecords] = useState<Post[]>([]);
 	const [clickedPost, setClickedPost] = useState<Post>();
 	const degrees = [0, 5, 9, 12, 17, 20, 23, 28];
-	const [selectedPostRange, setSelectedPostRange] = useState<Post[]>([]);
 	const [posts, setPosts] = useState<Post[]>([])
 
 	useEffect(() => {
