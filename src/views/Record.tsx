@@ -15,6 +15,7 @@ export const Record = () => {
 	const [userRecords, setUserRecords] = useState<Post[]>([]);
 	const [clickedPost, setClickedPost] = useState<Post>();
 	const degrees = [0, 5, 9, 12, 17, 20, 23, 28];
+	const [selectedPostRange, setSelectedPostRange] = useState<Post[]>([]);
 	const [posts, setPosts] = useState<Post[]>([])
 
 	useEffect(() => {
@@ -53,10 +54,10 @@ export const Record = () => {
 					</div>
 				</div>
 			) : (
-				<div className="card gap-5 my-8 mx-auto min-w-[300px] min-h-min bg-base-100 shadow-xl p-7">
+				<div className="card gap-5 my-8 mx-auto min-w-2/5 min-h-min bg-base-100 shadow-xl p-7">
 					<h2 className="text-4xl font-extrabold text-center pt-5 pb-5">Record</h2>
 					<div className="form-control w-full">
-						<div className="input-group input-group-xs xs:justify-end">
+						<div className="input-group input-group-xs justify-end">
 							<select
 								className="select select-bordered select-sm"
 								style={{ borderRadius: "20px" }}
@@ -92,7 +93,7 @@ export const Record = () => {
 							</select>
 						</div>
 					</div>
-					<div className="grid xs:grid-cols-2 gap-6 justify-center justify-items-center w-[250px] xs:w-[400px] md:min-w-[640px]">
+					<div className="grid xs:grid-cols-2 gap-6 justify-center justify-items-center">
 						{posts.map((post, idx) => {
 							let timeStamp = new Date(Number(post.date));
 							return (
