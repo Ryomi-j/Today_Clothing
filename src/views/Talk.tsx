@@ -11,7 +11,7 @@ import { Link } from "react-router-dom";
 
 const Talk = () => {
 	const user = useRecoilValue(userInfo);
-	const isLogin = JSON.parse(localStorage.getItem("isLogin") || "");
+	const isLogin = localStorage.getItem('isLogin') === null ? false : JSON.parse(localStorage.getItem('isLogin') || '')
 	const [posts, setPosts] = useState<Post[] | []>([]);
 	const [clickedPost, setClickedPost] = useState<Post | undefined>(undefined);
 	const [modalState, setModalState] = useState(false);

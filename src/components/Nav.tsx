@@ -7,7 +7,8 @@ import { nextWeekUserPost } from "../store/post";
 export const Nav = () => {
 	const [, setUserInfo] = useRecoilState(userInfo);
 	const [, setPostArr] = useRecoilState(nextWeekUserPost);
-	const isLogin = JSON.parse(localStorage.getItem('isLogin') || '')
+	const isLogin = localStorage.getItem('isLogin') === null ? false : JSON.parse(localStorage.getItem('isLogin') || '')
+
 	
 	const handleLogout = () => {
 		if (!isLogin) return;
