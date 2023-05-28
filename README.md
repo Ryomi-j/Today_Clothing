@@ -1,6 +1,7 @@
 <p align='center'><img alt='logo' src='https://github.com/Ryomi-j/Today_Clothing/assets/116236689/ed5c843e-f3e0-472e-afe5-293e97275e08'></p>
 <h1 align='center'>TodayClothes는 다음 한 주 간의 의류정보를 미리 계획하고 사람들과 소통할 수 있는 커뮤니티입니다.</h1>
 
+https://github.com/Ryomi-j/Today_Clothing/assets/116236689/b3c0405e-15c0-49f8-933b-aa8d4117dd33
 
 ## Introduce
 흔히 친구와의 약속, 출근, 기념일 등등 다가오는 이벤트가 특별할수록 더 많은 시간을 투자해 옷에 신경쓰게 됩니다.
@@ -50,6 +51,8 @@
 
 
 ### Configurations
+
+```
 📦src
  ┣ 📂api
  ┃ ┗ 📜weatherApi.ts
@@ -83,7 +86,7 @@
  ┣ 📜index.css
  ┣ 📜main.tsx
  ┗ 📜vite-env.d.ts
-
+```
 
 
 ## Pages
