@@ -17,7 +17,7 @@ const Login = lazy(() => import("./views/Login"));
 const TodayClothes = lazy(() => import("./views/TodayClothes"));
 
 function App() {
-	const isLogin = JSON.parse(localStorage.getItem("isLogin") || "");
+	const isLogin = JSON.parse(localStorage.getItem("isLogin") || "false");
 	const [, setUser] = useRecoilState(userInfo);
 	const [, setUserPosts] = useRecoilState(userPost);
 	const posts = useRecoilValue(postData);
