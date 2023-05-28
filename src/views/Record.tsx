@@ -62,8 +62,9 @@ export const Record = () => {
 								className="select select-bordered select-sm"
 								style={{ borderRadius: "20px" }}
 								onChange={(e) => handleSeletedDegree(e.target.selectedIndex - 1)}
+								defaultValue={'Select degree Range'}
 							>
-								<option className="text-center" disabled selected>
+								<option className="text-center" disabled>
 									Select degree Range
 								</option>
 								<option className="text-center" value={0}>
