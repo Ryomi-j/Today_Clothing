@@ -56,7 +56,8 @@ const TodayClothes = () => {
 			if (currentPost && currentPost.length > 0) {
 				setTodayPost(currentPost);
 			} else if (findPrevPost(res).length > 0) {
-				const prevPosts = findPrevPost(res).reverse().slice(0, 3)
+				let prevPosts = findPrevPost(res).reverse()
+				prevPosts =  prevPosts.length > 4 ? prevPosts.slice(0, 3) : prevPosts
 				setTodayPost(prevPosts)
 			} else {
 				const defaultData = async () => {
