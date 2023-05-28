@@ -2,16 +2,18 @@ import { Link } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { userInfo } from "../store/user";
 import { logout } from "../firebase";
+import { nextWeekUserPost } from "../store/post";
 
 export const Nav = () => {
 	const [, setUserInfo] = useRecoilState(userInfo);
+	const [, setPostArr] = useRecoilState(nextWeekUserPost);
 	const isLogin = JSON.parse(localStorage.getItem('isLogin') || '')
 	
 	const handleLogout = () => {
 		if (!isLogin) return;
 		logout();
 		setUserInfo(null);
-
+		setPostArr([])
 		localStorage.setItem("isLogin", "false");
 	};
 
