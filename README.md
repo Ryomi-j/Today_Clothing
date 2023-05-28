@@ -3,6 +3,8 @@
 
 https://github.com/Ryomi-j/Today_Clothing/assets/116236689/b3c0405e-15c0-49f8-933b-aa8d4117dd33
 
+[페이지 바로가기](https://today-clothing.web.app/)
+
 ## Introduce
 흔히 친구와의 약속, 출근, 기념일 등등 다가오는 이벤트가 특별할수록 더 많은 시간을 투자해 옷에 신경쓰게 됩니다.
 단순히 머릿속으로 무엇을 입을까 고민하기 보다는 이를 '기록'으로 남기면 어떨까요?
@@ -90,7 +92,7 @@ https://github.com/Ryomi-j/Today_Clothing/assets/116236689/b3c0405e-15c0-49f8-93
 
 
 ## Pages
-- pre 기획: https://www.notion.so/Pre-3385ab578a9941ed81be1c84004a1110
-- Figma : https://www.figma.com/file/1r2LQIi0Z6lmVwsjjg5bLT/Today-Clothing?type=whiteboard&node-id=0%3A1&t=hpdE4GH81OXTwCSu-1
-- Trouble Shooting : https://www.notion.so/Today-s-Clothing-8a1f84b15ae648a48d9ce795345615c3
-- introduce : https://www.notion.so/Today-Clothing-f56a12d7f0954492b6e1f7274a7d078e
+- [기획](https://www.notion.so/Pre-3385ab578a9941ed81be1c84004a1110)
+- [Figma](https://www.figma.com/file/1r2LQIi0Z6lmVwsjjg5bLT/Today-Clothing?type=whiteboard&node-id=0%3A1&t=hpdE4GH81OXTwCSu-1)
+- [Trouble Shooting](https://www.notion.so/Today-s-Clothing-8a1f84b15ae648a48d9ce795345615c3)
+- [프로젝트 설명](https://www.notion.so/Today-Clothing-f56a12d7f0954492b6e1f7274a7d078e)
