@@ -13,20 +13,25 @@ export const Record = () => {
 	const days = ["일", "월", "화", "수", "목", "금", "토"];
 	const nextMonday = useWeekDates()[0];
 	const [userRecords, setUserRecords] = useState<Post[]>([]);
-	const [isLoading, setIsLoading] = useState(false);
 	const [clickedPost, setClickedPost] = useState<Post>();
+	const degrees = [0, 5, 9, 12, 17, 20, 23, 28];
+	const [posts, setPosts] = useState<Post[]>([])
 
 	useEffect(() => {
-		setIsLoading(true);
 		if (userPosts.length > 0) {
 			const posts = userPosts.filter((post) => post.date !== undefined && post.date < Number(nextMonday));
 			setUserRecords(posts);
-			setIsLoading(false);
+			setPosts(posts)
 		}
 	}, [userPost, userPosts]);
 
 	const handleDeletePost = () => {
 		if (clickedPost) deletePost({ clickedPost, userPosts, setUserPosts });
+	};
+
+	const handleSeletedDegree = (idx: number) => {
+		const posts = userRecords.filter((post) => post.degree &&  post.degree >= degrees[idx] && post.degree < degrees[idx + 1]);
+		setPosts(posts)
 	};
 
 	return (
@@ -48,10 +53,47 @@ export const Record = () => {
 					</div>
 				</div>
 			) : (
-				<div className="card gap-5 my-8 mx-auto min-w-2/5 min-h-min bg-base-100 shadow-xl p-7">
+				<div className="card gap-5 my-8 mx-auto min-w-[300px] min-h-min bg-base-100 shadow-xl p-7">
 					<h2 className="text-4xl font-extrabold text-center pt-5 pb-5">Record</h2>
-					<div className="grid xs:grid-cols-2 gap-6 justify-center justify-items-center">
-						{userRecords.map((post, idx) => {
+					<div className="form-control w-full">
+						<div className="input-group input-group-xs xs:justify-end">
+							<select
+								className="select select-bordered select-sm"
+								style={{ borderRadius: "20px" }}
+								onChange={(e) => handleSeletedDegree(e.target.selectedIndex - 1)}
+							>
+								<option className="text-center" disabled>
+									Select degree Range
+								</option>
+								<option className="text-center" value={0}>
+									temp {"<"} 5C°
+								</option>
+								<option className="text-center" value={1}>
+									5C° {"≤"} temp {"<"} 9C°
+								</option>
+								<option className="text-center" value={9}>
+									9C° {"≤"} temp {"<"} 12C°
+								</option>
+								<option className="text-center" value={12}>
+									12C° {"≤"} temp {"<"} 17C°
+								</option>
+								<option className="text-center" value={17}>
+									17C° {"≤"} temp {"<"} 20C°
+								</option>
+								<option className="text-center" value={20}>
+									20C° {"≤"} temp {"<"} 23C°
+								</option>
+								<option className="text-center" value={23}>
+									23C° {"≤"} temp {"<"} 28C°
+								</option>
+								<option className="text-center" value={28}>
+									temp {"<"} 28C°
+								</option>
+							</select>
+						</div>
+					</div>
+					<div className="grid xs:grid-cols-2 gap-6 justify-center justify-items-center w-[250px] xs:w-[400px] md:min-w-[640px]">
+						{posts.map((post, idx) => {
 							let timeStamp = new Date(Number(post.date));
 							return (
 								<ImageFrame
@@ -59,7 +101,9 @@ export const Record = () => {
 									content={`${timeStamp.getFullYear()}년 ${timeStamp.getMonth() + 1}월 ${timeStamp.getDate()}일 ${
 										days[timeStamp.getDay()]
 									}요일${
-										post.humidity !== undefined && post.weather ? `\n습도 ${post.humidity}% ${post.weather}` : ""
+										post.humidity !== undefined && post.weather
+											? `\n습도 ${post.humidity}% ${post.degree}C° ${post.weather}`
+											: ""
 									}`}
 									post={post}
 									date={timeStamp}
