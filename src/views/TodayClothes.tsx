@@ -101,7 +101,7 @@ const TodayClothes = () => {
 
 	return (
 		<div className="flex w-screen min-h-[calc(100vh-3.3rem)] pt-16 bg-base-200">
-			<div className="card m-auto w-fit h-auto bg-base-100 shadow-xl p-5 sm:py-7 sm:px-10">
+			<div className="card m-auto w-11/12 xs:w-2/3 md:w-fit h-[500px] xs:h-auto bg-base-100 shadow-xl p-5 sm:py-7 sm:px-10">
 				<h2 className="text-xl xs:text-4xl font-extrabold text-center p-2 xs:py-5">Today's Clothes</h2>
 				{todayPost.length === 1 ? (
 					todayPost.map((post) => {
