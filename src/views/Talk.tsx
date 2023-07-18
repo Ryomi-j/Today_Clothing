@@ -68,7 +68,7 @@ const Talk = () => {
 					size={70}
 					aria-label="BarLoader Spinner"
 					data-testid="loader"
-					className="fixed bottom-1/4 z-10"
+					className="fixed bottom-5 right-1/2 z-10"
 				/>
 			)}
 			<div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6 my-10 justify-center items-center max-w-screen-2xl">
