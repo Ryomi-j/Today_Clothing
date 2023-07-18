@@ -35,7 +35,7 @@ const Talk = () => {
 				interval={6000}
 				showStatus={false}
 				infiniteLoop={true}
-				className="flex justify-center max-w-screen-2xl"
+				className="flex justify-center max-w-screen-lg max-h-[600px] !important"
 			>
 				<Link to="/talk">
 					<div className="overflow-hidden">
