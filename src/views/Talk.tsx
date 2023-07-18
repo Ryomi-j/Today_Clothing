@@ -78,15 +78,15 @@ const Talk = () => {
 							key={idx}
 							id={`${idx}/${post.createdAt}`}
 							htmlFor={`${post.createdAt}-${post.uid}`}
-							className="card card-compact bg-base-100 shadow-xl cursor-pointer h-80"
+							className="card card-compact bg-base-100 shadow-xl cursor-pointer h-fit"
 							onClick={() => {
 								setClickedPost(post);
 								setModalState(true);
 							}}
 						>
-							<figure className="mx-auto mt-5 w-4/5 h-3/5 overflow-hidden object-cover rounded-lg">
+							<figure className="mx-auto mt-5 w-4/5 h-80 overflow-hidden object-cover rounded-lg">
 								<div
-									className="w-full h-full bg-no-repeat bg-cover"
+									className="w-full h-full bg-no-repeat bg-center"
 									style={{ backgroundImage: `url(${post.imgUrl})` }}
 								></div>
 							</figure>
