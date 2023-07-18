@@ -147,7 +147,7 @@ export const PostDetailModal = ({
 		<>
 			<input type="checkbox" id="my-modal-6" className="modal-toggle" checked readOnly />
 			<div className="modal ">
-				<div className="modal-box relative max-w-3xl xxxs:p-0 sm:p-1.5">
+				<div className="modal-box relative max-w-3xl p-0 sm:p-1.5">
 					<span className="btn btn-sm btn-circle absolute right-2 top-2" onClick={onClose}>
 						✕
 					</span>
@@ -176,7 +176,7 @@ export const PostDetailModal = ({
 								</div>
 							</div>
 						</div>
-						<div className="card-body max-w-3xl xs:gap-5 xxxs:text-xs md:text-base p-4 ">
+						<div className="card-body max-w-3xl xs:gap-5 text-xs md:text-base p-4 ">
 							{isLogin && (
 								<div className="flex gap-2 flex-col">
 									<span className="font-bold">{userName}</span>

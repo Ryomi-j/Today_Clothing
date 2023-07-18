@@ -21,7 +21,7 @@ export const Nav = () => {
   return (
     <nav className="navbar absolute bg-base-100 justify-center">
       <div className="flex gap-12 w-full max-w-5xl">
-        <div className="navbar-start xxxs:w-full xl:w-1/2">
+        <div className="navbar-start w-full xl:w-1/2">
           <div className="dropdown">
             <label tabIndex={0} className="btn btn-ghost lg:hidden">
               <svg
@@ -70,7 +70,7 @@ export const Nav = () => {
               <figure className="flex justify-center items-center w-7 h-7 rounded-full bg-sky-500">
                 <img src="/logo.svg" alt="logo" />
               </figure>
-              <h1 className="xxxs:hidden xs:block">Today Clothing</h1>
+              <h1 className="hidden xs:block">Today Clothing</h1>
             </div>
           </Link>
         </div>

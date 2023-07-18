@@ -101,8 +101,8 @@ const TodayClothes = () => {
 
 	return (
 		<div className="flex w-screen min-h-[calc(100vh-3.3rem)] pt-16 bg-base-200">
-			<div className="card m-auto w-fit h-auto bg-base-100 shadow-xl xxxs:p-5 sm:py-7 sm:px-10">
-				<h2 className="xxxs:text-xl xs:text-4xl font-extrabold text-center xxxs:p-2 xs:py-5">Today's Clothes</h2>
+			<div className="card m-auto w-fit h-auto bg-base-100 shadow-xl p-5 sm:py-7 sm:px-10">
+				<h2 className="text-xl xs:text-4xl font-extrabold text-center p-2 xs:py-5">Today's Clothes</h2>
 				{todayPost.length === 1 ? (
 					todayPost.map((post) => {
 						return (
@@ -134,7 +134,7 @@ const TodayClothes = () => {
 					</Carousel>
 				)}
 				<div className="card-body p-1">
-					<p className="mt-8 mb-8 xxs:text-xs xs:text-xl text-center">
+					<p className="mt-8 mb-8 text-xs xs:text-xl text-center">
 						{year}년 {month}월 {date}일 {days[day]}요일 <br />
 						습도 {weather.humidity}% 온도 {weather.temp}C° {weather.weather}
 					</p>
@@ -142,10 +142,10 @@ const TodayClothes = () => {
 						<div className="flex flex-row-reverse">
 							<label
 								htmlFor="my-modal-6"
-								className="btn btn-primary xxxs:btn-sm xxxs:w-full xxs:justify-center xxs:p-0 xs:w-1/3"
+								className="btn btn-primary btn-sm w-full justify-center p-0 xs:w-1/3"
 							>
-								<span className="xxxs:hidden sm:block">Share</span>
-								<BiShareAlt className="xxs:p-0 pl-2 xxs:text-xs xs:text-xl" />
+								<span className="hidden sm:block">Share</span>
+								<BiShareAlt className="p-0 pl-2 text-xs xs:text-xl" />
 							</label>
 						</div>
 					)}
