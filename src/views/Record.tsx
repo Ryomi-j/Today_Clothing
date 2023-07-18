@@ -36,8 +36,8 @@ export const Record = () => {
 
 	return (
 		<div className="flex min-h-[calc(100vh-3.3rem)] pt-16 bg-base-200">
-			{userRecords.length === 0 ? (
-				<div className="card gap-5 my-8 mx-auto max-w-2/5 bg-base-100 shadow-xl p-7">
+			{posts.length === 0 ? (
+				<div className="card gap-5 my-8 mx-auto w-2/5 bg-base-100 shadow-xl p-7">
 					<h2 className="text-2xl sm:text-4xl font-extrabold text-center pt-5 pb-5">Record</h2>
 					<div className="grid xs:grid-cols-2 gap-6 justify-center justify-items-center">
 						<div className="flex items-center gap-2 mt-10 font-extrabold">
@@ -88,7 +88,7 @@ export const Record = () => {
 									23C° {"≤"} temp {"<"} 28C°
 								</option>
 								<option className="text-center" value={28}>
-									temp {"<"} 28C°
+									temp {">"} 28C°
 								</option>
 							</select>
 						</div>
