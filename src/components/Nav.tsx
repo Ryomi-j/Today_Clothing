@@ -43,20 +43,20 @@ export const Nav = () => {
               tabIndex={0}
               className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52 items-center"
             >
-              <li className="font-medium">
+              <li className="font-semibold">
                 <Link to="/talk">Talk</Link>
               </li>
               {isLogin && (
                 <>
-                  <li className="font-medium">
+                  <li className="font-semibold">
                     <Link to="/TodayClothes">Today's Clothing</Link>
                   </li>
-                  <li className="font-medium">
+                  <li className="font-semibold">
                     <Link to="/closet">My Closet</Link>
                   </li>
                 </>
               )}
-              <li className="font-medium" onClick={handleLogout}>
+              <li className="font-semibold" onClick={handleLogout}>
                 {isLogin ? (
                   <Link to="/login">Logout</Link>
                 ) : (
@@ -76,20 +76,20 @@ export const Nav = () => {
         </div>
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal px-1 items-center">
-            <li className="font-medium">
+            <li className="font-semibold">
               <Link to="/talk">Talk</Link>
             </li>
             {isLogin && (
               <>
-                <li className="font-medium">
+                <li className="font-semibold">
                   <Link to="/TodayClothes">Today's Clothing</Link>
                 </li>
-                <li className="font-medium">
+                <li className="font-semibold">
                   <Link to="/closet">My Closet</Link>
                 </li>
               </>
             )}
-            <li className="font-medium" onClick={handleLogout}>
+            <li className="font-semibold" onClick={handleLogout}>
               {isLogin ? (
                 <Link to="/login">Logout</Link>
               ) : (
