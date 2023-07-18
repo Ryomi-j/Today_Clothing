@@ -35,11 +35,11 @@ export const Record = () => {
 	};
 
 	return (
-		<div className="flex min-h-[calc(100vh-3.3rem)] pt-16 bg-base-200">
+		<div className="flex min-h-[calc(100vh-3.3rem)] pt-16 bg-base-200 px-4">
 			{posts.length === 0 ? (
-				<div className="card gap-5 my-8 mx-auto w-5/12 bg-base-100 shadow-xl p-7">
+				<div className="card gap-5 my-8 mx-auto w-full min-w-[350px] max-w-[1024px] bg-base-100 shadow-xl p-7">
 					<h2 className="text-2xl sm:text-4xl font-extrabold text-center pt-5 pb-5">Record</h2>
-					<div className="grid grid-cols-2 xs:grid-cols-1 gap-6 justify-center justify-items-center">
+					<div className="grid grid-cols-1 gap-6 justify-center justify-items-center">
 						<div className="flex items-center gap-2 mt-10 font-extrabold text-lg">
 							No clothing records found <RiEmotionSadLine />
 						</div>
@@ -53,7 +53,7 @@ export const Record = () => {
 					</div>
 				</div>
 			) : (
-				<div className="card gap-5 my-8 mx-auto min-w-2/5 min-h-min bg-base-100 shadow-xl p-7">
+				<div className="card gap-5 my-8 mx-auto min-w-[350px] w-full lg:w-[1024px] min-h-min bg-base-100 shadow-xl p-7">
 					<h2 className="text-4xl font-extrabold text-center pt-5 pb-5">Record</h2>
 					<div className="form-control w-full">
 						<div className="input-group input-group-xs justify-end">
@@ -93,7 +93,7 @@ export const Record = () => {
 							</select>
 						</div>
 					</div>
-					<div className="grid xs:grid-cols-2 gap-6 justify-center justify-items-center">
+					<div className="grid xs:grid-cols-2 gap-2 md:gap-6 justify-center justify-items-center">
 						{posts.map((post, idx) => {
 							let timeStamp = new Date(Number(post.date));
 							return (
