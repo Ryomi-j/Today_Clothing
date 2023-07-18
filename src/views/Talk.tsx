@@ -90,7 +90,7 @@ const Talk = () => {
 									style={{ backgroundImage: `url(${post.imgUrl})` }}
 								></div>
 							</figure>
-							<div className="card-body flex-row flex-wrap items-center text-center">
+              <div className="card-body flex-row flex-wrap flex-none items-center justify-center text-center h-min">
 								<div className="badge badge-primary badge-outline">#{post.location}</div>
 								<div className="badge badge-secondary badge-outline">#{post.weather}</div>
 								<div className="badge badge-outline">#{`${post.degree}C°`}</div>
