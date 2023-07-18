@@ -16,7 +16,7 @@ export const infiniteScroll = ({ setPosts, posts, setIsLoading }: infiniteScroll
 		setIsLoading(true);
 		const fetchData = async (): Promise<void> => {
 			const postRef = collection(db, "post");
-			const querySnapshot = await getDocs(query(postRef, where("isPost", "==", true), orderBy("createdAt"), limit(3)));
+			const querySnapshot = await getDocs(query(postRef, where("isPost", "==", true), orderBy("createdAt"), limit(6)));
 
 			const items: Post[] = [];
 			querySnapshot.forEach((doc) => {
