@@ -28,7 +28,7 @@ const Talk = () => {
 	};
 
 	return (
-		<div className="flex flex-col items-center min-h-[calc(100vh-3.3rem)] pt-16 bg-base-200">
+		<div className="flex flex-col justify-center m-auto min-h-[calc(100vh-3.3rem)] max-w-[1024px] pt-16 bg-base-200">
 			<Carousel
 				autoPlay
 				showThumbs={false}
