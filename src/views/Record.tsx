@@ -39,8 +39,8 @@ export const Record = () => {
 			{posts.length === 0 ? (
 				<div className="card gap-5 my-8 mx-auto w-5/12 bg-base-100 shadow-xl p-7">
 					<h2 className="text-2xl sm:text-4xl font-extrabold text-center pt-5 pb-5">Record</h2>
-					<div className="grid xs:grid-cols-2 gap-6 justify-center justify-items-center">
-						<div className="flex items-center gap-2 mt-10 font-extrabold">
+					<div className="grid grid-cols-2 xs:grid-cols-1 gap-6 justify-center justify-items-center">
+						<div className="flex items-center gap-2 mt-10 font-extrabold text-lg">
 							No clothing records found <RiEmotionSadLine />
 						</div>
 					</div>
