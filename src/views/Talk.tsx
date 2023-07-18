@@ -84,9 +84,9 @@ const Talk = () => {
 								setModalState(true);
 							}}
 						>
-							<figure className="mx-auto mt-5 w-4/5 h-80 overflow-hidden object-cover rounded-lg">
+							<figure className="mx-auto mt-5 w-4/5 h-80 overflow-hidden rounded-lg">
 								<div
-									className="w-full h-full bg-no-repeat bg-center"
+									className="w-full h-full bg-no-repeat bg-center bg-cover"
 									style={{ backgroundImage: `url(${post.imgUrl})` }}
 								></div>
 							</figure>
