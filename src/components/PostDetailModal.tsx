@@ -151,10 +151,10 @@ export const PostDetailModal = ({
 					<span className="btn btn-xs sm:btn-sm btn-circle absolute right-2 top-2" onClick={onClose}>
 						✕
 					</span>
-					<article className="flex flex-col md:flex-row p-2">
-						<div className="m-auto sm:w-1/2 mr-7 md:mr-0">
-							<figure className="relative mb-0 xs:m-5 max-w-xs h-auto md:h-auto overflow-hidden object-cover rounded-lg">
-								<img src={clickedPost?.imgUrl} alt={`${clickedPost?.uid}-${clickedPost?.date}-clothing info`} />
+					<article className="flex flex-col sm:flex-row p-2 h-[500px]">
+						<div className="m-auto h-full sm:w-1/2 mr-7 md:mr-0">
+							<figure className="relative mb-0 mx-auto md:m-5 max-w-xs h-4/5 overflow-hidden object-cover rounded-lg">
+								<div className='w-full h-full bg-no-repeat bg-center bg-cover' style={{ backgroundImage: `url(${clickedPost.imgUrl})` }}></div>
 								{user && clickedPost.uid === user.uid && (
                   <div
                     className="tooltip tooltip-left absolute top-2 right-2"
