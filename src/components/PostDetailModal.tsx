@@ -156,13 +156,18 @@ export const PostDetailModal = ({
 							<figure className="relative mb-0 xs:m-5 max-w-xs h-auto md:h-auto overflow-hidden object-cover rounded-lg">
 								<img src={clickedPost?.imgUrl} alt={`${clickedPost?.uid}-${clickedPost?.date}-clothing info`} />
 								{user && clickedPost.uid === user.uid && (
-									<span
-										className="absolute top-6 right-6 btn btn-xs sm:btn-sm btn-circle bg-white text-black"
-										onClick={deletePost}
-									>
-										✕
-									</span>
-								)}
+                  <div
+                    className="tooltip tooltip-left absolute top-2 right-2"
+                    data-tip="포스트 삭제하기"
+                  >
+                    <span
+                      onClick={deletePost}
+                      className=" btn btn-xs sm:btn-sm btn-circle bg-white text-black"
+                    >
+                      ✕
+                    </span>
+                  </div>
+                )}
 							</figure>
 							<div className="card-body flex-row flex-wrap justify-center items-center text-center p-2">
 								<div className="badge badge-primary badge-outline">#{clickedPost?.location}</div>
