@@ -1,7 +1,7 @@
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { BsFillSendFill } from "react-icons/bs";
 import { Post, getSelectedPostRef } from "../store/post";
-import { MouseEventHandler, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { setDoc, updateDoc } from "firebase/firestore";
 import { useRecoilValue } from "recoil";
 import { userInfo } from "../store/user";
@@ -11,7 +11,7 @@ interface PostDetailModalProps {
 	isLogin: boolean;
 	userName: string;
 	isChecked: boolean;
-	onClose: MouseEventHandler<HTMLSpanElement>;
+	onClose: () => void;
 	posts: Post[];
 	setPosts: Function;
 }
@@ -103,7 +103,7 @@ export const PostDetailModal = ({
 
 	const handleEditComment = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, idx: number) => {
 		const clickedBtn = e.target as HTMLButtonElement;
-		if (clickedBtn.innerText === "SAVE" && clickedPostItem.comments) {
+		if (clickedBtn.innerText === "SAVE") {
 			const commentsArr = [...comments];
 			commentsArr[idx].comment = newComment;
 			const newComments = [...commentsArr];
@@ -133,20 +133,20 @@ export const PostDetailModal = ({
 		}
 	};
 
-	const deletePost = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
+	const deletePost = () => {
 		getSelectedPostRef(clickedPost).then(async (postRef) => {
 			await updateDoc(postRef, { isPost: false, comments: [] });
 		});
 		const index = posts.findIndex((post) => post.id === clickedPost.id);
 		const newPosts = [...posts.slice(0, index), ...posts.slice(index + 1)];
 		setPosts(newPosts);
-		onClose(e);
+		onClose();
 	};
 
 	return (
 		<>
-			<input type="checkbox" id="my-modal-6" className="modal-toggle" checked readOnly />
-			<div className="modal ">
+			<input type="checkbox" id={`${clickedPost.createdAt}-${clickedPost.uid}`} className="modal-toggle" />
+			<div className="modal">
 				<div className="modal-box relative max-w-3xl p-0 sm:p-1.5">
 					<span className="btn btn-sm btn-circle absolute right-2 top-2" onClick={onClose}>
 						✕
@@ -157,11 +157,9 @@ export const PostDetailModal = ({
 								<img src={clickedPost?.imgUrl} alt={`${clickedPost?.uid}-${clickedPost?.date}-clothing info`} />
 								{user && clickedPost.uid === user.uid && (
 									<span
-										className="absolute top-5 right-5 btn btn-ghost btn-xs btn-circle"
-										onClick={(e) => {
-											deletePost(e);
-										}}
-									>
+										className="absolute top-6 right-6 btn btn-xs sm:btn-sm btn-circle bg-white text-black"
+										onClick={() => deletePost()}
+                  >
 										✕
 									</span>
 								)}
@@ -228,7 +226,7 @@ export const PostDetailModal = ({
 														className="flex justify-end items-center pl-1 gap-1"
 														onClick={(e) => handleEditComment(e, idx)}
 													>
-														<button className="text-white bg-secondary p-1 rounded-lg text-[1px] sm:text-xs leading-non">
+														<button className="text-white bg-secondary p-1 rounded-lg text-[1px] sm:text-xs leading-none">
 															SAVE
 														</button>
 														<button className="bg-slate-300 p-1 rounded-lg text-[1px] sm:text-xs leading-none">
