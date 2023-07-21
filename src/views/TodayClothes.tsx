@@ -133,8 +133,8 @@ const TodayClothes = () => {
 						})}
 					</Carousel>
 				)}
-				<div className="card-body p-1">
-					<p className="mt-8 mb-8 text-xs xs:text-xl text-center">
+				<div className="card-body p-1 font-semibold">
+					<p className="mt-8 mb-8 text-base xs:text-xl text-center">
 						{year}년 {month}월 {date}일 {days[day]}요일 <br />
 						습도 {weather.humidity}% 온도 {weather.temp}C° {weather.weather}
 					</p>
