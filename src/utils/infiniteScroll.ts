@@ -31,7 +31,7 @@ export const infiniteScroll = ({ setPosts, posts, setIsLoading }: infiniteScroll
 	}, []);
 
 	const handleScroll = async (): Promise<void> => {
-		if (window.innerHeight + window.scrollY >= document.body.offsetHeight && posts) {
+		if (Math.ceil(window.innerHeight + window.scrollY) >= document.body.offsetHeight && posts) {
 			const postRef = collection(db, "post");
 			const querySnapshot = await getDocs(
 				query(
@@ -39,7 +39,7 @@ export const infiniteScroll = ({ setPosts, posts, setIsLoading }: infiniteScroll
 					where("isPost", "==", true),
 					orderBy("createdAt"),
 					startAfter(posts[posts.length - 1].createdAt),
-					limit(3)
+					limit(6)
 				)
 			);
 
