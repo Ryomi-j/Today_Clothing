@@ -151,20 +151,20 @@ export const PostDetailModal = ({
 					<span className="btn btn-xs sm:btn-sm btn-circle absolute right-2 top-2" onClick={onClose}>
 						✕
 					</span>
-					<article className="flex flex-col md:flex-row">
-						<div className="m-auto sm:w-96">
-							<figure className="relative mb-0 xs:m-5 max-w-xs h-auto md:h-auto overflow-hidden object-cover rounded-lg p-5">
+					<article className="flex flex-col md:flex-row p-2">
+						<div className="m-auto sm:w-1/2 mr-7 md:mr-0">
+							<figure className="relative mb-0 xs:m-5 max-w-xs h-auto md:h-auto overflow-hidden object-cover rounded-lg">
 								<img src={clickedPost?.imgUrl} alt={`${clickedPost?.uid}-${clickedPost?.date}-clothing info`} />
 								{user && clickedPost.uid === user.uid && (
 									<span
 										className="absolute top-6 right-6 btn btn-xs sm:btn-sm btn-circle bg-white text-black"
 										onClick={deletePost}
-                  >
+									>
 										✕
 									</span>
 								)}
 							</figure>
-							<div className="card-body flex-row flex-wrap items-center text-center p-3 xs:p-4">
+							<div className="card-body flex-row flex-wrap justify-center items-center text-center p-2">
 								<div className="badge badge-primary badge-outline">#{clickedPost?.location}</div>
 								<div className="badge badge-secondary badge-outline">#{clickedPost?.weather}</div>
 								<div className="badge badge-outline">#{`${clickedPost?.degree}C°`}</div>
@@ -174,7 +174,7 @@ export const PostDetailModal = ({
 								</div>
 							</div>
 						</div>
-						<div className="card-body max-w-3xl xs:gap-5 text-sm md:text-base p-4 ">
+						<div className="card-body sm:w-1/2 xs:gap-5 text-sm md:text-base p-4 ">
 							{isLogin && (
 								<div className="flex gap-2 flex-col">
 									<span className="font-bold">{userName}</span>
