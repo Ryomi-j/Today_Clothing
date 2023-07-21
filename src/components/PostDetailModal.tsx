@@ -148,7 +148,7 @@ export const PostDetailModal = ({
 			<input type="checkbox" id={`${clickedPost.createdAt}-${clickedPost.uid}`} className="modal-toggle" />
 			<div className="modal">
 				<div className="modal-box relative max-w-3xl p-0 sm:p-1.5">
-					<span className="btn btn-sm btn-circle absolute right-2 top-2" onClick={onClose}>
+					<span className="btn btn-xs sm:btn-sm btn-circle absolute right-2 top-2" onClick={onClose}>
 						✕
 					</span>
 					<article className="flex flex-col md:flex-row">
@@ -174,7 +174,7 @@ export const PostDetailModal = ({
 								</div>
 							</div>
 						</div>
-						<div className="card-body max-w-3xl xs:gap-5 text-xs md:text-base p-4 ">
+						<div className="card-body max-w-3xl xs:gap-5 text-sm md:text-base p-4 ">
 							{isLogin && (
 								<div className="flex gap-2 flex-col">
 									<span className="font-bold">{userName}</span>
@@ -185,8 +185,8 @@ export const PostDetailModal = ({
 											placeholder="댓글을 입력해주세요."
 											ref={textareaRef}
 										/>
-										<div className="flex items-center w-6 h-full cursor-pointer" onClick={writeComment}>
-											<BsFillSendFill className="mr-1" />
+										<div className="flex items-center h-full cursor-pointer" onClick={writeComment}>
+											<BsFillSendFill className="w-10" />
 										</div>
 									</div>
 								</div>
@@ -204,10 +204,10 @@ export const PostDetailModal = ({
 													<span>{item.comment}</span>
 													{item.author === userName && (
 														<span className="flex items-center gap-1 pl-1" onClick={(e) => handleComment(e, idx)}>
-															<button className=" bg-slate-200 p-1 rounded-lg text-[1px] sm:text-xs leading-none">
+															<button className=" bg-slate-200 p-1 rounded-lg leading-none">
 																EDIT
 															</button>
-															<button className="bg-slate-300 p-1 rounded-lg text-[1px] sm:text-xs leading-none">
+															<button className="bg-slate-500 text-white p-1 rounded-lg leading-none">
 																DELETE
 															</button>
 														</span>
@@ -226,10 +226,10 @@ export const PostDetailModal = ({
 														className="flex justify-end items-center pl-1 gap-1"
 														onClick={(e) => handleEditComment(e, idx)}
 													>
-														<button className="text-white bg-secondary p-1 rounded-lg text-[1px] sm:text-xs leading-none">
+														<button className="text-white bg-secondary p-1 rounded-lg leading-none">
 															SAVE
 														</button>
-														<button className="bg-slate-300 p-1 rounded-lg text-[1px] sm:text-xs leading-none">
+														<button className="bg-slate-300 p-1 rounded-lg leading-none">
 															CANCEL
 														</button>
 													</div>
