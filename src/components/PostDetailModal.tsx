@@ -84,8 +84,8 @@ export const PostDetailModal = ({
 		}
 
 		if (clickedBtn.innerText === "DELETE") {
-			if (clickedPostItem.comments) {
-				const newComments = [...clickedPostItem.comments.slice(0, idx), ...clickedPostItem.comments.slice(idx + 1)];
+			if (comments[idx]) {
+				const newComments = [...comments.slice(0, idx), ...comments.slice(idx + 1)];
 				getSelectedPostRef(clickedPost).then(async (postRef) => {
 					await updateDoc(postRef, { comments: newComments });
 				});
@@ -158,7 +158,7 @@ export const PostDetailModal = ({
 								{user && clickedPost.uid === user.uid && (
 									<span
 										className="absolute top-6 right-6 btn btn-xs sm:btn-sm btn-circle bg-white text-black"
-										onClick={() => deletePost()}
+										onClick={deletePost}
                   >
 										✕
 									</span>
