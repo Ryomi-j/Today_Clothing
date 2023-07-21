@@ -2,8 +2,6 @@ import { Link } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { selectedDate } from "../../store/date";
 import { Post } from "../../store/post";
-import { GrEdit } from "react-icons/gr";
-import { MdDeleteOutline } from "react-icons/md";
 
 interface ImageFrameDataType {
 	content: string;
@@ -23,31 +21,29 @@ export const ImageFrame = ({ content, post, deleteBtn, date, prevPage, handleCli
 				<img src={post?.imgUrl} alt={`${date?.toString().slice(0, 15)} clothing image`} />
 			</figure>
 			<div className="h-20 md:h-28 p-3">
-				<h3 className="card-title justify-center gap-1 text-xs md:text-lg whitespace-pre-wrap text-center">
+				<h3 className="card-title justify-center gap-1 text-sm md:text-lg whitespace-pre-wrap text-center">
 					{content}
 				</h3>
-				<div className="flex md:gap-2 justify-end items-center mr-2">
+				<div className="flex md:gap-2 justify-end items-center gap-1 mr-2 text-sm md:text-base">
 					<div className="card-actions justify-end md:mt-0">
 						<Link to={`/editPost?prevPage=${prevPage}&content=${encodeURIComponent(content)}`}>
 							{date && (
 								<button
-									className="flex items-center font-medium rounded-md text-[7px] leading-none btn-xs md:btn md:btn-primary text-xs md:btn-xs md:btn-sm md:p-2"
+									className="flex items-center font-medium rounded-md leading-none"
 									onClick={() => setDate(date.getTime())}
 								>
-									<span className="hidden md:block ">EDIT</span>
-									<GrEdit className="md:hidden" />
+									<span className="bg-slate-200 p-1 rounded-lg leading-none">EDIT</span>
 								</button>
 							)}
 						</Link>
 					</div>
 					{deleteBtn && handleClickPost && post && (
-						<div className="form-control" onClick={() => handleClickPost(post)}>
+						<div className="form-control w-fit h-fit" onClick={() => handleClickPost(post)}>
 							<label
 								htmlFor="my-modal-6"
-								className="flex items-center font-medium rounded-md text-[7px] leading-none text-xs md:btn md:btn-xs md:btn-sm md:p-2"
+								className="flex items-center font-medium rounded-md leading-none"
 							>
-								<span className="hidden md:block">DELETE</span>
-								<MdDeleteOutline className="md:hidden" />
+								<span className="bg-slate-500 text-white p-1 rounded-lg leading-none">DELETE</span>
 							</label>
 						</div>
 					)}
