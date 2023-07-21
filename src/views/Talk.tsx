@@ -63,13 +63,15 @@ const Talk = () => {
 				</Link>
 			</Carousel>
 			{isLoading && (
-				<BarLoader
-					color="#cc36d7"
-					size={70}
-					aria-label="BarLoader Spinner"
-					data-testid="loader"
-					className="fixed bottom-5 right-1/2 z-10"
-				/>
+				<div className="flex justify-center">
+					<BarLoader
+						color="#cc36d7"
+						size={70}
+						aria-label="BarLoader Spinner"
+						data-testid="loader"
+						className="fixed flex justify-center bottom-12 z-10"
+					/>
+				</div>
 			)}
 			<div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6 my-10 justify-center items-center max-w-screen-2xl">
 				{posts?.map((post, idx) => {
