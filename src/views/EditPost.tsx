@@ -99,8 +99,8 @@ export const EditPost = () => {
 
 	return (
 		<div className="flex w-screen min-h-[calc(100vh-3.3rem)] pt-16 bg-base-200 p-4">
-			<div className="card m-auto w-[450px] xs:h-auto bg-base-100 shadow-xl p-5">
-				<h2 className="text-xl xs:text-4xl font-extrabold text-center py-5 px-2 xs:px-5">Edit Post</h2>
+			<div className="card m-auto w-[450px] h-auto bg-base-100 shadow-xl p-5">
+				<h2 className="text-xl xs:text-4xl font-extrabold text-center py-2 md:py-5 px-2 xs:px-5">Edit Post</h2>
 				<figure className="w-full h-80 md:h-96 mx-auto border-2 rounded-md bg-base-200">
 					<label id="label" className="w-1/3 h-1/3 bg-no-repeat bg-center bg-contain cursor-pointer">
 						<input
@@ -117,8 +117,8 @@ export const EditPost = () => {
 						/>
 					</label>
 				</figure>
-				<div className="card-body max-h-fit">
-					<h3 className="mb-14 text-lg font-semibold text-center">
+				<div className="card-body max-h-fit p-1 md:p-8">
+					<h3 className="md:mb-14 md:text-lg font-semibold text-center">
 						{query.content ? decodeURIComponent(query.content) : new Date(date).toString().slice(0, 4)}
 					</h3>
 					<div className="flex justify-end gap-2">
