@@ -73,7 +73,7 @@ const Talk = () => {
 					/>
 				</div>
 			)}
-			<div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6 my-10 justify-center items-center max-w-screen-2xl">
+			<div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6 my-10 p-2 justify-center items-center max-w-screen-2xl">
 				{posts?.map((post, idx) => {
 					return (
 						<label
