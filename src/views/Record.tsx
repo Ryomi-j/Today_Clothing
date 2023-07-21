@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import { MdNavigateBefore } from "react-icons/md";
 import { useRecoilState } from "recoil";
 import { useEffect, useState } from "react";
@@ -45,11 +44,9 @@ export const Record = () => {
 						</div>
 					</div>
 					<div className="flex flex-row-reverse mt-7">
-						<Link to="/closet">
-							<button className="btn">
-								<MdNavigateBefore className="text-xl" /> back
-							</button>
-						</Link>
+						<button className="btn" onClick={() => setPosts(userRecords)}>
+							<MdNavigateBefore className="text-xl" /> back
+						</button>
 					</div>
 				</div>
 			) : (
