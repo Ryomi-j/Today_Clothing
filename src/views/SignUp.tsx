@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import { isDuplicateId, isDuplicateNickName, logout, signUp } from "../firebase";
 import { useNavigate } from "react-router-dom";
 
-export const SignUp = () => {
+export default function SignUp() {
 	const idInput = useRef<HTMLInputElement>(null);
 	const pwInput = useRef<HTMLInputElement>(null);
 	const nicknameInput = useRef<HTMLInputElement>(null);

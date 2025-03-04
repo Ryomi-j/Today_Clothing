@@ -10,7 +10,7 @@ import { selectedDate } from "../store/date";
 import { doc, setDoc } from "firebase/firestore";
 import { Post, deleteImg, nextWeekUserPost, userPost } from "../store/post";
 
-export const EditPost = () => {
+export default function EditPost() {
 	const { search } = useLocation();
 	const [query, setQuery] = useState<{ [key: string]: string }>({});
 	const date = useRecoilValue(selectedDate);

@@ -1,13 +1,8 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Footer } from "./components/common/Footer";
 import { Nav } from "./components/common/Nav";
-import { SignUp } from "./views/SignUp";
-import { Record } from "./views/Record";
-import { EditPost } from "./views/EditPost";
-import Talk from "./views/Talk";
-import Closet from "./views/Closet";
 import "./index.css";
-import React, { lazy, useEffect } from "react";
+import React, { lazy, Suspense, useEffect } from "react";
 import { auth, getUserData } from "./firebase";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { User, userInfo } from "./store/user";
@@ -15,6 +10,11 @@ import { postData, userPost } from "./store/post";
 
 const Login = lazy(() => import("./views/Login"));
 const TodayClothes = lazy(() => import("./views/TodayClothes"));
+const SignUp = lazy(() => import("./views/SignUp"));
+const Record = lazy(() => import("./views/Record"));
+const EditPost = lazy(() => import("./views/EditPost"));
+const Talk = lazy(() => import("./views/Talk"));
+const Closet = lazy(() => import("./views/Closet"));
 
 function App() {
   const isLogin =
@@ -42,16 +42,18 @@ function App() {
     <BrowserRouter>
       <Nav />
       <main>
-        <Routes>
-          <Route path="/*" element={isLogin ? <TodayClothes /> : <Talk />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/todayClothes" element={<TodayClothes />} />
-          <Route path="/closet" element={<Closet />} />
-          <Route path="/talk" element={<Talk />} />
-          <Route path="/sign-up" element={<SignUp />} />
-          <Route path="/record" element={<Record />} />
-          <Route path="/editPost" element={<EditPost />} />
-        </Routes>
+        <Suspense fallback={<div>Loading...</div>}>
+          <Routes>
+            <Route path="/*" element={isLogin ? <TodayClothes /> : <Talk />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/todayClothes" element={<TodayClothes />} />
+            <Route path="/closet" element={<Closet />} />
+            <Route path="/talk" element={<Talk />} />
+            <Route path="/sign-up" element={<SignUp />} />
+            <Route path="/record" element={<Record />} />
+            <Route path="/editPost" element={<EditPost />} />
+          </Routes>
+        </Suspense>
       </main>
       <Footer />
     </BrowserRouter>

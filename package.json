@@ -1,4 +1,16 @@
 {
+  "description": "<p align='center'><img alt='logo' src='https://github.com/Ryomi-j/Today_Clothing/assets/116236689/ed5c843e-f3e0-472e-afe5-293e97275e08'></p> <h1 align='center'>TodayClothes는 다음 한 주 간의 의류정보를 미리 계획하고 사람들과 소통할 수 있는 커뮤니티입니다.</h1>",
+  "main": "postcss.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ryomi-j/Today_Clothing.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Ryomi-j/Today_Clothing/issues"
+  },
+  "homepage": "https://github.com/Ryomi-j/Today_Clothing#readme",
   "name": "today_clothing",
   "private": true,
   "version": "0.0.0",
@@ -40,17 +52,5 @@
   },
   "dependencies": {
     "firebase": "^9.21.0"
-  },
-  "description": "<p align='center'><img alt='logo' src='https://github.com/Ryomi-j/Today_Clothing/assets/116236689/ed5c843e-f3e0-472e-afe5-293e97275e08'></p> <h1 align='center'>TodayClothes는 다음 한 주 간의 의류정보를 미리 계획하고 사람들과 소통할 수 있는 커뮤니티입니다.</h1>",
-  "main": "postcss.config.js",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Ryomi-j/Today_Clothing.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Ryomi-j/Today_Clothing/issues"
-  },
-  "homepage": "https://github.com/Ryomi-j/Today_Clothing#readme"
+  }
 }
